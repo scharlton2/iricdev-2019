@@ -7,5 +7,5 @@ popd
 call versions.cmd
 set GENERATOR="Visual Studio 15 2017 Win64"
 set SGEN=vs2017-x64
-msbuild /nologo /target:vtk-build-release iricdev.proj
+msbuild /nologo /target:vtk-build iricdev.proj
 endlocal
