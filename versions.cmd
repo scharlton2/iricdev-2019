@@ -2,7 +2,7 @@
 REM
 REM versions.cmd
 REM
-set VTK_VER=6.1.0
+set VTK_VER=8.2.0
 set HDF5_VER=1.8.14
 set CGNSLIB_VER=3.2.1
 set IRICLIB_VER=0.2.3
@@ -30,6 +30,6 @@ if [%BUILD_TOOLS%]==[] (
 )
 
 :: nmake cannot create environment variables
-set GENERATOR="Visual Studio 12 2013 Win64"
-set SGEN=vs2013-x64
+set GENERATOR="Visual Studio 15 2017 Win64"
+set SGEN=vs2017-x64
 set VERSIONS_CMD_RUN=YES
