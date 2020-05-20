@@ -30,6 +30,6 @@ if [%BUILD_TOOLS%]==[] (
 )
 
 :: nmake cannot create environment variables
-set GENERATOR="Visual Studio 15 2017 Win64"
-set SGEN=vs2017-x64
+REM set GENERATOR="Visual Studio 15 2017 Win64"
+REM set SGEN=vs2017-x64
 set VERSIONS_CMD_RUN=YES
