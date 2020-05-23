@@ -3,6 +3,9 @@ version: '{branch}-{build}'
 # QT 5.14 is only available with VS2019 on appveyor
 image: Visual Studio 2019
 
+environment:
+  CL: /MP
+
 # called before clone
 init:
   - echo %APPVEYOR_BUILD_WORKER_IMAGE%
@@ -51,6 +54,6 @@ artifacts:
   - path: paths.pri
   - path: dirExt.prop
 
-##cache:
-##  - lib\install
-##  - logs
+cache:
+ - lib\install
+ - logs
