@@ -2,8 +2,10 @@
 
 Build libraries needed to build iRIC on Linux and Windows
 
-## Windows Visual Studio 2017 Build (Full)
-* Visual Studio 2017 available from https://my.visualstudio.com/Downloads?q=visual%20studio%202017&wt.mc_id=o~msft~vscom~older-downloads
+## Windows Visual Studio Community 2019 Build (Full)
+* Visual Studio 2019 available from https://visualstudio.microsoft.com/vs/
+  Install at least Workload 'Desktop development with C++ (7.02 GB)
+  Set environmental variable CL to /MP to speed up compilations
 * git available from https://git-scm.com/download/win
 * Qt 5.14 available from https://www.qt.io/download-qt-installer?hsCtaTracking=99d9dd4f-5681-48d2-b096-470725510d34%7C074ddad0-fdef-4e53-8aa8-5e8a876d6ab4
 * 7-zip available from http://www.7-zip.org/
@@ -15,16 +17,17 @@ Build libraries needed to build iRIC on Linux and Windows
 
 ### in a git bash shell
 ```
-git clone https://github.com/i-RIC/iricdev.git iricdev_2017
-cd iricdev_2017
+git clone https://github.com/i-RIC/iricdev.git iricdev_2019
+cd iricdev_2019
 ```
 
+Note: this may no longer be necessary (at least on windows 10)
 copy programs_std.prop to programs.prop and make any necessary changes (ie path to git curl program)
 
 ### in a Command Prompt
 ```
-cd iricdev_2017
-msbuild_2017.cmd (or msbuild_2017_w_tools.cmd to build cgns and hdf5 tools)
+cd iricdev_2019
+msbuild_2019.cmd (or msbuild_2019_w_tools.cmd to build cgns and hdf5 tools)
 copy paths.pri [prepost-gui-root]\.
 copy dirExt.prop [prepost-gui-root]\tools\data\.
 mkdir [prepost-gui-root]\libdlls\debug.
@@ -36,8 +39,8 @@ add install\cgnslib-[CGNS_VER]\release\bin and install\hdf5-[HDF5_VER]\release\b
 or if you want to use the VTK_DEBUG_LEAKS configuration
 
 ```
-cd iricdev_2017
-msbuild_2017.cmd (or msbuild_2017_w_tools.cmd to build cgns and hdf5 tools)
+cd iricdev_2019
+msbuild_2019.cmd (or msbuild_2019_w_tools.cmd to build cgns and hdf5 tools)
 copy paths-debug-vtk-leaks.pri [prepost-gui-root]\paths.pri
 copy dirExt-debug-vtk-leaks.prop [prepost-gui-root]\tools\data\dirExt.prop
 mkdir [prepost-gui-root]\libdlls\debug.

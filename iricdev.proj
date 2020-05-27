@@ -247,13 +247,15 @@
   </Target>
 
   <Target Name="cgnslib-src" DependsOnTargets="cgnslib-download" Condition="!Exists('$(SRC_DIR)\cgnslib-$(CGNSLIB_VER)')">
-    <Exec Command="7z x cgnslib_$(CGNSLIB_VER).tar.gz -so | 7z x -si -ttar -o$(SRC_DIR)" Condition=" '$(CGNSLIB_VER)'!='3.2.1-patch1' "/>
+    <Exec Command="7z x cgnslib-$(CGNSLIB_VER).zip -o$(SRC_DIR)" Condition=" '$(CGNSLIB_VER)'!='3.2.1-patch1' "/>
+    <Exec Command="ren $(SRC_DIR)\CGNS-$(CGNSLIB_VER) cgnslib-$(CGNSLIB_VER)" Condition=" '$(CGNSLIB_VER)'!='3.2.1-patch1' "/>
     <Exec Command="git clone --branch v3.2.1-patch1 https://github.com/scharlton2/CGNS.git lib/src/cgnslib-$(CGNSLIB_VER)" Condition=" '$(CGNSLIB_VER)'=='3.2.1-patch1' "/>
   </Target>
 
-  <Target Name="cgnslib-download" Condition="!Exists('cgnslib_$(CGNSLIB_VER).tar.gz')">
-    <Message Text="Downloading cgnslib_$(CGNSLIB_VER).tar.gz" Condition=" '$(CGNSLIB_VER)'!='3.2.1-patch1' "/>
-    <Exec Command="$(CURL) https://downloads.sourceforge.net/project/cgns/cgnslib_$(CGNSLIB_MAJMIN)/cgnslib_$(CGNSLIB_VER).tar.gz" Condition=" '$(CGNSLIB_VER)'!='3.2.1-patch1' "/>
+  <Target Name="cgnslib-download" Condition="!Exists('cgnslib-$(CGNSLIB_VER).zip')">
+    <Message Text="Downloading cgnslib-$(CGNSLIB_VER).zip" Condition=" '$(CGNSLIB_VER)'!='3.2.1-patch1' "/>
+    <Exec Command="$(CURL) https://github.com/CGNS/CGNS/archive/v$(CGNSLIB_VER).zip" Condition=" '$(CGNSLIB_VER)'!='3.2.1-patch1' "/>
+    <Move SourceFiles="v$(CGNSLIB_VER).zip" DestinationFiles="cgnslib-$(CGNSLIB_VER).zip" Condition=" '$(CGNSLIB_VER)'!='3.2.1-patch1' "/>
   </Target>
 
   <!-- hdf5 -->
@@ -268,15 +270,13 @@
     <Exec Command="ctest -S build-hdf5.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(SGEN)-hdf5-release.log"/>
   </Target>
 
-  <Target Name="hdf5-src" DependsOnTargets="hdf5-download" Condition="!Exists('$(SRC_DIR)\hdf5-$(HDF5_VER)')">
-    <Exec Command="7z x hdf5-$(HDF5_VER).zip -o$(SRC_DIR)" />
+  <Target Name="hdf5-src" DependsOnTargets="hdf5-download" Condition="!Exists('$(SRC_DIR)\CMake-hdf5-$(HDF5_VER)\hdf5-$(HDF5_VER)')">
+    <Exec Command="7z x CMake-hdf5-$(HDF5_VER).zip -o$(SRC_DIR)" />
   </Target>
 
   <Target Name="hdf5-download" Condition="!Exists('hdf5-$(HDF5_VER).zip')">
     <Message Text="Downloading hdf5-$(HDF5_VER).zip" />
-    <Exec Command="$(CURL) https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-$(HDF5_MAJMIN)/hdf5-$(HDF5_VER)/cmake/SZip.tar.gz" />
-    <Exec Command="$(CURL) https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-$(HDF5_MAJMIN)/hdf5-$(HDF5_VER)/cmake/ZLib.tar.gz" />
-    <Exec Command="$(CURL) https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-$(HDF5_MAJMIN)/hdf5-$(HDF5_VER)/src/hdf5-$(HDF5_VER).zip" />
+    <Exec Command="$(CURL) https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-$(HDF5_MAJMIN)/hdf5-$(HDF5_VER)/src/CMake-hdf5-$(HDF5_VER).zip" />
   </Target>
 
   <!-- geos -->

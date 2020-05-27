@@ -3,7 +3,7 @@ REM
 REM versions.cmd
 REM
 set VTK_VER=8.2.0
-set HDF5_VER=1.8.14
+set HDF5_VER=1.8.21
 set CGNSLIB_VER=3.2.1
 set IRICLIB_VER=0.2.3
 set IRICLIB_ADF_VER=0.2
