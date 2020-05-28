@@ -6,6 +6,7 @@ Build libraries needed to build iRIC on Linux and Windows
 * Visual Studio 2019 available from https://visualstudio.microsoft.com/vs/
   Install at least Workload 'Desktop development with C++ (7.02 GB)
   Set environmental variable CL to /MP to speed up compilations
+* Qt Visual Studio Tools available from https://marketplace.visualstudio.com/items?itemName=TheQtCompany.QtVisualStudioTools2019
 * git available from https://git-scm.com/download/win
 * Qt 5.14 available from https://www.qt.io/download-qt-installer?hsCtaTracking=99d9dd4f-5681-48d2-b096-470725510d34%7C074ddad0-fdef-4e53-8aa8-5e8a876d6ab4
 * 7-zip available from http://www.7-zip.org/
