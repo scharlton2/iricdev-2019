@@ -9,5 +9,5 @@ set GENERATOR="Visual Studio 16 2019"
 set SGEN=vs2019-x64
 
 REM msbuild /nologo /target:all iricdev.proj HDF5 failure
-msbuild /nologo /target:cgnslib-build iricdev.proj
+msbuild /nologo /target:hdf5-build iricdev.proj
 endlocal

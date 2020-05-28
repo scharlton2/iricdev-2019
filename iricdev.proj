@@ -264,10 +264,14 @@
 
   <Target Name="hdf5-build-debug" DependsOnTargets="hdf5-src" Condition="!Exists('$(INSTALL_DIR)\hdf5-$(HDF5_VER)\debug')">
     <Exec Command="ctest -S build-hdf5.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(SGEN)-hdf5-debug.log"/>
+    <Exec Command="cpack -C Debug -G ZIP" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\debug"/>
+    <Exec Command="xcopy /s /i _CPack_Packages\win64\ZIP\HDF5-1.8.21-win64 ..\..\..\install\hdf5-$(HDF5_VER)\debug" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\debug"/>
   </Target>
 
   <Target Name="hdf5-build-release" DependsOnTargets="hdf5-src" Condition="!Exists('$(INSTALL_DIR)\hdf5-$(HDF5_VER)\release')">
     <Exec Command="ctest -S build-hdf5.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(SGEN)-hdf5-release.log"/>
+    <Exec Command="cpack -C Release -G ZIP" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\release"/>
+    <Exec Command="xcopy /s /i _CPack_Packages\win64\ZIP\HDF5-1.8.21-win64 ..\..\..\install\hdf5-$(HDF5_VER)\release" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\release"/>
   </Target>
 
   <Target Name="hdf5-src" DependsOnTargets="hdf5-download" Condition="!Exists('$(SRC_DIR)\CMake-hdf5-$(HDF5_VER)\hdf5-$(HDF5_VER)')">
