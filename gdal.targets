@@ -4,48 +4,65 @@
 
   <PropertyGroup>
     <INSTALL_DIR Condition=" '$(INSTALL_DIR)' == '' ">lib\install</INSTALL_DIR>
+    <DOWNLOADS_DIR Condition=" '$(DOWNLOADS_DIR)' == '' ">downloads</DOWNLOADS_DIR>
     <SRC_DIR Condition=" '$(SRC_DIR)' == '' ">lib\src</SRC_DIR>
+    <GDAL_VER Condition=" '$(GDAL_VER)' == '' ">3.0.4</GDAL_VER>
+    <topdir>$(MSBuildProjectDirectory)</topdir>
+    <options>$(options) WIN64=YES</options>
+    <options>$(options) MSVC_VER=1926</options>
+    <options>$(options) NETCDF_PLUGIN=YES</options>
+    <options>$(options) NETCDF_SETTING=YES</options>
+    <options>$(options) NETCDF_HAS_NC4=YES</options>
+    <makefile>$(topdir)\$(SRC_DIR)\gdal-$(GDAL_VER)\makefile.vc</makefile>
   </PropertyGroup>
 
   <Target Name="gdal-build" DependsOnTargets="gdal-build-debug;gdal-build-release" />
 
-  <Target Name="gdal-build-debug" Inputs="gdal.targets" Outputs="$(INSTALL_DIR)\gdal-$(GDAL_VER)\debug\lib\gdal_i.lib" DependsOnTargets="gdal-src;netcdf-build-debug">
+  <Target Name="gdal-build-release" Inputs="gdal.targets" Outputs="$(INSTALL_DIR)\gdal-$(GDAL_VER)\release\lib\gdal_i.lib" DependsOnTargets="gdal-src;netcdf-c-build-release;proj-build-release">
     <PropertyGroup>
-      <topdir>$(MSBuildProjectDirectory)</topdir>
+      <config>release</config>
+      <gdal_src>$(topdir)\lib\src\gdal-$(GDAL_VER)</gdal_src>
+      <gdal_inst>$(topdir)\$(INSTALL_DIR)\gdal-$(GDAL_VER)\$(config)</gdal_inst>
+      <options-release>$(options) GDAL_HOME=$(gdal_inst)</options-release>
+      <options-release>$(options-release) NETCDF_LIB=$(topdir)\$(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\$(config)\lib\netcdf.lib</options-release>
+      <options-release>$(options-release) NETCDF_INC_DIR=$(topdir)\$(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\$(config)\include</options-release>
+      <options-release>$(options-release) PROJ_INCLUDE=-I$(topdir)\$(INSTALL_DIR)\proj-$(PROJ_VER)\$(config)\include</options-release>
+      <options-release>$(options-release) PROJ_LIBRARY=$(topdir)\$(INSTALL_DIR)\proj-$(PROJ_VER)\$(config)\lib\proj.lib</options-release>
     </PropertyGroup>
-    <Exec Command="rd /s /q c:\warmerda" Condition="Exists('c:\warmerda')" />
-    <MakeDir Directories="c:\warmerda\bld" />
-    <Exec Command="rd /s /q $(INSTALL_DIR)\gdal-$(GDAL_VER)\debug" Condition="Exists('$(INSTALL_DIR)\gdal-$(GDAL_VER)\debug')" />
-    <Exec Command="nmake -f makefile.vc WIN64=YES MSVC_VER=1800 clean" WorkingDirectory="$(topdir)\$(SRC_DIR)\gdal-$(GDAL_VER)" />
-    <Exec Command="nmake -f makefile.vc DEBUG=1 WIN64=YES MSVC_VER=1800 NETCDF_PLUGIN=YES NETCDF_SETTING=YES NETCDF_LIB=$(topdir)\$(INSTALL_DIR)\netcdf-$(NETCDF_VER)\debug\lib\netcdf.lib NETCDF_INC_DIR=$(topdir)\$(INSTALL_DIR)\netcdf-$(NETCDF_VER)\debug\include NETCDF_HAS_NC4=YES" WorkingDirectory="$(topdir)\$(SRC_DIR)\gdal-$(GDAL_VER)" />
-    <Exec Command="nmake -f makefile.vc DEBUG=1 WIN64=YES MSVC_VER=1800 NETCDF_PLUGIN=YES NETCDF_SETTING=YES NETCDF_LIB=$(topdir)\$(INSTALL_DIR)\netcdf-$(NETCDF_VER)\debug\lib\netcdf.lib NETCDF_INC_DIR=$(topdir)\$(INSTALL_DIR)\netcdf-$(NETCDF_VER)\debug\include NETCDF_HAS_NC4=YES devinstall" WorkingDirectory="$(topdir)\$(SRC_DIR)\gdal-$(GDAL_VER)" />
-    <MakeDir Directories="$(INSTALL_DIR)\gdal-$(GDAL_VER)" />
-    <Exec Command="xcopy c:\warmerda\bld $(INSTALL_DIR)\gdal-$(GDAL_VER)\debug /I/S/E" />
-    <Exec Command="rmdir /q /s c:\warmerda" />
+
+    <Exec Command="rd /s /q $(gdal_inst)" Condition="Exists('$(gdal_inst)')" />
+    <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(options-release) clean"  />
+    <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(options-release)" />
+    <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(options-release) devinstall" />
   </Target>
 
-  <Target Name="gdal-build-release" Inputs="gdal.targets" Outputs="$(INSTALL_DIR)\gdal-$(GDAL_VER)\release\lib\gdal_i.lib" DependsOnTargets="gdal-src;netcdf-build-release">
+  <Target Name="gdal-build-debug" Inputs="gdal.targets" Outputs="$(INSTALL_DIR)\gdal-$(GDAL_VER)\debug\lib\gdal_i.lib" DependsOnTargets="gdal-src;netcdf-c-build-debug;proj-build-debug">
     <PropertyGroup>
-      <topdir>$(MSBuildProjectDirectory)</topdir>
+      <config>debug</config>
+      <gdal_src>$(topdir)\lib\src\gdal-$(GDAL_VER)</gdal_src>
+      <gdal_inst>$(topdir)\$(INSTALL_DIR)\gdal-$(GDAL_VER)\$(config)</gdal_inst>
+      <options-debug>$(options) DEBUG=1</options-debug>
+      <options-debug>$(options-debug) WITH_PDB=1</options-debug>
+      <options-debug>$(options-debug) GDAL_HOME=$(gdal_inst)</options-debug>
+      <options-debug>$(options-debug) NETCDF_LIB=$(topdir)\$(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\$(config)\lib\netcdf.lib</options-debug>
+      <options-debug>$(options-debug) NETCDF_INC_DIR=$(topdir)\$(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\$(config)\include</options-debug>
+      <options-debug>$(options-debug) PROJ_INCLUDE=-I$(topdir)\$(INSTALL_DIR)\proj-$(PROJ_VER)\$(config)\include</options-debug>
+      <options-debug>$(options-debug) PROJ_LIBRARY=$(topdir)\$(INSTALL_DIR)\proj-$(PROJ_VER)\$(config)\lib\proj_d.lib</options-debug>
     </PropertyGroup>
-    <Exec Command="rd /s /q c:\warmerda" Condition="Exists('c:\warmerda')" />
-    <MakeDir Directories="c:\warmerda\bld" />
-    <Exec Command="rd /s /q $(INSTALL_DIR)\gdal-$(GDAL_VER)\release" Condition="Exists('$(INSTALL_DIR)\gdal-$(GDAL_VER)\release')" />
-    <Exec Command="nmake -f makefile.vc WIN64=YES MSVC_VER=1800 clean" WorkingDirectory="$(topdir)\$(SRC_DIR)\gdal-$(GDAL_VER)" />
-    <Exec Command="nmake -f makefile.vc WIN64=YES MSVC_VER=1800 NETCDF_PLUGIN=YES NETCDF_SETTING=YES NETCDF_LIB=$(topdir)\$(INSTALL_DIR)\netcdf-$(NETCDF_VER)\release\lib\netcdf.lib NETCDF_INC_DIR=$(topdir)\$(INSTALL_DIR)\netcdf-$(NETCDF_VER)\release\include NETCDF_HAS_NC4=YES" WorkingDirectory="$(topdir)\$(SRC_DIR)\gdal-$(GDAL_VER)" />
-    <Exec Command="nmake -f makefile.vc WIN64=YES MSVC_VER=1800 NETCDF_PLUGIN=YES NETCDF_SETTING=YES NETCDF_LIB=$(topdir)\$(INSTALL_DIR)\netcdf-$(NETCDF_VER)\release\lib\netcdf.lib NETCDF_INC_DIR=$(topdir)\$(INSTALL_DIR)\netcdf-$(NETCDF_VER)\release\include NETCDF_HAS_NC4=YES devinstall" WorkingDirectory="$(topdir)\$(SRC_DIR)\gdal-$(GDAL_VER)" />
-    <MakeDir Directories="$(INSTALL_DIR)\gdal-$(GDAL_VER)" />
-    <Exec Command="xcopy c:\warmerda\bld $(INSTALL_DIR)\gdal-$(GDAL_VER)\release /I/S/E" />
-    <Exec Command="rmdir /q /s c:\warmerda" />
+
+    <Exec Command="rd /s /q $(gdal_inst)" Condition="Exists('$(gdal_inst)')" />
+    <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(options-debug) clean"  />
+    <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(options-debug)" />
+    <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(options-debug) devinstall" />
   </Target>
 
   <Target Name="gdal-src" DependsOnTargets="gdal-download" Condition="!Exists('$(SRC_DIR)\gdal-$(GDAL_VER)')">
-    <Exec Command="7z x gdal-$(GDAL_VER).tar.gz -so | 7z x -si -ttar -o$(SRC_DIR)"/>
+    <Exec Command="7z x $(DOWNLOADS_DIR)\gdal-$(GDAL_VER).tar.gz -so | 7z x -si -ttar -o$(SRC_DIR)"/>
   </Target>
 
-  <Target Name="gdal-download" Condition="!Exists('gdal-$(GDAL_VER).tar.gz')">
+  <Target Name="gdal-download" Condition="!Exists('$(DOWNLOADS_DIR)\gdal-$(GDAL_VER).tar.gz')">
     <Message Text="Downloading gdal-$(GDAL_VER).tar.gz" />
-    <Exec Command="$(CURL) http://download.osgeo.org/gdal/$(GDAL_VER)/gdal-$(GDAL_VER).tar.gz" />
+    <Exec Command="$(CURL) http://download.osgeo.org/gdal/$(GDAL_VER)/gdal-$(GDAL_VER).tar.gz" WorkingDirectory="$(DOWNLOADS_DIR)" />
   </Target>
 
 </Project>

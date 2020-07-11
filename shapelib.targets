@@ -1,0 +1,48 @@
+<Project DefaultTargets="gdal-build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="programs.prop" Condition="'$(CURL)'==''"/>
+
+  <PropertyGroup>
+    <BUILD_DIR Condition=" '$(BUILD_DIR)' == '' ">lib\build</BUILD_DIR>
+    <DOWNLOADS_DIR Condition=" '$(DOWNLOADS_DIR)' == '' ">downloads</DOWNLOADS_DIR>
+    <INSTALL_DIR Condition=" '$(INSTALL_DIR)' == '' ">lib\install</INSTALL_DIR>
+    <SRC_DIR Condition=" '$(SRC_DIR)' == '' ">lib\src</SRC_DIR>
+  </PropertyGroup>
+
+  <Target Name="shapelib-build" DependsOnTargets="shapelib-build-debug;shapelib-build-release" />
+
+  <Target Name="shapelib-build-release" DependsOnTargets="shapelib-src" Condition="!Exists('$(INSTALL_DIR)\shapelib-$(SHAPELIB_VER)\release')">
+    <Exec Command="nmake -f makefile.vc clean" WorkingDirectory="$(SRC_DIR)\shapelib-$(SHAPELIB_VER)" />
+    <Exec Command="nmake -f makefile.vc" WorkingDirectory="$(SRC_DIR)\shapelib-$(SHAPELIB_VER)" />
+    <ItemGroup>
+      <OutputFiles Include="$(SRC_DIR)\shapelib-$(SHAPELIB_VER)\shapefil.h" />
+      <OutputFiles Include="$(SRC_DIR)\shapelib-$(SHAPELIB_VER)\*.exe" />
+      <OutputFiles Include="$(SRC_DIR)\shapelib-$(SHAPELIB_VER)\*.exp" />
+      <OutputFiles Include="$(SRC_DIR)\shapelib-$(SHAPELIB_VER)\*.dll" />
+      <OutputFiles Include="$(SRC_DIR)\shapelib-$(SHAPELIB_VER)\*.lib" />
+    </ItemGroup>
+    <Copy SourceFiles="@(OutputFiles)" DestinationFolder="$(INSTALL_DIR)\shapelib-$(SHAPELIB_VER)\release" />
+  </Target>
+
+  <Target Name="shapelib-build-debug" DependsOnTargets="shapelib-src" Condition="!Exists('$(INSTALL_DIR)\shapelib-$(SHAPELIB_VER)\debug')">
+    <Exec Command="nmake -f makefile.vc clean" WorkingDirectory="$(SRC_DIR)\shapelib-$(SHAPELIB_VER)" />
+    <Exec Command="nmake -f makefile.vc CFLAGS=&quot;/nologo /Ox /MDd /DSHAPELIB_DLLEXPORT&quot;" WorkingDirectory="$(SRC_DIR)\shapelib-$(SHAPELIB_VER)" />
+    <ItemGroup>
+      <OutputFiles Include="$(SRC_DIR)\shapelib-$(SHAPELIB_VER)\shapefil.h" />
+      <OutputFiles Include="$(SRC_DIR)\shapelib-$(SHAPELIB_VER)\*.exe" />
+      <OutputFiles Include="$(SRC_DIR)\shapelib-$(SHAPELIB_VER)\*.exp" />
+      <OutputFiles Include="$(SRC_DIR)\shapelib-$(SHAPELIB_VER)\*.dll" />
+      <OutputFiles Include="$(SRC_DIR)\shapelib-$(SHAPELIB_VER)\*.lib" />
+    </ItemGroup>
+    <Copy SourceFiles="@(OutputFiles)" DestinationFolder="$(INSTALL_DIR)\shapelib-$(SHAPELIB_VER)\debug" />
+  </Target>
+
+  <Target Name="shapelib-src" DependsOnTargets="shapelib-download" Condition="!Exists('$(SRC_DIR)\shapelib-$(SHAPELIB_VER)')">
+    <Exec Command="7z x $(DOWNLOADS_DIR)\shapelib-$(SHAPELIB_VER).zip -o$(SRC_DIR)"/>
+  </Target>
+
+  <Target Name="shapelib-download" Condition="!Exists('$(DOWNLOADS_DIR)/shapelib-$(SHAPELIB_VER).zip')">
+    <Message Text="Downloading shapelib-$(SHAPELIB_VER).zip" />
+    <Exec Command="$(CURL) http://download.osgeo.org/shapelib/shapelib-$(SHAPELIB_VER).zip" WorkingDirectory="$(DOWNLOADS_DIR)" />
+  </Target>
+</Project>

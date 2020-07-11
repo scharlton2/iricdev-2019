@@ -1,0 +1,40 @@
+<Project DefaultTargets="udunits-build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="programs.prop" Condition="'$(CURL)'==''"/>
+
+  <PropertyGroup>
+    <BUILD_DIR Condition=" '$(BUILD_DIR)' == '' ">lib\build</BUILD_DIR>
+    <DOWNLOADS_DIR Condition=" '$(DOWNLOADS_DIR)' == '' ">downloads</DOWNLOADS_DIR>
+    <INSTALL_DIR Condition=" '$(INSTALL_DIR)' == '' ">lib\install</INSTALL_DIR>
+    <SRC_DIR Condition=" '$(SRC_DIR)' == '' ">lib\src</SRC_DIR>
+  </PropertyGroup>
+
+  <Target Name="udunits-build" DependsOnTargets="udunits-build-debug;udunits-build-release" />
+
+  <Target Name="udunits-build-debug" Inputs="udunits.targets" Outputs="$(INSTALL_DIR)\udunits-$(UDUNITS_VER)\debug\lib\udunits2.lib" DependsOnTargets="udunits-src;expat-build-debug">
+    <PropertyGroup>
+      <config>debug</config>
+      <udunits_inst>$(INSTALL_DIR)\udunits-$(UDUNITS_VER)\$(config)</udunits_inst>
+    </PropertyGroup>
+    <Exec Command="rd /s /q $(udunits_inst)" Condition="Exists('$(udunits_inst)')" />
+    <Exec Command="ctest -S udunits.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O logs\$(SGEN)-udunits-debug.log"/>
+  </Target>
+
+  <Target Name="udunits-build-release" Inputs="udunits.targets" Outputs="$(INSTALL_DIR)\udunits-$(UDUNITS_VER)\release\lib\udunits2.lib" DependsOnTargets="udunits-src;expat-build-release">
+    <PropertyGroup>
+      <config>release</config>
+      <udunits_inst>$(INSTALL_DIR)\udunits-$(UDUNITS_VER)\$(config)</udunits_inst>
+    </PropertyGroup>
+    <Exec Command="rd /s /q $(udunits_inst)" Condition="Exists('$(udunits_inst)')" />
+    <Exec Command="ctest -S udunits.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O logs\$(SGEN)-udunits-release.log"/>
+  </Target>
+
+  <Target Name="udunits-src" DependsOnTargets="udunits-download" Condition="!Exists('$(SRC_DIR)\udunits-$(UDUNITS_VER)')">
+    <Exec Command="7z x $(DOWNLOADS_DIR)\udunits-$(UDUNITS_VER).tar.gz -so | 7z x -si -ttar -o$(SRC_DIR)"/>
+  </Target>
+
+  <Target Name="udunits-download" Condition="!Exists('$(DOWNLOADS_DIR)\udunits-$(UDUNITS_VER).tar.gz')">
+    <Message Text="Downloading udunits-$(UDUNITS_VER).tar.gz" />
+    <Exec Command="$(CURL) ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-$(UDUNITS_VER).tar.gz"  WorkingDirectory="$(DOWNLOADS_DIR)" />
+  </Target>
+</Project>
