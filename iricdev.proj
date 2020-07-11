@@ -91,28 +91,6 @@
   <!-- OpenSSL -->
   <Import Project="openssl.targets" />
 
-  <!-- iriclib-adf -->
-
-  <Target Name="iriclib-adf-build" DependsOnTargets="iriclib-adf-build-debug;iriclib-adf-build-release" />
-
-  <Target Name="iriclib-adf-build-debug" DependsOnTargets="iriclib-adf-src;cgnslib-adf-build-debug" Condition="!Exists('$(INSTALL_DIR)\iriclib-adf-$(IRICLIB_ADF_VER)\debug')">
-    <Exec Command="ctest -S build-iriclib-adf.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O logs\$(SGEN)-iriclib-adf-debug.log"/>
-  </Target>
-
-  <Target Name="iriclib-adf-build-release" DependsOnTargets="iriclib-adf-src;cgnslib-adf-build-release" Condition="!Exists('$(INSTALL_DIR)\iriclib-adf-$(IRICLIB_ADF_VER)\release')">
-    <Exec Command="ctest -S build-iriclib-adf.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O logs\$(SGEN)-iriclib-adf-release.log"/>
-  </Target>
-
-  <Target Name="iriclib-adf-src" DependsOnTargets="iriclib-adf-download" Condition="!Exists('$(SRC_DIR)\iriclib-adf-$(IRICLIB_ADF_VER)')">
-    <Exec Command="7z x iriclib-adf-$(IRICLIB_ADF_VER).zip -o$(SRC_DIR)" />
-  </Target>
-
-  <Target Name="iriclib-adf-download" Condition="!Exists('iriclib-adf-$(IRICLIB_ADF_VER).zip')">
-    <Message Text="Downloading iriclib_$(IRICLIB_ADF_VER).zip" />
-    <Exec Command="$(CURL) https://github.com/scharlton2/iriclib/archive/adf-$(IRICLIB_ADF_VER).zip" />
-    <Move SourceFiles="adf-$(IRICLIB_ADF_VER).zip" DestinationFiles="iriclib-adf-$(IRICLIB_ADF_VER).zip"/>
-  </Target>
-
   <!-- qtwebkit -->
   <Import Project="qtwebkit.targets" />
 

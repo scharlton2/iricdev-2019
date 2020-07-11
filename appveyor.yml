@@ -22,7 +22,7 @@ init:
 clone_folder: C:\iricdev
 
 configuration:
-##  - Debug
+  - Debug
   - Release
 
 # Note mkdir is from Git (C:\Program Files\Git\usr\bin\mkdir.exe)
@@ -57,6 +57,6 @@ artifacts:
   - path: paths.pri
   - path: dirExt.prop
 
-##cache:
-## - lib\install
-## - logs
+cache:
+ - lib\install
+ - logs
