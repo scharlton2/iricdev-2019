@@ -3,7 +3,7 @@ setlocal
 set topdir=%~dp0
 set topdir=%topdir:\=/%
 call versions.cmd
-if "%CGNSLIB_VER%"=="3.2.1" (
+if "%CGNSLIB_VER%"=="4.1.1" (
   set CGNSLIB_VER=%CGNSLIB_VER%-patch1
 )
 for /f "tokens=1,2 delims=." %%a in ("%VTK_VER%") do set VTK_MAJ_MIN=%%a.%%b
@@ -37,7 +37,7 @@ if "%DEBUG_LEAKS%"=="YES" (
 @echo.	LIBS += -L"%topdir%lib/install/hdf5-%HDF5_VER%/debug/lib"
 @echo.
 @echo.	# netcdf
-@echo.	LIBS += -L"%topdir%lib/install/netcdf-%NETCDF_VER%/debug/lib"
+@echo.	LIBS += -L"%topdir%lib/install/netcdf-c-%NETCDF_VER%/debug/lib"
 @echo.
 @echo.	# geos
 @echo.	LIBS += -L"%topdir%lib/install/geos-%GEOS_VER%/debug/lib"
@@ -74,7 +74,7 @@ if "%DEBUG_LEAKS%"=="YES" (
 @echo.	LIBS += -L"%topdir%lib/install/hdf5-%HDF5_VER%/release/lib"
 @echo.
 @echo.	# netcdf
-@echo.	LIBS += -L"%topdir%lib/install/netcdf-%NETCDF_VER%/release/lib"
+@echo.	LIBS += -L"%topdir%lib/install/netcdf-c-%NETCDF_VER%/release/lib"
 @echo.
 @echo.	# geos
 @echo.	LIBS += -L"%topdir%lib/install/geos-%GEOS_VER%/release/lib"
@@ -125,7 +125,7 @@ if "%CGNS_ADF%"=="YES" (
 @echo.INCLUDEPATH += "%topdir%lib/install/proj-%PROJ_VER%/release/include"
 @echo.
 @echo.# netcdf
-@echo.INCLUDEPATH += "%topdir%lib/install/netcdf-%NETCDF_VER%/release/include"
+@echo.INCLUDEPATH += "%topdir%lib/install/netcdf-c-%NETCDF_VER%/release/include"
 @echo.
 @echo.# geos
 @echo.INCLUDEPATH += "%topdir%lib/install/geos-%GEOS_VER%/release/include"

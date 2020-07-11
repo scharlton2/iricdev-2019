@@ -11,8 +11,6 @@ init:
   - echo %APPVEYOR_BUILD_WORKER_IMAGE%
   - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2019" (set GENERATOR="Visual Studio 16 2019"       && set SGEN=vs2019-x64)
   - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" (set GENERATOR="Visual Studio 15 2017 Win64" && set SGEN=vs2017-x64)
-##  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" (set GENERATOR="Visual Studio 14 2015 Win64" && set SGEN=vs2015-x64)
-##  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2013" (set GENERATOR="Visual Studio 12 2013 Win64" && set SGEN=vs2013-x64)
   - echo %GENERATOR%
   - echo %Configuration%
   - if "%Configuration%"=="Debug"   (set config=debug)
@@ -24,15 +22,15 @@ init:
 clone_folder: C:\iricdev
 
 configuration:
-  - Debug
+##  - Debug
   - Release
 
 # Note mkdir is from Git (C:\Program Files\Git\usr\bin\mkdir.exe)
 # It might give unexpected results (use md instead)
 before_build:
   - call C:\Qt\5.14.2\msvc2017_64\bin\qtenv2.bat
-  - if "%SGEN%"=="vs2017-x64" (call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64)
-  - if "%SGEN%"=="vs2019-x64" (call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64)
+  - if "%SGEN%"=="vs2017-x64"   ( call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat" )
+  - if "%SGEN%"=="vs2019-x64"   ( call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat" )
   - cd "%APPVEYOR_BUILD_FOLDER%"
   - copy appveyor_programs.prop programs.prop
   - call versions.cmd
@@ -57,6 +55,6 @@ artifacts:
   - path: paths.pri
   - path: dirExt.prop
 
-cache:
- - lib\install
- - logs
+##cache:
+## - lib\install
+## - logs

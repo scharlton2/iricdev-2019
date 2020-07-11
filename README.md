@@ -15,6 +15,7 @@ Build libraries needed to build iRIC on Linux and Windows
 * Perl available from https://www.activestate.com/activeperl/downloads (for OpenSSL)
 * Tcl available from https://www.activestate.com/activetcl/downloads (if building cgns and hdf5 tools)
 * curl available from https://www.nuget.org/packages/curl/ (not required if using the git packaged version)
+* Python 3
 
 ### in a git bash shell
 ```
