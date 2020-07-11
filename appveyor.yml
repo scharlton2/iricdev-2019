@@ -37,6 +37,8 @@ before_build:
   - set BUILD_TOOLS=OFF
   - curl -L -O https://raw.githubusercontent.com/MestreLion/git-tools/cd87904e0b85d74b1d05f6acbd10553a0ceaceb0/git-restore-mtime
   - python git-restore-mtime
+  - if not exist logs (md logs)
+  - if not exist downloads (md downloads)
 
 build_script:
 ##  - msbuild /nologo /verbosity:minimal /target:appveyor-%config% iricdev.proj
@@ -45,9 +47,9 @@ build_script:
   # Step 2
   - msbuild /nologo /verbosity:minimal /target:hdf5-build-%config% iricdev.proj
 
-after_build:
-  - if not exist logs (md logs)
-  - if exist *.log (copy *.log logs\.)
+##after_build:
+##  - if not exist logs (md logs)
+##  - if exist *.log (copy *.log logs\.)
 
 artifacts:
   - path: lib\install
