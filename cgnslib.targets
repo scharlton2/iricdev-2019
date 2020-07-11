@@ -15,14 +15,14 @@
   <Target Name="cgnslib-adf-build" DependsOnTargets="cgnslib-adf-build-debug;cgnslib-adf-build-release" />
 
   <Target Name="cgnslib-adf-build-debug" Inputs="cgnslib.targets;cgnslib-adf.cmake" Outputs="$(INSTALL_DIR)\cgnslib-adf-$(CGNSLIB_VER)\debug\lib\cgnsdll.lib" DependsOnTargets="cgnslib-src">
-    <Exec Command="rd /s /q $(BUILD_DIR)\cgnslib-adf-$(CGNSLIB_VER)\debug" Condition="Exists('$(BUILD_DIR)\cgnslib-adf-$(CGNSLIB_VER)\debug')" />
-    <Exec Command="rd /s /q $(INSTALL_DIR)\cgnslib-adf-$(CGNSLIB_VER)\debug" Condition="Exists('$(INSTALL_DIR)\cgnslib-adf-$(CGNSLIB_VER)\debug')" />
+    <RemoveDir Directories="$(BUILD_DIR)\cgnslib-adf-$(CGNSLIB_VER)\debug"/>
+    <RemoveDir Directories="$(INSTALL_DIR)\cgnslib-adf-$(CGNSLIB_VER)\debug"/>
     <Exec Command="ctest -S cgnslib-adf.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O logs\$(SGEN)-cgnslib-adf-debug.log"/>
   </Target>
 
   <Target Name="cgnslib-adf-build-release" Inputs="cgnslib.targets;cgnslib-adf.cmake" Outputs="$(INSTALL_DIR)\cgnslib-adf-$(CGNSLIB_VER)\release\lib\cgnsdll.lib" DependsOnTargets="cgnslib-src">
-    <Exec Command="rd /s /q $(BUILD_DIR)\cgnslib-adf-$(CGNSLIB_VER)\release" Condition="Exists('$(BUILD_DIR)\cgnslib-adf-$(CGNSLIB_VER)\release')" />
-    <Exec Command="rd /s /q $(INSTALL_DIR)\cgnslib-adf-$(CGNSLIB_VER)\release" Condition="Exists('$(INSTALL_DIR)\cgnslib-adf-$(CGNSLIB_VER)\release')" />
+    <RemoveDir Directories="$(BUILD_DIR)\cgnslib-adf-$(CGNSLIB_VER)\release"/>
+    <RemoveDir Directories="$(INSTALL_DIR)\cgnslib-adf-$(CGNSLIB_VER)\release"/>
     <Exec Command="ctest -S cgnslib-adf.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O logs\$(SGEN)-cgnslib-adf-release.log"/>
   </Target>
 
@@ -31,20 +31,20 @@
   <Target Name="cgnslib-build" DependsOnTargets="cgnslib-build-debug;cgnslib-build-release" />
 
   <Target Name="cgnslib-build-debug" Inputs="cgnslib.targets;cgnslib.cmake" Outputs="$(INSTALL_DIR)\cgnslib-$(CGNSLIB_VER)\debug\lib\cgnsdll.lib" DependsOnTargets="cgnslib-src;hdf5-build-debug">
-    <Exec Command="rd /s /q $(BUILD_DIR)\cgnslib-$(CGNSLIB_VER)\debug" Condition="Exists('$(BUILD_DIR)\cgnslib-$(CGNSLIB_VER)\debug')" />
-    <Exec Command="rd /s /q $(INSTALL_DIR)\cgnslib-$(CGNSLIB_VER)\debug" Condition="Exists('$(INSTALL_DIR)\cgnslib-$(CGNSLIB_VER)\debug')" />
+    <RemoveDir Directories="$(BUILD_DIR)\cgnslib-$(CGNSLIB_VER)\debug"/>
+    <RemoveDir Directories="$(INSTALL_DIR)\cgnslib-$(CGNSLIB_VER)\debug"/>
     <Exec Command="ctest -S cgnslib.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O logs\$(SGEN)-cgnslib-debug.log"/>
   </Target>
 
   <Target Name="cgnslib-build-release" Inputs="cgnslib.targets;cgnslib.cmake" Outputs="$(INSTALL_DIR)\cgnslib-$(CGNSLIB_VER)\release\lib\cgnsdll.lib" DependsOnTargets="cgnslib-src;hdf5-build-release">
-    <Exec Command="rd /s /q $(BUILD_DIR)\cgnslib-$(CGNSLIB_VER)\release" Condition="Exists('$(BUILD_DIR)\cgnslib-$(CGNSLIB_VER)\release')" />
-    <Exec Command="rd /s /q $(INSTALL_DIR)\cgnslib-$(CGNSLIB_VER)\release" Condition="Exists('$(INSTALL_DIR)\cgnslib-$(CGNSLIB_VER)\release')" />
+    <RemoveDir Directories="$(BUILD_DIR)\cgnslib-$(CGNSLIB_VER)\release"/>
+    <RemoveDir Directories="$(INSTALL_DIR)\cgnslib-$(CGNSLIB_VER)\release"/>
     <Exec Command="ctest -S cgnslib.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O logs\$(SGEN)-cgnslib-release.log"/>
   </Target>
 
   <Target Name="cgnslib-src" DependsOnTargets="cgnslib-download" Condition="!Exists('$(SRC_DIR)\cgnslib-$(CGNSLIB_VER)')">
     <Exec Command="7z x $(DOWNLOADS_DIR)\cgnslib-$(CGNSLIB_VER).zip -o$(SRC_DIR)" Condition=" '$(CGNSLIB_VER)'!='4.1.1-patch1' "/>
-    <!-- Does Move task have Condition? -->
+    <!-- Move task does not support moving directories. -->
     <Exec Command="ren $(SRC_DIR)\CGNS-$(CGNSLIB_VER) cgnslib-$(CGNSLIB_VER)" Condition=" '$(CGNSLIB_VER)'!='4.1.1-patch1' "/>
     <Exec Command="git clone --branch v4.1.1-patch1 https://github.com/scharlton2/CGNS.git lib/src/cgnslib-$(CGNSLIB_VER)" Condition=" '$(CGNSLIB_VER)'=='4.1.1-patch1' "/>
   </Target>
