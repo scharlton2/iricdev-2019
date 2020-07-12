@@ -15,8 +15,10 @@
     <Copy SourceFiles="$(INSTALL_DIR)\cgnslib-$(CGNSLIB_VER)\release\lib\cgnsdll.lib"
           DestinationFiles="$(SRC_DIR)\iriclib-git\_artifacts\libs\cgnsdll_x64_ifort.lib"
     />
+    <!-- TODO determine which include files are necessary for CGNS > 3.2.1 -->
     <Copy SourceFiles="$(INSTALL_DIR)\cgnslib-$(CGNSLIB_VER)\release\include\cgnslib_f.h"
           DestinationFiles="$(SRC_DIR)\iriclib-git\_artifacts\libs\cgnslib_f.h"
+          Condition="Exists('$(INSTALL_DIR)\cgnslib-$(CGNSLIB_VER)\release\include\cgnslib_f.h')"
     />
     <Copy SourceFiles="$(SRC_DIR)\iriclib-git\_build_release\INSTALL\include\iriclib_f.h"
           DestinationFiles="$(SRC_DIR)\iriclib-git\_artifacts\libs\iriclib_f.h"
