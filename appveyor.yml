@@ -40,6 +40,8 @@ before_build:
   - python git-restore-mtime
   - if not exist logs (md logs)
   - if not exist downloads (md downloads)
+  - where msbuild
+  - msbuild -version
 
 build_script:
 ##  - msbuild /nologo /verbosity:minimal /target:appveyor-%config% iricdev.proj
