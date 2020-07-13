@@ -1,16 +1,12 @@
 <Project DefaultTargets="qwt-build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <Import Project="programs.prop" Condition="'$(CURL)'==''"/>
+  <Import Project="programs.prop" Condition="'$(CURL)'==''" />
 
-  <PropertyGroup>
-    <BUILD_DIR Condition=" '$(BUILD_DIR)' == '' ">lib\build</BUILD_DIR>
-    <DOWNLOADS_DIR Condition=" '$(DOWNLOADS_DIR)' == '' ">downloads</DOWNLOADS_DIR>
-    <INSTALL_DIR Condition=" '$(INSTALL_DIR)' == '' ">lib\install</INSTALL_DIR>
-    <SRC_DIR Condition=" '$(SRC_DIR)' == '' ">lib\src</SRC_DIR>
-  </PropertyGroup>
+  <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
+
   <Target Name="qtwebkit-build" DependsOnTargets="qtwebkit-git-clone">
-    <Exec Command="python3 -m pip install --upgrade pip"/>
-    <Exec Command="pip3 install conan"/>    
+    <Exec Command="python3 -m pip install --upgrade pip" />
+    <Exec Command="pip3 install conan" />
     <Exec WorkingDirectory="$(SRC_DIR)\qtwebkit-git" Command="python3 Tools\qt\build-qtwebkit-conan.py --qt=C:\Qt\5.14.2\msvc2017_64 --install --cmakeargs '-DCMAKE_INSTALL_PREFIX:PATH=C:/Qt/5.14.2/msvc2017_64'" />
   </Target>
 

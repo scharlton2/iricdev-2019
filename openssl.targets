@@ -1,6 +1,6 @@
 <Project DefaultTargets="openssl-build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <Import Project="programs.prop" Condition="'$(CURL)'==''"/>
+  <Import Project="programs.prop" Condition="'$(CURL)'==''" />
 
   <PropertyGroup>
     <INSTALL_DIR Condition=" '$(INSTALL_DIR)' == '' ">lib\install</INSTALL_DIR>
@@ -37,10 +37,11 @@
   </Target>
 
   <Target Name="openssl-src" DependsOnTargets="openssl-download" Condition="!Exists('$(SRC_DIR)\openssl-OpenSSL_$(OPENSSL_UVER)')">
-    <Exec Command="7z x $(DOWNLOADS_DIR)\OpenSSL_$(OPENSSL_UVER).zip -o$(SRC_DIR)"/>
+    <Exec Command="7z x $(DOWNLOADS_DIR)\OpenSSL_$(OPENSSL_UVER).zip -o$(SRC_DIR)" />
   </Target>
 
   <Target Name="openssl-download" Condition="!Exists('$(DOWNLOADS_DIR)\OpenSSL_$(OPENSSL_UVER).zip')">
+    <MakeDir Directories="$(DOWNLOADS_DIR)" />
     <Message Text="Downloading OpenSSL_$(OPENSSL_UVER).zip" />
     <Exec Command="$(CURL) https://github.com/openssl/openssl/archive/OpenSSL_$(OPENSSL_UVER).zip" WorkingDirectory="$(DOWNLOADS_DIR)" />
   </Target>

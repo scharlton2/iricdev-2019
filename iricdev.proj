@@ -89,8 +89,11 @@
   <!-- qtwebkit -->
   <Import Project="qtwebkit.targets" />
 
-  <!-- dump variables -->
+  <Target Name="download-dir">
+    <MakeDir Directories="$(DOWNLOADS_DIR)" />
+  </Target>
 
+  <!-- dump variables -->
   <Target Name="dump">
     <Message Text="BOOST_UVER=$(BOOST_UVER)" />
     <Message Text="BOOST_VER=$(BOOST_VER)" />

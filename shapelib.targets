@@ -1,13 +1,8 @@
 <Project DefaultTargets="gdal-build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <Import Project="programs.prop" Condition="'$(CURL)'==''"/>
+  <Import Project="programs.prop" Condition="'$(CURL)'==''" />
 
-  <PropertyGroup>
-    <BUILD_DIR Condition=" '$(BUILD_DIR)' == '' ">lib\build</BUILD_DIR>
-    <DOWNLOADS_DIR Condition=" '$(DOWNLOADS_DIR)' == '' ">downloads</DOWNLOADS_DIR>
-    <INSTALL_DIR Condition=" '$(INSTALL_DIR)' == '' ">lib\install</INSTALL_DIR>
-    <SRC_DIR Condition=" '$(SRC_DIR)' == '' ">lib\src</SRC_DIR>
-  </PropertyGroup>
+  <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
 
   <Target Name="shapelib-build" DependsOnTargets="shapelib-build-debug;shapelib-build-release" />
 
@@ -38,10 +33,11 @@
   </Target>
 
   <Target Name="shapelib-src" DependsOnTargets="shapelib-download" Condition="!Exists('$(SRC_DIR)\shapelib-$(SHAPELIB_VER)')">
-    <Exec Command="7z x $(DOWNLOADS_DIR)\shapelib-$(SHAPELIB_VER).zip -o$(SRC_DIR)"/>
+    <Exec Command="7z x $(DOWNLOADS_DIR)\shapelib-$(SHAPELIB_VER).zip -o$(SRC_DIR)" />
   </Target>
 
   <Target Name="shapelib-download" Condition="!Exists('$(DOWNLOADS_DIR)/shapelib-$(SHAPELIB_VER).zip')">
+    <MakeDir Directories="$(DOWNLOADS_DIR)" />
     <Message Text="Downloading shapelib-$(SHAPELIB_VER).zip" />
     <Exec Command="$(CURL) http://download.osgeo.org/shapelib/shapelib-$(SHAPELIB_VER).zip" WorkingDirectory="$(DOWNLOADS_DIR)" />
   </Target>

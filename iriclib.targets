@@ -31,13 +31,13 @@
   <Target Name="iriclib-git-build" DependsOnTargets="iriclib-git-build-debug;iriclib-git-build-release" />
 
   <Target Name="iriclib-git-build-debug" DependsOnTargets="iriclib-git-clone;cgnslib-build-debug">
-    <RemoveDir Directories="$(SRC_DIR)\iriclib-git\_build_debug"/>
-    <Exec Command="ctest -S iriclib-git.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-iriclib-git-debug.log"/>
+    <RemoveDir Directories="$(SRC_DIR)\iriclib-git\_build_debug" />
+    <Exec Command="ctest -S iriclib-git.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-iriclib-git-debug.log" />
   </Target>
 
   <Target Name="iriclib-git-build-release" DependsOnTargets="iriclib-git-clone;cgnslib-build-release">
-    <RemoveDir Directories="$(SRC_DIR)\iriclib-git\_build_release"/>
-    <Exec Command="ctest -S iriclib-git.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-iriclib-git-release.log"/>
+    <RemoveDir Directories="$(SRC_DIR)\iriclib-git\_build_release" />
+    <Exec Command="ctest -S iriclib-git.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-iriclib-git-release.log" />
   </Target>
 
   <Target Name="iriclib-git-clone" Condition="!Exists('$(SRC_DIR)\iriclib-git')">
@@ -50,15 +50,15 @@
   <Target Name="iriclib-build" DependsOnTargets="iriclib-build-debug;iriclib-build-release" />
 
   <Target Name="iriclib-build-debug" Inputs="iriclib.targets;iriclib.cmake" Outputs="$(INSTALL_DIR)\iriclib-$(IRICLIB_VER)\debug\lib\iriclib.lib" DependsOnTargets="iriclib-src;cgnslib-build-debug">
-    <RemoveDir Directories="$(BUILD_DIR)\iriclib-$(IRICLIB_VER)\debug"/>
-    <RemoveDir Directories="$(INSTALL_DIR)\iriclib-$(IRICLIB_VER)\debug"/>
-    <Exec Command="ctest -S iriclib.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-iriclib-debug.log"/>
+    <RemoveDir Directories="$(BUILD_DIR)\iriclib-$(IRICLIB_VER)\debug" />
+    <RemoveDir Directories="$(INSTALL_DIR)\iriclib-$(IRICLIB_VER)\debug" />
+    <Exec Command="ctest -S iriclib.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-iriclib-debug.log" />
   </Target>
 
   <Target Name="iriclib-build-release" Inputs="iriclib.targets;iriclib.cmake" Outputs="$(INSTALL_DIR)\iriclib-$(IRICLIB_VER)\release\lib\iriclib.lib" DependsOnTargets="iriclib-src;cgnslib-build-release">
-    <RemoveDir Directories="$(BUILD_DIR)\iriclib-$(IRICLIB_VER)\release"/>
-    <RemoveDir Directories="$(INSTALL_DIR)\iriclib-$(IRICLIB_VER)\release"/>
-    <Exec Command="ctest -S iriclib.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-iriclib-release.log"/>
+    <RemoveDir Directories="$(BUILD_DIR)\iriclib-$(IRICLIB_VER)\release" />
+    <RemoveDir Directories="$(INSTALL_DIR)\iriclib-$(IRICLIB_VER)\release" />
+    <Exec Command="ctest -S iriclib.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-iriclib-release.log" />
   </Target>
 
   <Target Name="iriclib-src" DependsOnTargets="iriclib-download" Condition="!Exists('$(SRC_DIR)\iriclib-$(IRICLIB_VER)')">
@@ -66,10 +66,10 @@
   </Target>
 
   <Target Name="iriclib-download" Condition="!Exists('$(DOWNLOADS_DIR)\iriclib-$(IRICLIB_VER).zip')">
-    <MkDir Directories="$(DOWNLOADS_DIR)" />
+    <MakeDir Directories="$(DOWNLOADS_DIR)" />
     <Message Text="Downloading iriclib-$(IRICLIB_VER).zip" />
     <Exec Command="$(CURL) https://github.com/i-RIC/iriclib/archive/v$(IRICLIB_VER).zip" WorkingDirectory="$(DOWNLOADS_DIR)" />
-    <Move SourceFiles="$(DOWNLOADS_DIR)\v$(IRICLIB_VER).zip" DestinationFiles="$(DOWNLOADS_DIR)\iriclib-$(IRICLIB_VER).zip"/>
+    <Move SourceFiles="$(DOWNLOADS_DIR)\v$(IRICLIB_VER).zip" DestinationFiles="$(DOWNLOADS_DIR)\iriclib-$(IRICLIB_VER).zip" />
   </Target>
 
   <!-- iriclib-adf -->
@@ -77,15 +77,15 @@
   <Target Name="iriclib-adf-build" DependsOnTargets="iriclib-adf-build-debug;iriclib-adf-build-release" />
 
   <Target Name="iriclib-adf-build-debug" Inputs="iriclib.targets;iriclib-adf.cmake" Outputs="$(INSTALL_DIR)\iriclib-adf-$(IRICLIB_VER)\debug\lib\iriclib.lib" DependsOnTargets="iriclib-adf-src;cgnslib-adf-build-debug">
-    <RemoveDir Directories="$(BUILD_DIR)\iriclib-adf-$(IRICLIB_VER)\debug"/>
-    <RemoveDir Directories="$(INSTALL_DIR)\iriclib-adf-$(IRICLIB_VER)\debug"/>
-    <Exec Command="ctest -S iriclib-adf.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-iriclib-adf-debug.log"/>
+    <RemoveDir Directories="$(BUILD_DIR)\iriclib-adf-$(IRICLIB_VER)\debug" />
+    <RemoveDir Directories="$(INSTALL_DIR)\iriclib-adf-$(IRICLIB_VER)\debug" />
+    <Exec Command="ctest -S iriclib-adf.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-iriclib-adf-debug.log" />
   </Target>
 
   <Target Name="iriclib-adf-build-release" Inputs="iriclib.targets;iriclib-adf.cmake" Outputs="$(INSTALL_DIR)\iriclib-adf-$(IRICLIB_VER)\release\lib\iriclib.lib" DependsOnTargets="iriclib-adf-src;cgnslib-adf-build-release">
-    <RemoveDir Directories="$(BUILD_DIR)\iriclib-adf-$(IRICLIB_VER)\release"/>
-    <RemoveDir Directories="$(INSTALL_DIR)\iriclib-adf-$(IRICLIB_VER)\release"/>
-    <Exec Command="ctest -S iriclib-adf.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-iriclib-adf-release.log"/>
+    <RemoveDir Directories="$(BUILD_DIR)\iriclib-adf-$(IRICLIB_VER)\release" />
+    <RemoveDir Directories="$(INSTALL_DIR)\iriclib-adf-$(IRICLIB_VER)\release" />
+    <Exec Command="ctest -S iriclib-adf.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-iriclib-adf-release.log" />
   </Target>
 
   <Target Name="iriclib-adf-src" DependsOnTargets="iriclib-adf-download" Condition="!Exists('$(SRC_DIR)\iriclib-adf-$(IRICLIB_ADF_VER)')">
@@ -93,10 +93,10 @@
   </Target>
 
   <Target Name="iriclib-adf-download" Condition="!Exists('iriclib-adf-$(IRICLIB_ADF_VER).zip')">
-    <MkDir Directories="$(DOWNLOADS_DIR)" />
+    <MakeDir Directories="$(DOWNLOADS_DIR)" />
     <Message Text="Downloading iriclib_$(IRICLIB_ADF_VER).zip" />
     <Exec Command="$(CURL) https://github.com/scharlton2/iriclib/archive/adf-$(IRICLIB_ADF_VER).zip" WorkingDirectory="$(DOWNLOADS_DIR)" />
-    <Move SourceFiles="$(DOWNLOADS_DIR)\adf-$(IRICLIB_ADF_VER).zip" DestinationFiles="$(DOWNLOADS_DIR)\iriclib-adf-$(IRICLIB_ADF_VER).zip"/>
+    <Move SourceFiles="$(DOWNLOADS_DIR)\adf-$(IRICLIB_ADF_VER).zip" DestinationFiles="$(DOWNLOADS_DIR)\iriclib-adf-$(IRICLIB_ADF_VER).zip" />
   </Target>
 
 </Project>

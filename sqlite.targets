@@ -1,45 +1,33 @@
 <Project DefaultTargets="sqlite-build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <Import Project="programs.prop" Condition="'$(CURL)'==''"/>
+  <Import Project="programs.prop" Condition="'$(CURL)'==''" />
 
   <PropertyGroup>
-    <BUILD_DIR Condition=" '$(BUILD_DIR)' == '' ">lib\build</BUILD_DIR>
-    <DOWNLOADS_DIR Condition=" '$(DOWNLOADS_DIR)' == '' ">downloads</DOWNLOADS_DIR>
-    <INSTALL_DIR Condition=" '$(INSTALL_DIR)' == '' ">lib\install</INSTALL_DIR>
-    <SRC_DIR Condition=" '$(SRC_DIR)' == '' ">lib\src</SRC_DIR>
-    <TOP_DIR Condition=" '$(TOP_DIR)' == '' ">..\..\..\src\sqlite-src-3320300</TOP_DIR>
+    <sqlite_top_dir>..\..\..\src\sqlite-src-3320300</sqlite_top_dir>
   </PropertyGroup>
-
-  <!--
-  curl.exe -L -O https://www.sqlite.org/2020/sqlite-src-3320300.zip
-  cd Release
-  nmake /f ..\sqlite-src-3320300\Makefile.msc TOP=..\sqlite-src-3320300 TCLDIR=C:\ActiveTcl TCLVERSION=86t
-  cd Debug
-  nmake /f ..\sqlite-src-3320300\Makefile.msc TOP=..\sqlite-src-3320300 TCLDIR=C:\ActiveTcl TCLVERSION=86t DEBUG=2
-  -->
 
   <Target Name="sqlite-build" DependsOnTargets="sqlite-build-debug;sqlite-build-release" />
 
   <Target Name="sqlite-build-release" Inputs="sqlite.targets" Outputs="$(INSTALL_DIR)\sqlite-src-3320300\release\sqlite3.lib" DependsOnTargets="sqlite-src">
-    <Exec Command="rd /s /q $(INSTALL_DIR)\sqlite-src-3320300\release" Condition="Exists('$(INSTALL_DIR)\sqlite-src-3320300\release')" />
+    <RemoveDir Directories="$(INSTALL_DIR)\sqlite-src-3320300\release" />
     <MakeDir Directories="$(INSTALL_DIR)\sqlite-src-3320300\release" />
-    <Exec Command="nmake /f $(TOP_DIR)\Makefile.msc TOP=$(TOP_DIR) SYMBOLS=0" WorkingDirectory="$(INSTALL_DIR)\sqlite-src-3320300\release"/>
+    <Exec Command="nmake /f $(sqlite_top_dir)\Makefile.msc TOP=$(sqlite_top_dir) SYMBOLS=0" WorkingDirectory="$(INSTALL_DIR)\sqlite-src-3320300\release" />
   </Target>
 
   <Target Name="sqlite-build-debug" Inputs="sqlite.targets" Outputs="$(INSTALL_DIR)\sqlite-src-3320300\debug\sqlite3.lib" DependsOnTargets="sqlite-src">
-    <Exec Command="rd /s /q $(INSTALL_DIR)\sqlite-src-3320300\debug" Condition="Exists('$(INSTALL_DIR)\sqlite-src-3320300\debug')" />
+    <RemoveDir Directories="$(INSTALL_DIR)\sqlite-src-3320300\debug" />
     <MakeDir Directories="$(INSTALL_DIR)\sqlite-src-3320300\debug" />
-    <Exec Command="nmake /f $(TOP_DIR)\Makefile.msc TOP=$(TOP_DIR) DEBUG=2" WorkingDirectory="$(INSTALL_DIR)\sqlite-src-3320300\debug"/>
+    <Exec Command="nmake /f $(sqlite_top_dir)\Makefile.msc TOP=$(sqlite_top_dir) DEBUG=2" WorkingDirectory="$(INSTALL_DIR)\sqlite-src-3320300\debug" />
   </Target>
 
   <Target Name="sqlite-src" DependsOnTargets="proj-download" Condition="!Exists('$(SRC_DIR)\sqlite-src-3320300')">
-    <Exec Command="7z x $(DOWNLOADS_DIR)\sqlite-src-3320300.zip -o$(SRC_DIR)"/>
+    <Exec Command="7z x $(DOWNLOADS_DIR)\sqlite-src-3320300.zip -o$(SRC_DIR)" />
   </Target>
 
   <Target Name="sqlite-download" Condition="!Exists('$(DOWNLOADS_DIR)\sqlite-src-3320300.zip')">
     <MakeDir Directories="$(DOWNLOADS_DIR)" />
     <Message Text="Downloading https://www.sqlite.org/2020/sqlite-src-3320300.zip" />
-    <Exec Command="$(CURL) https://www.sqlite.org/2020/sqlite-src-3320300.zip" WorkingDirectory="$(DOWNLOADS_DIR)"/>
+    <Exec Command="$(CURL) https://www.sqlite.org/2020/sqlite-src-3320300.zip" WorkingDirectory="$(DOWNLOADS_DIR)" />
   </Target>
 
 </Project>

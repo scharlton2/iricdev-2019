@@ -28,7 +28,7 @@
       <gdal_opts_release>$(gdal_opts_release) PROJ_LIBRARY=$(TOP_DIR)\$(INSTALL_DIR)\proj-$(PROJ_VER)\$(gdal_config)\lib\proj.lib</gdal_opts_release>
     </PropertyGroup>
 
-    <Exec Command="rd /s /q $(gdal_inst)" Condition="Exists('$(gdal_inst)')" />
+    <RemoveDir Directories="$(gdal_inst)" />
     <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(gdal_opts_release) clean"  />
     <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(gdal_opts_release)" />
     <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(gdal_opts_release) devinstall" />
@@ -48,17 +48,18 @@
       <gdal_opts_debug>$(gdal_opts_debug) PROJ_LIBRARY=$(TOP_DIR)\$(INSTALL_DIR)\proj-$(PROJ_VER)\$(gdal_config)\lib\proj_d.lib</gdal_opts_debug>
     </PropertyGroup>
 
-    <Exec Command="rd /s /q $(gdal_inst)" Condition="Exists('$(gdal_inst)')" />
+    <RemoveDir Directories="$(gdal_inst)" />
     <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(gdal_opts_debug) clean"  />
     <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(gdal_opts_debug)" />
     <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(gdal_opts_debug) devinstall" />
   </Target>
 
   <Target Name="gdal-src" DependsOnTargets="gdal-download" Condition="!Exists('$(SRC_DIR)\gdal-$(GDAL_VER)')">
-    <Exec Command="7z x $(DOWNLOADS_DIR)\gdal-$(GDAL_VER).tar.gz -so | 7z x -si -ttar -o$(SRC_DIR)"/>
+    <Exec Command="7z x $(DOWNLOADS_DIR)\gdal-$(GDAL_VER).tar.gz -so | 7z x -si -ttar -o$(SRC_DIR)" />
   </Target>
 
   <Target Name="gdal-download" Condition="!Exists('$(DOWNLOADS_DIR)\gdal-$(GDAL_VER).tar.gz')">
+    <MakeDir Directories="$(DOWNLOADS_DIR)" />
     <Message Text="Downloading gdal-$(GDAL_VER).tar.gz" />
     <Exec Command="$(CURL) http://download.osgeo.org/gdal/$(GDAL_VER)/gdal-$(GDAL_VER).tar.gz" WorkingDirectory="$(DOWNLOADS_DIR)" />
   </Target>

@@ -1,21 +1,21 @@
 <Project DefaultTargets="netcdf-c-build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <Import Project="programs.prop" Condition="'$(CURL)'==''"/>
+  <Import Project="programs.prop" Condition="'$(CURL)'==''" />
 
   <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
 
   <Target Name="netcdf-c-build" DependsOnTargets="netcdf-c-build-debug;netcdf-c-build-release" />
 
   <Target Name="netcdf-c-build-debug" Inputs="netcdf-c.targets;netcdf-c.cmake" Outputs="$(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\debug\lib\netcdf.lib" DependsOnTargets="netcdf-c-src;hdf5-build-debug">
-    <Exec Command="rd /s /q $(BUILD_DIR)\netcdf-c-$(NETCDF_VER)\debug" Condition="Exists('$(BUILD_DIR)\netcdf-c-$(NETCDF_VER)\debug')" />
-    <Exec Command="rd /s /q $(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\debug" Condition="Exists('$(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\debug')" />
-    <Exec Command="ctest -S netcdf-c.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-netcdf-c-debug.log"/>
+    <RemoveDir Directories="$(BUILD_DIR)\netcdf-c-$(NETCDF_VER)\debug" />
+    <RemoveDir Directories="$(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\debug" />
+    <Exec Command="ctest -S netcdf-c.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-netcdf-c-debug.log" />
   </Target>
 
   <Target Name="netcdf-c-build-release" Inputs="netcdf-c.targets;netcdf-c.cmake" Outputs="$(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\release\lib\netcdf.lib" DependsOnTargets="netcdf-c-src;hdf5-build-release">
-    <Exec Command="rd /s /q $(BUILD_DIR)\netcdf-c-$(NETCDF_VER)\release" Condition="Exists('$(BUILD_DIR)\netcdf-c-$(NETCDF_VER)\release')" />
-    <Exec Command="rd /s /q $(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\release" Condition="Exists('$(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\release')" />
-    <Exec Command="ctest -S netcdf-c.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-netcdf-c-release.log"/>
+    <RemoveDir Directories="$(BUILD_DIR)\netcdf-c-$(NETCDF_VER)\release" />
+    <RemoveDir Directories="$(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\release" />
+    <Exec Command="ctest -S netcdf-c.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-netcdf-c-release.log" />
   </Target>
 
   <Target Name="netcdf-c-src" DependsOnTargets="netcdf-c-download" Condition="!Exists('$(SRC_DIR)\netcdf-c-$(NETCDF_VER)')">

@@ -5,11 +5,12 @@
   <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
 
   <Target Name="boost-src" DependsOnTargets="boost-download" Condition="!Exists('$(SRC_DIR)\boost-$(BOOST_VER)')">
-    <Exec Command="7z x $(DOWNLOADS_DIR)\boost_$(BOOST_UVER).7z -o$(SRC_DIR)"/>
-    <Exec Command="ren $(SRC_DIR)\boost_$(BOOST_UVER) boost-$(BOOST_VER)"/>
+    <Exec Command="7z x $(DOWNLOADS_DIR)\boost_$(BOOST_UVER).7z -o$(SRC_DIR)" />
+    <Exec Command="ren $(SRC_DIR)\boost_$(BOOST_UVER) boost-$(BOOST_VER)" />
   </Target>
 
   <Target Name="boost-download" Condition="!Exists('$(DOWNLOADS_DIR)\boost_$(BOOST_UVER).7z')">
+    <MakeDir Directories="$(DOWNLOADS_DIR)" />
     <Message Text="Downloading boost_$(BOOST_UVER).7z" />
     <Exec Command="$(CURL) https://sourceforge.net/projects/boost/files/boost/$(BOOST_VER)/boost_$(BOOST_UVER).7z" WorkingDirectory="$(DOWNLOADS_DIR)" />
   </Target>
