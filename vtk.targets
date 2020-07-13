@@ -1,32 +1,27 @@
 <Project DefaultTargets="vtk-build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <Import Project="programs.prop" Condition="'$(CURL)'==''"/>
+  <Import Project="programs.prop" Condition="'$(CURL)'==''" />
 
-  <PropertyGroup>
-    <BUILD_DIR Condition=" '$(BUILD_DIR)' == '' ">lib\build</BUILD_DIR>
-    <DOWNLOADS_DIR Condition=" '$(DOWNLOADS_DIR)' == '' ">downloads</DOWNLOADS_DIR>
-    <INSTALL_DIR Condition=" '$(INSTALL_DIR)' == '' ">lib\install</INSTALL_DIR>
-    <SRC_DIR Condition=" '$(SRC_DIR)' == '' ">lib\src</SRC_DIR>
-  </PropertyGroup>
+  <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
 
   <Target Name="vtk-build" DependsOnTargets="vtk-build-debug;vtk-build-release;vtk-build-debug-leaks" />
 
   <Target Name="vtk-build-release" Inputs="vtk.targets;vtk.cmake" Outputs="$(INSTALL_DIR)\vtk-$(VTK_VER)\release\lib\vtkGUISupportQtOpenGL-$(VTK_MAJMIN).lib" DependsOnTargets="vtk-src">
     <Exec Command="rd /s /q $(BUILD_DIR)\vtk-$(VTK_VER)\release" Condition="Exists('$(BUILD_DIR)\vtk-$(VTK_VER)\release')" />
     <Exec Command="rd /s /q $(INSTALL_DIR)\vtk-$(VTK_VER)\release" Condition="Exists('$(INSTALL_DIR)\vtk-$(VTK_VER)\release')" />
-    <Exec Command="ctest -S vtk.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O logs\$(SGEN)-vtk-release.log"/>
+    <Exec Command="ctest -S vtk.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-vtk-release.log"/>
   </Target>
 
   <Target Name="vtk-build-debug" Inputs="vtk.targets;vtk.cmake" Outputs="$(INSTALL_DIR)\vtk-$(VTK_VER)\debug\lib\vtkGUISupportQtOpenGL-$(VTK_MAJMIN).lib" DependsOnTargets="vtk-src">
     <Exec Command="rd /s /q $(BUILD_DIR)\vtk-$(VTK_VER)\debug" Condition="Exists('$(BUILD_DIR)\vtk-$(VTK_VER)\debug')" />
     <Exec Command="rd /s /q $(INSTALL_DIR)\vtk-$(VTK_VER)\debug" Condition="Exists('$(INSTALL_DIR)\vtk-$(VTK_VER)\debug')" />
-    <Exec Command="ctest -S vtk.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O logs\$(SGEN)-vtk-debug.log"/>
+    <Exec Command="ctest -S vtk.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-vtk-debug.log"/>
   </Target>
 
   <Target Name="vtk-build-debug-leaks" Inputs="vtk.targets;vtk.cmake" Outputs="$(INSTALL_DIR)\vtk-$(VTK_VER)\debug-vtk-leaks\lib\vtkGUISupportQtOpenGL-$(VTK_MAJMIN).lib" DependsOnTargets="vtk-src" >
     <Exec Command="rd /s /q $(BUILD_DIR)\vtk-$(VTK_VER)\debug-vtk-leaks" Condition="Exists('$(BUILD_DIR)\vtk-$(VTK_VER)\debug-vtk-leaks')" />
     <Exec Command="rd /s /q $(INSTALL_DIR)\vtk-$(VTK_VER)\debug-vtk-leaks" Condition="Exists('$(INSTALL_DIR)\vtk-$(VTK_VER)\debug-vtk-leaks')" />
-    <Exec Command="ctest -S vtk.cmake -DCONF_DIR:STRING=debug-vtk-leaks -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O logs\$(SGEN)-vtk-debug-leaks.log"/>
+    <Exec Command="ctest -S vtk.cmake -DCONF_DIR:STRING=debug-vtk-leaks -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-vtk-debug-leaks.log"/>
   </Target>
 
   <Target Name="vtk-src" DependsOnTargets="vtk-download" Condition="!Exists('$(SRC_DIR)\VTK-$(VTK_VER)')">

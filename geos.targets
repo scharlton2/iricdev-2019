@@ -2,25 +2,20 @@
 
   <Import Project="programs.prop" Condition="'$(CURL)'==''"/>
 
-  <PropertyGroup>
-    <BUILD_DIR Condition=" '$(BUILD_DIR)' == '' ">lib\build</BUILD_DIR>
-    <DOWNLOADS_DIR Condition=" '$(DOWNLOADS_DIR)' == '' ">downloads</DOWNLOADS_DIR>
-    <INSTALL_DIR Condition=" '$(INSTALL_DIR)' == '' ">lib\install</INSTALL_DIR>
-    <SRC_DIR Condition=" '$(SRC_DIR)' == '' ">lib\src</SRC_DIR>
-  </PropertyGroup>
+  <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
 
   <Target Name="geos-build" DependsOnTargets="geos-build-debug;geos-build-release" />
 
   <Target Name="geos-build-debug" Inputs="geos.targets;geos.cmake" Outputs="$(INSTALL_DIR)\geos-$(GEOS_VER)\debug\lib\geos.lib" DependsOnTargets="geos-src">
     <Exec Command="rd /s /q $(BUILD_DIR)\geos-$(GEOS_VER)\debug" Condition="Exists('$(BUILD_DIR)\geos-$(GEOS_VER)\debug')" />
     <Exec Command="rd /s /q $(INSTALL_DIR)\geos-$(GEOS_VER)\debug" Condition="Exists('$(INSTALL_DIR)\geos-$(GEOS_VER)\debug')" />
-    <Exec Command="ctest -S geos.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O logs\$(SGEN)-geos-debug.log"/>
+    <Exec Command="ctest -S geos.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-geos-debug.log"/>
   </Target>
 
   <Target Name="geos-build-release" Inputs="geos.targets;geos.cmake" Outputs="$(INSTALL_DIR)\geos-$(GEOS_VER)\release\lib\geos.lib" DependsOnTargets="geos-src">
     <Exec Command="rd /s /q $(BUILD_DIR)\geos-$(GEOS_VER)\release" Condition="Exists('$(BUILD_DIR)\geos-$(GEOS_VER)\release')" />
     <Exec Command="rd /s /q $(INSTALL_DIR)\geos-$(GEOS_VER)\release" Condition="Exists('$(INSTALL_DIR)\geos-$(GEOS_VER)\release')" />
-    <Exec Command="ctest -S geos.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O logs\$(SGEN)-geos-release.log"/>
+    <Exec Command="ctest -S geos.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-geos-release.log"/>
   </Target>
 
   <Target Name="geos-src" DependsOnTargets="geos-download" Condition="!Exists('$(SRC_DIR)\geos-$(GEOS_VER)')">

@@ -1,13 +1,8 @@
 <Project DefaultTargets="qwt-build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <Import Project="programs.prop" Condition="'$(CURL)'==''"/>
+  <Import Project="programs.prop" Condition="'$(CURL)'==''" />
 
-  <PropertyGroup>
-    <BUILD_DIR Condition=" '$(BUILD_DIR)' == '' ">lib\build</BUILD_DIR>
-    <DOWNLOADS_DIR Condition=" '$(DOWNLOADS_DIR)' == '' ">downloads</DOWNLOADS_DIR>
-    <INSTALL_DIR Condition=" '$(INSTALL_DIR)' == '' ">lib\install</INSTALL_DIR>
-    <SRC_DIR Condition=" '$(SRC_DIR)' == '' ">lib\src</SRC_DIR>
-  </PropertyGroup>
+  <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
 
   <Target Name="boost-src" DependsOnTargets="boost-download" Condition="!Exists('$(SRC_DIR)\boost-$(BOOST_VER)')">
     <Exec Command="7z x $(DOWNLOADS_DIR)\boost_$(BOOST_UVER).7z -o$(SRC_DIR)"/>

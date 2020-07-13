@@ -2,19 +2,14 @@
 
   <Import Project="programs.prop" Condition="'$(CURL)'==''"/>
 
-  <PropertyGroup>
-    <BUILD_DIR Condition=" '$(BUILD_DIR)' == '' ">lib\build</BUILD_DIR>
-    <DOWNLOADS_DIR Condition=" '$(DOWNLOADS_DIR)' == '' ">downloads</DOWNLOADS_DIR>
-    <INSTALL_DIR Condition=" '$(INSTALL_DIR)' == '' ">lib\install</INSTALL_DIR>
-    <SRC_DIR Condition=" '$(SRC_DIR)' == '' ">lib\src</SRC_DIR>
-  </PropertyGroup>
+  <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
 
   <Target Name="hdf5-build" DependsOnTargets="hdf5-build-debug;hdf5-build-release" />
 
   <Target Name="hdf5-build-debug" Inputs="hdf5.targets;hdf5.cmake" Outputs="$(INSTALL_DIR)\hdf5-$(HDF5_VER)\debug\lib\hdf5_D.lib" DependsOnTargets="hdf5-src">
     <RemoveDir Directories="$(BUILD_DIR)\hdf5-$(HDF5_VER)\debug"/>
     <RemoveDir Directories="$(INSTALL_DIR)\hdf5-$(HDF5_VER)\debug"/>
-    <Exec Command="ctest -S hdf5.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O logs\$(SGEN)-hdf5-debug.log"/>
+    <Exec Command="ctest -S hdf5.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-hdf5-debug.log"/>
     <Exec Command="cpack -C Debug -G ZIP" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\debug"/>
     <Exec Command="xcopy /s /i _CPack_Packages\win64\ZIP\HDF5-1.8.21-win64 ..\..\..\install\hdf5-$(HDF5_VER)\debug" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\debug"/>
   </Target>
@@ -22,7 +17,7 @@
   <Target Name="hdf5-build-release" Inputs="hdf5.targets;hdf5.cmake" Outputs="$(INSTALL_DIR)\hdf5-$(HDF5_VER)\release\lib\hdf5.lib" DependsOnTargets="hdf5-src">
     <RemoveDir Directories="$(BUILD_DIR)\hdf5-$(HDF5_VER)\release"/>
     <RemoveDir Directories="$(INSTALL_DIR)\hdf5-$(HDF5_VER)\release"/>
-    <Exec Command="ctest -S hdf5.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O logs\$(SGEN)-hdf5-release.log"/>
+    <Exec Command="ctest -S hdf5.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-hdf5-release.log"/>
     <Exec Command="cpack -C Release -G ZIP" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\release"/>
     <Exec Command="xcopy /s /i _CPack_Packages\win64\ZIP\HDF5-1.8.21-win64 ..\..\..\install\hdf5-$(HDF5_VER)\release" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\release"/>
   </Target>

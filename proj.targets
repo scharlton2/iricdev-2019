@@ -2,25 +2,20 @@
 
   <Import Project="programs.prop" Condition="'$(CURL)'==''"/>
 
-  <PropertyGroup>
-    <BUILD_DIR Condition=" '$(BUILD_DIR)' == '' ">lib\build</BUILD_DIR>
-    <DOWNLOADS_DIR Condition=" '$(DOWNLOADS_DIR)' == '' ">downloads</DOWNLOADS_DIR>
-    <INSTALL_DIR Condition=" '$(INSTALL_DIR)' == '' ">lib\install</INSTALL_DIR>
-    <SRC_DIR Condition=" '$(SRC_DIR)' == '' ">lib\src</SRC_DIR>
-  </PropertyGroup>
+  <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
 
   <Target Name="proj-build" DependsOnTargets="proj-build-debug;proj-build-release" />
 
   <Target Name="proj-build-release" Inputs="proj.targets;proj.cmake" Outputs="$(INSTALL_DIR)\proj-$(PROJ_VER)\release\lib\proj.lib" DependsOnTargets="proj-src;sqlite-build-release;libtiff-build-release">
     <Exec Command="rd /s /q $(BUILD_DIR)\proj-$(PROJ_VER)\release" Condition="Exists('$(BUILD_DIR)\proj-$(PROJ_VER)\release')" />
     <Exec Command="rd /s /q $(INSTALL_DIR)\proj-$(PROJ_VER)\release" Condition="Exists('$(INSTALL_DIR)\proj-$(PROJ_VER)\release')" />
-    <Exec Command="ctest -S proj.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O logs\$(SGEN)-proj-release.log"/>
+    <Exec Command="ctest -S proj.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-proj-release.log"/>
   </Target>
 
   <Target Name="proj-build-debug" Inputs="proj.targets;proj.cmake" Outputs="$(INSTALL_DIR)\proj-$(PROJ_VER)\debug\lib\proj_d.lib" DependsOnTargets="proj-src;sqlite-build-debug;libtiff-build-debug">
     <Exec Command="rd /s /q $(BUILD_DIR)\proj-$(PROJ_VER)\debug" Condition="Exists('$(BUILD_DIR)\proj-$(PROJ_VER)\debug')" />
     <Exec Command="rd /s /q $(INSTALL_DIR)\proj-$(PROJ_VER)\debug" Condition="Exists('$(INSTALL_DIR)\proj-$(PROJ_VER)\debug')" />
-    <Exec Command="ctest -S proj.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O logs\$(SGEN)-proj-debug.log"/>
+    <Exec Command="ctest -S proj.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-proj-debug.log"/>
   </Target>
 
   <!-- Test Failure: AdobeDeflate compression support -->

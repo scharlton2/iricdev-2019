@@ -2,24 +2,20 @@
 
   <Import Project="programs.prop" Condition="'$(CURL)'==''"/>
 
-  <PropertyGroup>
-    <BUILD_DIR Condition=" '$(BUILD_DIR)' == '' ">lib\build</BUILD_DIR>
-    <INSTALL_DIR Condition=" '$(INSTALL_DIR)' == '' ">lib\install</INSTALL_DIR>
-    <SRC_DIR Condition=" '$(SRC_DIR)' == '' ">lib\src</SRC_DIR>
-  </PropertyGroup>
+  <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
 
   <Target Name="libtiff-build" DependsOnTargets="libtiff-build-debug;libtiff-build-release" />
 
   <Target Name="libtiff-build-release" Inputs="libtiff.targets;libtiff.cmake" Outputs="$(INSTALL_DIR)\tiff-$(LIBTIFF_VER)\release\lib\tiff.lib" DependsOnTargets="libtiff-src">
     <Exec Command="rd /s /q $(BUILD_DIR)\tiff-$(LIBTIFF_VER)\release" Condition="Exists('$(BUILD_DIR)\tiff-$(LIBTIFF_VER)\release')" />
     <Exec Command="rd /s /q $(INSTALL_DIR)\tiff-$(LIBTIFF_VER)\release" Condition="Exists('$(INSTALL_DIR)\tiff-$(LIBTIFF_VER)\release')" />
-    <Exec Command="ctest -S libtiff.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O logs\$(SGEN)-libtiff-release.log"/>
+    <Exec Command="ctest -S libtiff.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-libtiff-release.log"/>
   </Target>
 
   <Target Name="libtiff-build-debug" Inputs="libtiff.targets" Outputs="$(INSTALL_DIR)\tiff-$(LIBTIFF_VER)\debug\lib\tiffd.lib" DependsOnTargets="libtiff-src">
     <Exec Command="rd /s /q $(BUILD_DIR)\tiff-$(LIBTIFF_VER)\debug" Condition="Exists('$(BUILD_DIR)\tiff-$(LIBTIFF_VER)\debug')" />
     <Exec Command="rd /s /q $(INSTALL_DIR)\tiff-$(LIBTIFF_VER)\debug" Condition="Exists('$(INSTALL_DIR)\tiff-$(LIBTIFF_VER)\debug')" />
-    <Exec Command="ctest -S libtiff.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O logs\$(SGEN)-libtiff-debug.log"/>
+    <Exec Command="ctest -S libtiff.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-libtiff-debug.log"/>
   </Target>
 
   <Target Name="libtiff-src" DependsOnTargets="libtiff-download" Condition="!Exists('$(SRC_DIR)\tiff-$(LIBTIFF_VER)')">

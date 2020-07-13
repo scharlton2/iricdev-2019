@@ -2,12 +2,7 @@
 
   <Import Project="programs.prop" Condition="'$(CURL)'==''"/>
 
-  <PropertyGroup>
-    <BUILD_DIR Condition=" '$(BUILD_DIR)' == '' ">lib\build</BUILD_DIR>
-    <DOWNLOADS_DIR Condition=" '$(DOWNLOADS_DIR)' == '' ">downloads</DOWNLOADS_DIR>
-    <INSTALL_DIR Condition=" '$(INSTALL_DIR)' == '' ">lib\install</INSTALL_DIR>
-    <SRC_DIR Condition=" '$(SRC_DIR)' == '' ">lib\src</SRC_DIR>
-  </PropertyGroup>
+  <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
 
   <Target Name="udunits-build" DependsOnTargets="udunits-build-debug;udunits-build-release" />
 
@@ -17,7 +12,7 @@
       <udunits_inst>$(INSTALL_DIR)\udunits-$(UDUNITS_VER)\$(config)</udunits_inst>
     </PropertyGroup>
     <Exec Command="rd /s /q $(udunits_inst)" Condition="Exists('$(udunits_inst)')" />
-    <Exec Command="ctest -S udunits.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O logs\$(SGEN)-udunits-debug.log"/>
+    <Exec Command="ctest -S udunits.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-udunits-debug.log"/>
   </Target>
 
   <Target Name="udunits-build-release" Inputs="udunits.targets" Outputs="$(INSTALL_DIR)\udunits-$(UDUNITS_VER)\release\lib\udunits2.lib" DependsOnTargets="udunits-src;expat-build-release">
@@ -26,7 +21,7 @@
       <udunits_inst>$(INSTALL_DIR)\udunits-$(UDUNITS_VER)\$(config)</udunits_inst>
     </PropertyGroup>
     <Exec Command="rd /s /q $(udunits_inst)" Condition="Exists('$(udunits_inst)')" />
-    <Exec Command="ctest -S udunits.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O logs\$(SGEN)-udunits-release.log"/>
+    <Exec Command="ctest -S udunits.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-udunits-release.log"/>
   </Target>
 
   <Target Name="udunits-src" DependsOnTargets="udunits-download" Condition="!Exists('$(SRC_DIR)\udunits-$(UDUNITS_VER)')">

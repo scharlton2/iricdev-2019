@@ -1,59 +1,57 @@
 <Project DefaultTargets="gdal-build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <Import Project="programs.prop" Condition="'$(CURL)'==''"/>
+  <Import Project="programs.prop" Condition="'$(CURL)'==''" />
+
+  <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
 
   <PropertyGroup>
-    <INSTALL_DIR Condition=" '$(INSTALL_DIR)' == '' ">lib\install</INSTALL_DIR>
-    <DOWNLOADS_DIR Condition=" '$(DOWNLOADS_DIR)' == '' ">downloads</DOWNLOADS_DIR>
-    <SRC_DIR Condition=" '$(SRC_DIR)' == '' ">lib\src</SRC_DIR>
-    <GDAL_VER Condition=" '$(GDAL_VER)' == '' ">3.0.4</GDAL_VER>
-    <topdir>$(MSBuildProjectDirectory)</topdir>
-    <options>$(options) WIN64=YES</options>
-    <options>$(options) MSVC_VER=1926</options>
-    <options>$(options) NETCDF_PLUGIN=YES</options>
-    <options>$(options) NETCDF_SETTING=YES</options>
-    <options>$(options) NETCDF_HAS_NC4=YES</options>
-    <makefile>$(topdir)\$(SRC_DIR)\gdal-$(GDAL_VER)\makefile.vc</makefile>
+    <!-- <GDAL_VER Condition=" '$(GDAL_VER)' == '' ">3.0.4</GDAL_VER> -->
+    <gdal_opts>$(gdal_opts) WIN64=YES</gdal_opts>
+    <gdal_opts>$(gdal_opts) MSVC_VER=1926</gdal_opts>
+    <gdal_opts>$(gdal_opts) NETCDF_PLUGIN=YES</gdal_opts>
+    <gdal_opts>$(gdal_opts) NETCDF_SETTING=YES</gdal_opts>
+    <gdal_opts>$(gdal_opts) NETCDF_HAS_NC4=YES</gdal_opts>
+    <makefile>$(TOP_DIR)\$(SRC_DIR)\gdal-$(GDAL_VER)\makefile.vc</makefile>
   </PropertyGroup>
 
   <Target Name="gdal-build" DependsOnTargets="gdal-build-debug;gdal-build-release" />
 
   <Target Name="gdal-build-release" Inputs="gdal.targets" Outputs="$(INSTALL_DIR)\gdal-$(GDAL_VER)\release\lib\gdal_i.lib" DependsOnTargets="gdal-src;netcdf-c-build-release;proj-build-release">
     <PropertyGroup>
-      <config>release</config>
-      <gdal_src>$(topdir)\lib\src\gdal-$(GDAL_VER)</gdal_src>
-      <gdal_inst>$(topdir)\$(INSTALL_DIR)\gdal-$(GDAL_VER)\$(config)</gdal_inst>
-      <options-release>$(options) GDAL_HOME=$(gdal_inst)</options-release>
-      <options-release>$(options-release) NETCDF_LIB=$(topdir)\$(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\$(config)\lib\netcdf.lib</options-release>
-      <options-release>$(options-release) NETCDF_INC_DIR=$(topdir)\$(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\$(config)\include</options-release>
-      <options-release>$(options-release) PROJ_INCLUDE=-I$(topdir)\$(INSTALL_DIR)\proj-$(PROJ_VER)\$(config)\include</options-release>
-      <options-release>$(options-release) PROJ_LIBRARY=$(topdir)\$(INSTALL_DIR)\proj-$(PROJ_VER)\$(config)\lib\proj.lib</options-release>
+      <gdal_config>release</gdal_config>
+      <gdal_src>$(TOP_DIR)\lib\src\gdal-$(GDAL_VER)</gdal_src>
+      <gdal_inst>$(TOP_DIR)\$(INSTALL_DIR)\gdal-$(GDAL_VER)\$(gdal_config)</gdal_inst>
+      <gdal_opts_release>$(gdal_opts) GDAL_HOME=$(gdal_inst)</gdal_opts_release>
+      <gdal_opts_release>$(gdal_opts_release) NETCDF_LIB=$(TOP_DIR)\$(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\$(gdal_config)\lib\netcdf.lib</gdal_opts_release>
+      <gdal_opts_release>$(gdal_opts_release) NETCDF_INC_DIR=$(TOP_DIR)\$(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\$(gdal_config)\include</gdal_opts_release>
+      <gdal_opts_release>$(gdal_opts_release) PROJ_INCLUDE=-I$(TOP_DIR)\$(INSTALL_DIR)\proj-$(PROJ_VER)\$(gdal_config)\include</gdal_opts_release>
+      <gdal_opts_release>$(gdal_opts_release) PROJ_LIBRARY=$(TOP_DIR)\$(INSTALL_DIR)\proj-$(PROJ_VER)\$(gdal_config)\lib\proj.lib</gdal_opts_release>
     </PropertyGroup>
 
     <Exec Command="rd /s /q $(gdal_inst)" Condition="Exists('$(gdal_inst)')" />
-    <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(options-release) clean"  />
-    <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(options-release)" />
-    <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(options-release) devinstall" />
+    <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(gdal_opts_release) clean"  />
+    <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(gdal_opts_release)" />
+    <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(gdal_opts_release) devinstall" />
   </Target>
 
   <Target Name="gdal-build-debug" Inputs="gdal.targets" Outputs="$(INSTALL_DIR)\gdal-$(GDAL_VER)\debug\lib\gdal_i.lib" DependsOnTargets="gdal-src;netcdf-c-build-debug;proj-build-debug">
     <PropertyGroup>
-      <config>debug</config>
-      <gdal_src>$(topdir)\lib\src\gdal-$(GDAL_VER)</gdal_src>
-      <gdal_inst>$(topdir)\$(INSTALL_DIR)\gdal-$(GDAL_VER)\$(config)</gdal_inst>
-      <options-debug>$(options) DEBUG=1</options-debug>
-      <options-debug>$(options-debug) WITH_PDB=1</options-debug>
-      <options-debug>$(options-debug) GDAL_HOME=$(gdal_inst)</options-debug>
-      <options-debug>$(options-debug) NETCDF_LIB=$(topdir)\$(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\$(config)\lib\netcdf.lib</options-debug>
-      <options-debug>$(options-debug) NETCDF_INC_DIR=$(topdir)\$(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\$(config)\include</options-debug>
-      <options-debug>$(options-debug) PROJ_INCLUDE=-I$(topdir)\$(INSTALL_DIR)\proj-$(PROJ_VER)\$(config)\include</options-debug>
-      <options-debug>$(options-debug) PROJ_LIBRARY=$(topdir)\$(INSTALL_DIR)\proj-$(PROJ_VER)\$(config)\lib\proj_d.lib</options-debug>
+      <gdal_config>debug</gdal_config>
+      <gdal_src>$(TOP_DIR)\lib\src\gdal-$(GDAL_VER)</gdal_src>
+      <gdal_inst>$(TOP_DIR)\$(INSTALL_DIR)\gdal-$(GDAL_VER)\$(gdal_config)</gdal_inst>
+      <gdal_opts_debug>$(gdal_opts) DEBUG=1</gdal_opts_debug>
+      <gdal_opts_debug>$(gdal_opts_debug) WITH_PDB=1</gdal_opts_debug>
+      <gdal_opts_debug>$(gdal_opts_debug) GDAL_HOME=$(gdal_inst)</gdal_opts_debug>
+      <gdal_opts_debug>$(gdal_opts_debug) NETCDF_LIB=$(TOP_DIR)\$(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\$(gdal_config)\lib\netcdf.lib</gdal_opts_debug>
+      <gdal_opts_debug>$(gdal_opts_debug) NETCDF_INC_DIR=$(TOP_DIR)\$(INSTALL_DIR)\netcdf-c-$(NETCDF_VER)\$(gdal_config)\include</gdal_opts_debug>
+      <gdal_opts_debug>$(gdal_opts_debug) PROJ_INCLUDE=-I$(TOP_DIR)\$(INSTALL_DIR)\proj-$(PROJ_VER)\$(gdal_config)\include</gdal_opts_debug>
+      <gdal_opts_debug>$(gdal_opts_debug) PROJ_LIBRARY=$(TOP_DIR)\$(INSTALL_DIR)\proj-$(PROJ_VER)\$(gdal_config)\lib\proj_d.lib</gdal_opts_debug>
     </PropertyGroup>
 
     <Exec Command="rd /s /q $(gdal_inst)" Condition="Exists('$(gdal_inst)')" />
-    <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(options-debug) clean"  />
-    <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(options-debug)" />
-    <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(options-debug) devinstall" />
+    <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(gdal_opts_debug) clean"  />
+    <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(gdal_opts_debug)" />
+    <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(gdal_opts_debug) devinstall" />
   </Target>
 
   <Target Name="gdal-src" DependsOnTargets="gdal-download" Condition="!Exists('$(SRC_DIR)\gdal-$(GDAL_VER)')">

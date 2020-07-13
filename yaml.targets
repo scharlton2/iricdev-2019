@@ -2,12 +2,7 @@
 
   <Import Project="programs.prop" Condition="'$(CURL)'==''"/>
 
-  <PropertyGroup>
-    <BUILD_DIR Condition=" '$(BUILD_DIR)' == '' ">lib\build</BUILD_DIR>
-    <DOWNLOADS_DIR Condition=" '$(DOWNLOADS_DIR)' == '' ">downloads</DOWNLOADS_DIR>
-    <INSTALL_DIR Condition=" '$(INSTALL_DIR)' == '' ">lib\install</INSTALL_DIR>
-    <SRC_DIR Condition=" '$(SRC_DIR)' == '' ">lib\src</SRC_DIR>
-  </PropertyGroup>
+  <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
 
   <!-- yaml-cpp no longer depends on Boost since version 0.6.0 -->
   <Target Name="yaml-cpp-build" DependsOnTargets="yaml-cpp-build-debug;yaml-cpp-build-release" />
@@ -15,13 +10,13 @@
   <Target Name="yaml-cpp-build-debug" Inputs="yaml.targets;yaml.cmake" Outputs="$(INSTALL_DIR)\yaml-cpp-$(YAML_CPP_VER)\debug\lib\yaml-cpp.lib" DependsOnTargets="yaml-cpp-src">
     <Exec Command="rd /s /q $(BUILD_DIR)\yaml-cpp-$(YAML_CPP_VER)\debug" Condition="Exists('$(BUILD_DIR)\yaml-cpp-$(YAML_CPP_VER)\debug')" />
     <Exec Command="rd /s /q $(INSTALL_DIR)\yaml-cpp-$(YAML_CPP_VER)\debug" Condition="Exists('$(INSTALL_DIR)\yaml-cpp-$(YAML_CPP_VER)\debug')" />
-    <Exec Command="ctest -S yaml.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O logs\$(SGEN)-yaml-cpp-debug.log" />
+    <Exec Command="ctest -S yaml.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-yaml-cpp-debug.log" />
   </Target>
 
   <Target Name="yaml-cpp-build-release" Inputs="yaml.targets;yaml.cmake" Outputs="$(INSTALL_DIR)\yaml-cpp-$(YAML_CPP_VER)\release\lib\yaml-cpp.lib" DependsOnTargets="yaml-cpp-src">
     <Exec Command="rd /s /q $(BUILD_DIR)\yaml-cpp-$(YAML_CPP_VER)\release" Condition="Exists('$(BUILD_DIR)\yaml-cpp-$(YAML_CPP_VER)\release')" />
     <Exec Command="rd /s /q $(INSTALL_DIR)\yaml-cpp-$(YAML_CPP_VER)\release" Condition="Exists('$(INSTALL_DIR)\yaml-cpp-$(YAML_CPP_VER)\release')" />
-    <Exec Command="ctest -S yaml.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O logs\$(SGEN)-yaml-cpp-release.log" />
+    <Exec Command="ctest -S yaml.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-yaml-cpp-release.log" />
   </Target>
 
   <Target Name="yaml-cpp-src" DependsOnTargets="yaml-cpp-download" Condition="!Exists('$(SRC_DIR)\yaml-cpp-$(YAML_CPP_VER)')">

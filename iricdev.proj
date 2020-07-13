@@ -3,11 +3,6 @@
   <Import Project="programs.prop" />
 
   <PropertyGroup>
-    <INSTALL_DIR>lib\install</INSTALL_DIR>
-    <SRC_DIR>lib\src</SRC_DIR>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <VTK_MAJMIN>$([System.Text.RegularExpressions.Regex]::Match($(VTK_VER), `[0-9]\d*\.[0-9]\d*`))</VTK_MAJMIN>
     <HDF5_MAJMIN>$([System.Text.RegularExpressions.Regex]::Match($(HDF5_VER), `[0-9]\d*\.[0-9]\d*`))</HDF5_MAJMIN>
     <CGNSLIB_MAJMIN>$([System.Text.RegularExpressions.Regex]::Match($(CGNSLIB_VER), `[0-9]\d*\.[0-9]\d*`))</CGNSLIB_MAJMIN>
@@ -121,6 +116,7 @@
     <Message Text="VTK_MAJMIN=$(VTK_MAJMIN)" />
     <Message Text="VTK_VER=$(VTK_VER)" />
     <Message Text="YAML_CPP_VER=$(YAML_CPP_VER)" />
+    <Message Text="ZFlavor=$(ZFlavor)" />
     <Message Text="Environment:" />
     <Exec Command="set" />
   </Target>

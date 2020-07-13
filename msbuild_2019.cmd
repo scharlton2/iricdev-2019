@@ -33,6 +33,10 @@ REM msbuild /nologo /target:qtwebkit-build iricdev.proj
 
 REM msbuild /nologo /target:hdf5-build iricdev.proj
 REM msbuild /nologo /target:iriclib-build iricdev.proj
-msbuild /nologo /target:hdf5-build-release iricdev.proj
+REM msbuild /nologo /target:hdf5-build-release iricdev.proj
+
+REM msbuild /nologo /target:cgnslib-test-move iricdev.proj
+
+msbuild /nologo /target:dump iricdev.proj
 
 endlocal
