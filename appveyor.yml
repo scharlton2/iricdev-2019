@@ -46,11 +46,11 @@ before_build:
 build_script:
 ##  - msbuild /nologo /verbosity:minimal /target:appveyor-%config% iricdev.proj
   # Step 1
-  - msbuild /nologo /verbosity:minimal /target:vtk-build-%config% iricdev.proj
+##  - msbuild /nologo /verbosity:minimal /target:vtk-build-%config% iricdev.proj
   # Step 2
 ##  - msbuild /nologo /verbosity:minimal /target:hdf5-build-%config% iricdev.proj
   # Step 3
-##  - msbuild /nologo /verbosity:minimal /target:cgnslib-build-%config% iricdev.proj
+  - msbuild /nologo /verbosity:minimal /target:cgnslib-build-%config% iricdev.proj
   # Step 4
 ##  - msbuild /nologo /verbosity:minimal /target:iriclib-build-%config% iricdev.proj
 
