@@ -42,18 +42,41 @@ before_build:
   - if not exist downloads (md downloads)
   - where msbuild
   - msbuild -version
+  - ps: |
+      if ($true) {
+        # remove old versions
+        Remove-Item -Recurse -Force -exclude cgnslib-$env:CGNSLIB_VER      .\lib\install\cgnslib-*
+        Remove-Item -Recurse -Force -exclude expat-$env:EXPAT_VER          .\lib\install\expat-*
+        Remove-Item -Recurse -Force -exclude gdal-$env:GDAL_VER            .\lib\install\gdal-*
+        Remove-Item -Recurse -Force -exclude geos-$env:GEOS_VER            .\lib\install\geos-*
+        Remove-Item -Recurse -Force -exclude hdf5-$env:HDF5_VER            .\lib\install\hdf5-*
+        Remove-Item -Recurse -Force -exclude iriclib-$env:IRICLIB_VER      .\lib\install\iriclib-*
+        Remove-Item -Recurse -Force -exclude netcdf-c-$env:NETCDF_VER      .\lib\install\netcdf-c-*
+        Remove-Item -Recurse -Force -exclude openssl-$env:OPENSSL_VER      .\lib\install\openssl-*
+        Remove-Item -Recurse -Force -exclude proj-$env:PROJ_VER            .\lib\install\proj-*
+        Remove-Item -Recurse -Force -exclude Qwt-$env:QWT_VER              .\lib\install\Qwt-*
+        Remove-Item -Recurse -Force -exclude shapelib-$env:SHAPELIB_VER    .\lib\install\shapelib-*
+        Remove-Item -Recurse -Force -exclude sqlite-src-3320300            .\lib\install\sqlite-src-*
+        Remove-Item -Recurse -Force -exclude tiff-$env:LIBTIFF_VER         .\lib\install\tiff-*
+        Remove-Item -Recurse -Force -exclude udunits-$env:UDUNITS_VER      .\lib\install\udunits-*
+        Remove-Item -Recurse -Force -exclude vtk-$env:VTK_VER              .\lib\install\vtk-*
+        Remove-Item -Recurse -Force -exclude yaml-cpp-$env:YAML_CPP_VER    .\lib\install\yaml-cpp-*
+      }
 
+# Since appveyor has time limits (1 hour) we must build in steps
 build_script:
+  - ps: |
+      if (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\vtk-$env:VTK_VER\$env:config" -PathType Container) {
+        msbuild /nologo /verbosity:minimal /target:vtk-build-$env:config iricdev.proj
+      } elseif (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\iriclib-$env:IRICLIB_VER\$env:config" -PathType Container) {
+        msbuild /nologo /verbosity:minimal /target:iriclib-build-$env:config iricdev.proj
+      } else {
+        msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
+      }
+
+after_build:
+  - set
   - ps: Get-ChildItem -Recurse C:\iricdev
-##  - msbuild /nologo /verbosity:minimal /target:appveyor-%config% iricdev.proj
-  # Step 1
-##  - msbuild /nologo /verbosity:minimal /target:vtk-build-%config% iricdev.proj
-  # Step 2
-##  - msbuild /nologo /verbosity:minimal /target:hdf5-build-%config% iricdev.proj
-  # Step 3
-##  - msbuild /nologo /verbosity:minimal /target:cgnslib-build-%config% iricdev.proj
-  # Step 4
-##  - msbuild /nologo /verbosity:minimal /target:iriclib-build-%config% iricdev.proj
 
 artifacts:
   - path: lib\install
