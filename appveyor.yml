@@ -1,13 +1,16 @@
 version: '{branch}-{build}'
 
-image: Visual Studio 2013
+# QT 5.14 is only available with VS2019 on appveyor
+image: Visual Studio 2019
+
+environment:
+  CL: /MP
 
 # called before clone
 init:
   - echo %APPVEYOR_BUILD_WORKER_IMAGE%
+  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2019" (set GENERATOR="Visual Studio 16 2019"       && set SGEN=vs2019-x64)
   - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" (set GENERATOR="Visual Studio 15 2017 Win64" && set SGEN=vs2017-x64)
-  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" (set GENERATOR="Visual Studio 14 2015 Win64" && set SGEN=vs2015-x64)
-  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2013" (set GENERATOR="Visual Studio 12 2013 Win64" && set SGEN=vs2013-x64)
   - echo %GENERATOR%
   - echo %Configuration%
   - if "%Configuration%"=="Debug"   (set config=debug)
@@ -15,6 +18,7 @@ init:
   - set BUILD_TOOLS=OFF
   - FOR /F "tokens=3 delims= " %%i in ('echo %APPVEYOR_BUILD_WORKER_IMAGE%') do set YEAR=%%i
   - echo %YEAR%
+  - set
 
 clone_folder: C:\iricdev
 
@@ -25,23 +29,31 @@ configuration:
 # Note mkdir is from Git (C:\Program Files\Git\usr\bin\mkdir.exe)
 # It might give unexpected results (use md instead)
 before_build:
-  - call C:\Qt\5.5\msvc2013_64\bin\qtenv2.bat
-  - call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x86_amd64
+  - call C:\Qt\5.14.2\msvc2017_64\bin\qtenv2.bat
+  - if "%SGEN%"=="vs2017-x64"   ( call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat" )
+  - if "%SGEN%"=="vs2019-x64"   ( call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat" )
   - cd "%APPVEYOR_BUILD_FOLDER%"
   - copy appveyor_programs.prop programs.prop
   - call versions.cmd
-  - call cleanup-cache.cmd
   - set BUILD_TOOLS=OFF
   - curl -L -O https://raw.githubusercontent.com/MestreLion/git-tools/cd87904e0b85d74b1d05f6acbd10553a0ceaceb0/git-restore-mtime
   - python git-restore-mtime
+  - if not exist logs (md logs)
+  - if not exist downloads (md downloads)
+  - where msbuild
+  - msbuild -version
 
 build_script:
-  - msbuild /nologo /verbosity:minimal /target:appveyor-%config% iricdev.proj
-  - msbuild /nologo /verbosity:minimal /target:vtk-build-%config% iricdev.proj
-
-after_build:
-  - if not exist logs (md logs)
-  - if exist *.log (copy *.log logs\.)
+  - ps: Get-ChildItem -Recurse C:\iricdev
+##  - msbuild /nologo /verbosity:minimal /target:appveyor-%config% iricdev.proj
+  # Step 1
+##  - msbuild /nologo /verbosity:minimal /target:vtk-build-%config% iricdev.proj
+  # Step 2
+##  - msbuild /nologo /verbosity:minimal /target:hdf5-build-%config% iricdev.proj
+  # Step 3
+##  - msbuild /nologo /verbosity:minimal /target:cgnslib-build-%config% iricdev.proj
+  # Step 4
+##  - msbuild /nologo /verbosity:minimal /target:iriclib-build-%config% iricdev.proj
 
 artifacts:
   - path: lib\install

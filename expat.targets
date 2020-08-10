@@ -1,0 +1,33 @@
+<Project DefaultTargets="qwt-build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="programs.prop" Condition="'$(CURL)'==''" />
+
+  <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
+
+  <Target Name="expat-build" DependsOnTargets="expat-build-debug;expat-build-release" />
+
+  <Target Name="expat-build-debug" Inputs="expat.targets" Outputs="$(INSTALL_DIR)\expat-$(EXPAT_VER)\debug\lib\expatd.lib" DependsOnTargets="expat-src">
+    <RemoveDir Directories="$(BUILD_DIR)\expat-$(EXPAT_VER)\debug" />
+    <RemoveDir Directories="$(INSTALL_DIR)\expat-$(EXPAT_VER)\debug" />
+    <Exec Command="ctest -S build-expat.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-expat-debug.log" />
+  </Target>
+
+  <Target Name="expat-build-release" Inputs="expat.targets" Outputs="$(INSTALL_DIR)\expat-$(EXPAT_VER)\release\lib\expat.lib" DependsOnTargets="expat-src">
+    <RemoveDir Directories="$(BUILD_DIR)\expat-$(EXPAT_VER)\release" />
+    <RemoveDir Directories="$(INSTALL_DIR)\expat-$(EXPAT_VER)\release" />
+    <Exec Command="ctest -S build-expat.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-expat-release.log" />
+  </Target>
+
+  <Target Name="expat-src" DependsOnTargets="expat-download" Condition="!Exists('$(SRC_DIR)\expat-$(EXPAT_VER)')">
+    <Exec Command="7z x $(DOWNLOADS_DIR)\expat-$(EXPAT_VER).zip -o$(SRC_DIR)" />
+    <Exec Command="ren $(SRC_DIR)\libexpat-$(EXPAT_UVER) expat-$(EXPAT_VER)" />
+  </Target>
+
+  <Target Name="expat-download" Condition="!Exists('$(DOWNLOADS_DIR)\expat-$(EXPAT_VER).zip')">
+    <MakeDir Directories="$(DOWNLOADS_DIR)" />
+    <Message Text="Downloading expat-$(EXPAT_VER).zip" />
+    <Exec Command="$(CURL) https://github.com/libexpat/libexpat/archive/$(EXPAT_UVER).zip" WorkingDirectory="$(DOWNLOADS_DIR)" />
+    <Move SourceFiles="$(DOWNLOADS_DIR)\$(EXPAT_UVER).zip" DestinationFiles="$(DOWNLOADS_DIR)\expat-$(EXPAT_VER).zip" />
+  </Target>
+
+</Project>

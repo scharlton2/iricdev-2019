@@ -1,0 +1,31 @@
+<Project DefaultTargets="libtiff-build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="programs.prop" Condition="'$(CURL)'==''" />
+
+  <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
+
+  <Target Name="libtiff-build" DependsOnTargets="libtiff-build-debug;libtiff-build-release" />
+
+  <Target Name="libtiff-build-release" Inputs="libtiff.targets;libtiff.cmake" Outputs="$(INSTALL_DIR)\tiff-$(LIBTIFF_VER)\release\lib\tiff.lib" DependsOnTargets="libtiff-src">
+    <RemoveDir Directories="$(BUILD_DIR)\tiff-$(LIBTIFF_VER)\release" />
+    <RemoveDir Directories="$(INSTALL_DIR)\tiff-$(LIBTIFF_VER)\release" />
+    <Exec Command="ctest -S libtiff.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-libtiff-release.log" />
+  </Target>
+
+  <Target Name="libtiff-build-debug" Inputs="libtiff.targets;libtiff.cmake" Outputs="$(INSTALL_DIR)\tiff-$(LIBTIFF_VER)\debug\lib\tiffd.lib" DependsOnTargets="libtiff-src">
+    <RemoveDir Directories="$(BUILD_DIR)\tiff-$(LIBTIFF_VER)\debug" />
+    <RemoveDir Directories="$(INSTALL_DIR)\tiff-$(LIBTIFF_VER)\debug" />
+    <Exec Command="ctest -S libtiff.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-libtiff-debug.log" />
+  </Target>
+
+  <Target Name="libtiff-src" DependsOnTargets="libtiff-download" Condition="!Exists('$(SRC_DIR)\tiff-$(LIBTIFF_VER)')">
+    <Exec Command="7z x $(DOWNLOADS_DIR)\tiff-$(LIBTIFF_VER).zip -o$(SRC_DIR)" Condition="!Exists('$(SRC_DIR)\tiff-$(LIBTIFF_VER)')" />
+  </Target>
+
+  <Target Name="libtiff-download" Condition="!Exists('$(DOWNLOADS_DIR)\tiff-$(LIBTIFF_VER).zip')">
+    <MakeDir Directories="$(DOWNLOADS_DIR)" />
+    <Message Text="Downloading tiff-$(LIBTIFF_VER).zip" />
+    <Exec Command="$(CURL) http://download.osgeo.org/libtiff/tiff-$(LIBTIFF_VER).zip" WorkingDirectory="$(DOWNLOADS_DIR)" />
+  </Target>
+
+</Project>

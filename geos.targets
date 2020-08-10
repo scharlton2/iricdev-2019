@@ -1,0 +1,31 @@
+<Project DefaultTargets="geos-build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="programs.prop" Condition="'$(CURL)'==''" />
+
+  <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
+
+  <Target Name="geos-build" DependsOnTargets="geos-build-debug;geos-build-release" />
+
+  <Target Name="geos-build-debug" Inputs="geos.targets;geos.cmake" Outputs="$(INSTALL_DIR)\geos-$(GEOS_VER)\debug\lib\geos.lib" DependsOnTargets="geos-src">
+    <RemoveDir Directories="$(BUILD_DIR)\geos-$(GEOS_VER)\debug" />
+    <RemoveDir Directories="$(INSTALL_DIR)\geos-$(GEOS_VER)\debug" />
+    <Exec Command="ctest -S geos.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-geos-debug.log" />
+  </Target>
+
+  <Target Name="geos-build-release" Inputs="geos.targets;geos.cmake" Outputs="$(INSTALL_DIR)\geos-$(GEOS_VER)\release\lib\geos.lib" DependsOnTargets="geos-src">
+    <RemoveDir Directories="$(BUILD_DIR)\geos-$(GEOS_VER)\release" />
+    <RemoveDir Directories="$(INSTALL_DIR)\geos-$(GEOS_VER)\release" />
+    <Exec Command="ctest -S geos.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-geos-release.log" />
+  </Target>
+
+  <Target Name="geos-src" DependsOnTargets="geos-download" Condition="!Exists('$(SRC_DIR)\geos-$(GEOS_VER)')">
+    <Exec Command="7z x $(DOWNLOADS_DIR)\geos-$(GEOS_VER).tar.bz2 -so | 7z x -si -ttar -o$(SRC_DIR)" />
+  </Target>
+
+  <Target Name="geos-download" Condition="!Exists('$(DOWNLOADS_DIR)\geos-$(GEOS_VER).tar.bz2')">
+    <MakeDir Directories="$(DOWNLOADS_DIR)" />
+    <Message Text="Downloading geos-$(GEOS_VER).tar.bz2" />
+    <Exec Command="$(CURL) http://download.osgeo.org/geos/geos-$(GEOS_VER).tar.bz2" WorkingDirectory="$(DOWNLOADS_DIR)" />
+  </Target>
+
+</Project>

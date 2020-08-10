@@ -1,0 +1,28 @@
+<Project DefaultTargets="qwt-build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="programs.prop" Condition="'$(CURL)'==''" />
+
+  <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
+
+  <Target Name="qwt-build" DependsOnTargets="qwt-src" Condition="!Exists('$(INSTALL_DIR)\qwt-$(QWT_VER)\lib')">
+    <PropertyGroup>
+      <topdir>$(MSBuildProjectDirectory)</topdir>
+    </PropertyGroup>
+    <Exec Command="qmake" WorkingDirectory="$(topdir)\$(SRC_DIR)\qwt-$(QWT_VER)" />
+    <Exec Command="nmake" WorkingDirectory="$(topdir)\$(SRC_DIR)\qwt-$(QWT_VER)" />
+    <Exec Command="nmake install" WorkingDirectory="$(topdir)\$(SRC_DIR)\qwt-$(QWT_VER)" />
+    <Exec Command="xcopy c:\Qwt-$(QWT_VER) $(INSTALL_DIR)\Qwt-$(QWT_VER) /I/S/E" />
+    <Exec Command="rmdir /q /s c:\Qwt-$(QWT_VER)" />
+  </Target>
+
+  <Target Name="qwt-src" DependsOnTargets="qwt-download" Condition="!Exists('$(SRC_DIR)\qwt-$(QWT_VER)')">
+    <Exec Command="7z x $(DOWNLOADS_DIR)\qwt-$(QWT_VER).zip -o$(SRC_DIR)" />
+  </Target>
+
+  <Target Name="qwt-download" Condition="!Exists('$(DOWNLOADS_DIR)\qwt-$(QWT_VER).zip')">
+    <MakeDir Directories="$(DOWNLOADS_DIR)" />
+    <Message Text="Downloading qwt-$(QWT_VER).zip" />
+    <Exec Command="$(CURL) https://sourceforge.net/projects/qwt/files/qwt/$(QWT_VER)/qwt-$(QWT_VER).zip" WorkingDirectory="$(DOWNLOADS_DIR)" />
+  </Target>
+
+</Project>

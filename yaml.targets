@@ -1,0 +1,33 @@
+<Project DefaultTargets="yaml-cpp-build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="programs.prop" Condition="'$(CURL)'==''" />
+
+  <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
+
+  <!-- yaml-cpp no longer depends on Boost since version 0.6.0 -->
+  <Target Name="yaml-cpp-build" DependsOnTargets="yaml-cpp-build-debug;yaml-cpp-build-release" />
+
+  <Target Name="yaml-cpp-build-debug" Inputs="yaml.targets;yaml.cmake" Outputs="$(INSTALL_DIR)\yaml-cpp-$(YAML_CPP_VER)\debug\lib\yaml-cpp.lib" DependsOnTargets="yaml-cpp-src">
+    <RemoveDir Directories="$(BUILD_DIR)\yaml-cpp-$(YAML_CPP_VER)\debug" />
+    <RemoveDir Directories="$(INSTALL_DIR)\yaml-cpp-$(YAML_CPP_VER)\debug" />
+    <Exec Command="ctest -S yaml.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-yaml-cpp-debug.log" />
+  </Target>
+
+  <Target Name="yaml-cpp-build-release" Inputs="yaml.targets;yaml.cmake" Outputs="$(INSTALL_DIR)\yaml-cpp-$(YAML_CPP_VER)\release\lib\yaml-cpp.lib" DependsOnTargets="yaml-cpp-src">
+    <RemoveDir Directories="$(BUILD_DIR)\yaml-cpp-$(YAML_CPP_VER)\release" />
+    <RemoveDir Directories="$(INSTALL_DIR)\yaml-cpp-$(YAML_CPP_VER)\release" />
+    <Exec Command="ctest -S yaml.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-yaml-cpp-release.log" />
+  </Target>
+
+  <Target Name="yaml-cpp-src" DependsOnTargets="yaml-cpp-download" Condition="!Exists('$(SRC_DIR)\yaml-cpp-$(YAML_CPP_VER)')">
+    <Exec Command="7z x $(DOWNLOADS_DIR)\yaml-cpp-$(YAML_CPP_VER).zip -o$(SRC_DIR)" />
+    <Exec Command="ren $(SRC_DIR)\yaml-cpp-yaml-cpp-$(YAML_CPP_VER) yaml-cpp-$(YAML_CPP_VER)" />
+  </Target>
+
+  <Target Name="yaml-cpp-download" Condition="!Exists('$(DOWNLOADS_DIR)\yaml-cpp-$(YAML_CPP_VER).zip')">
+    <MakeDir Directories="$(DOWNLOADS_DIR)" />
+    <Message Text="Downloading release-$(YAML_CPP_VER).zip" />
+    <Exec Command="$(CURL) https://github.com/jbeder/yaml-cpp/archive/yaml-cpp-$(YAML_CPP_VER).zip" WorkingDirectory="$(DOWNLOADS_DIR)" />
+  </Target>
+
+</Project>

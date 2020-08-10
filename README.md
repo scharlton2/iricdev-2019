@@ -2,30 +2,34 @@
 
 Build libraries needed to build iRIC on Linux and Windows
 
-## Windows Visual Studio 2013 Build (Full)
-* Visual Studio 2013 available from https://my.visualstudio.com/Downloads?pid=1901
+## Windows Visual Studio Community 2019 Build (Full)
+* Visual Studio 2019 available from https://visualstudio.microsoft.com/vs/
+  Install at least Workload 'Desktop development with C++ (7.02 GB)
+  Set environmental variable CL to /MP to speed up compilations
+* Qt Visual Studio Tools available from https://marketplace.visualstudio.com/items?itemName=TheQtCompany.QtVisualStudioTools2019
 * git available from https://git-scm.com/download/win
-* cmake available from https://cmake.org/download/
-* Qt 5.5 available from https://www.qt.io/download/
+* Qt 5.14 available from https://www.qt.io/download-qt-installer?hsCtaTracking=99d9dd4f-5681-48d2-b096-470725510d34%7C074ddad0-fdef-4e53-8aa8-5e8a876d6ab4
 * 7-zip available from http://www.7-zip.org/
-* NSIS available from http://nsis.sourceforge.net/Download/ (for HDF5 packaging)
 * Add 7-zip installation path to "Path" environment variable.
+* NSIS available from http://nsis.sourceforge.net/Download/ (for HDF5 packaging)
 * Perl available from https://www.activestate.com/activeperl/downloads (for OpenSSL)
 * Tcl available from https://www.activestate.com/activetcl/downloads (if building cgns and hdf5 tools)
 * curl available from https://www.nuget.org/packages/curl/ (not required if using the git packaged version)
+* Python 3
 
 ### in a git bash shell
 ```
-git clone https://github.com/i-RIC/iricdev.git iricdev_2013
-cd iricdev_2013
+git clone https://github.com/i-RIC/iricdev.git iricdev_2019
+cd iricdev_2019
 ```
 
+Note: this may no longer be necessary (at least on windows 10)
 copy programs_std.prop to programs.prop and make any necessary changes (ie path to git curl program)
 
-### in a VS2013 x64 Native Tools Command Prompt
+### in a Command Prompt
 ```
-cd iricdev_2013
-msbuild_2013.cmd (or msbuild_2013_w_tools.cmd to build cgns and hdf5 tools)
+cd iricdev_2019
+msbuild_2019.cmd (or msbuild_2019_w_tools.cmd to build cgns and hdf5 tools)
 copy paths.pri [prepost-gui-root]\.
 copy dirExt.prop [prepost-gui-root]\tools\data\.
 mkdir [prepost-gui-root]\libdlls\debug.
@@ -37,8 +41,8 @@ add install\cgnslib-[CGNS_VER]\release\bin and install\hdf5-[HDF5_VER]\release\b
 or if you want to use the VTK_DEBUG_LEAKS configuration
 
 ```
-cd iricdev_2013
-msbuild_2013.cmd (or msbuild_2013_w_tools.cmd to build cgns and hdf5 tools)
+cd iricdev_2019
+msbuild_2019.cmd (or msbuild_2019_w_tools.cmd to build cgns and hdf5 tools)
 copy paths-debug-vtk-leaks.pri [prepost-gui-root]\paths.pri
 copy dirExt-debug-vtk-leaks.prop [prepost-gui-root]\tools\data\dirExt.prop
 mkdir [prepost-gui-root]\libdlls\debug.

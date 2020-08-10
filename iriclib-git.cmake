@@ -4,9 +4,6 @@ set(CTEST_SITE "$ENV{COMPUTERNAME}")
 
 set(CGNS_VER "$ENV{CGNSLIB_VER}")
 set(HDF5_VER "$ENV{HDF5_VER}")
-if(${CGNS_VER} STREQUAL "3.2.1")
-  set(CGNS_VER "$ENV{CGNSLIB_VER}-patch1")
-endif()
 
 set(CTEST_SOURCE_DIRECTORY "${CTEST_SCRIPT_DIRECTORY}/lib/src/iriclib-git")
 # avoid caching hdf5 settings
