@@ -50,7 +50,7 @@ build_script:
   # Step 2
 ##  - msbuild /nologo /verbosity:minimal /target:hdf5-build-%config% iricdev.proj
   # Step 3
-  - msbuild /nologo /verbosity:minimal /target:cgnslib-build-%config% iricdev.proj
+##  - msbuild /nologo /verbosity:minimal /target:cgnslib-build-%config% iricdev.proj
   # Step 4
 ##  - msbuild /nologo /verbosity:minimal /target:iriclib-build-%config% iricdev.proj
 
@@ -61,5 +61,5 @@ artifacts:
   - path: dirExt.prop
 
 cache:
- - lib\install
- - logs
+  - lib\install
+  - logs
