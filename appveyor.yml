@@ -44,6 +44,7 @@ before_build:
   - msbuild -version
 
 build_script:
+  - ps: Get-ChildItem -Recurse C:\iricdev
 ##  - msbuild /nologo /verbosity:minimal /target:appveyor-%config% iricdev.proj
   # Step 1
 ##  - msbuild /nologo /verbosity:minimal /target:vtk-build-%config% iricdev.proj
