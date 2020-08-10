@@ -28,16 +28,9 @@ REM
 set BOOST_UVER=%BOOST_VER:.=_%
 set EXPAT_UVER=R_%EXPAT_VER:.=_%
 set OPENSSL_UVER=%OPENSSL_VER:.=_%
-if NOT defined BUILD_TOOLS (
-  set BUILD_TOOLS="OFF"
-)
+if NOT defined BUILD_TOOLS  set BUILD_TOOLS="OFF"
 
 :: nmake cannot create environment variables
-if NOT defined GENERATOR (
-  set GENERATOR="Visual Studio 16 2019"
-)
-if NOT defined SGEN (
-  set SGEN=vs2019-x64
-)
-
+if NOT defined GENERATOR    set GENERATOR="Visual Studio 16 2019"
+if NOT defined SGEN         set SGEN=vs2019-x64
 set VERSIONS_CMD_RUN=YES
