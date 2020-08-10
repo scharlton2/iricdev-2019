@@ -20,7 +20,7 @@
     <Exec Command="nmake /f $(sqlite_top_dir)\Makefile.msc TOP=$(sqlite_top_dir) DEBUG=2" WorkingDirectory="$(INSTALL_DIR)\sqlite-src-3320300\debug" />
   </Target>
 
-  <Target Name="sqlite-src" DependsOnTargets="proj-download" Condition="!Exists('$(SRC_DIR)\sqlite-src-3320300')">
+  <Target Name="sqlite-src" DependsOnTargets="sqlite-download" Condition="!Exists('$(SRC_DIR)\sqlite-src-3320300')">
     <Exec Command="7z x $(DOWNLOADS_DIR)\sqlite-src-3320300.zip -o$(SRC_DIR)" />
   </Target>
 
