@@ -138,7 +138,7 @@ if "%CGNS_ADF%"=="YES" (
 @echo.
 @echo.# boost
 if "%APPVEYOR_BUILD_FOLDER%"=="" (
-  @echo.INCLUDEPATH += "%topdir%lib/src/boost-%BOOST_VER%"
+  @echo.INCLUDEPATH += "%topdir%lib/install/boost-%BOOST_VER%"
 ) else (
   @echo.INCLUDEPATH += "C:/Libraries/boost_%BOOST_UVER%"
 )
