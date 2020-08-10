@@ -19,7 +19,7 @@
   </Target>
 
   <Target Name="expat-src" DependsOnTargets="expat-download" Condition="!Exists('$(SRC_DIR)\expat-$(EXPAT_VER)')">
-    <Exec Command="7z x expat-$(EXPAT_VER).zip -o$(SRC_DIR)" />
+    <Exec Command="7z x $(DOWNLOADS_DIR)\expat-$(EXPAT_VER).zip -o$(SRC_DIR)" />
     <Exec Command="ren $(SRC_DIR)\libexpat-$(EXPAT_UVER) expat-$(EXPAT_VER)" />
   </Target>
 
