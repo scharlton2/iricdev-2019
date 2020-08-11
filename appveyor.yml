@@ -72,6 +72,8 @@ before_build:
         cmd /c start /wait $exePath /exenoui /exelog $env:APPVEYOR_BUILD_FOLDER\logs\ActiveTcl-8.6.9.8609.2-MSWin32-x64-5ccbd9ac8.log /exenoupdates /quiet /norestart
         Push-AppveyorArtifact $env:APPVEYOR_BUILD_FOLDER\logs\ActiveTcl-8.6.9.8609.2-MSWin32-x64-5ccbd9ac8.log
         Start-Sleep 15
+        $env:PATH += ";C:\ActiveTcl\bin"
+        Get-Command tclsh  # reqd by sqlite
       }
 
 # Since appveyor has time limits (1 hour) we must build in steps
