@@ -8,17 +8,17 @@
     <CGNSLIB_MAJMIN>$([System.Text.RegularExpressions.Regex]::Match($(CGNSLIB_VER), `[0-9]\d*\.[0-9]\d*`))</CGNSLIB_MAJMIN>
   </PropertyGroup>
 
-  <Target Name="all" DependsOnTargets="shapelib-build;qwt-build;gdal-build;vtk-build;proj-build;netcdf-c-build;iriclib-build;cgnslib-build;hdf5-build;geos-build;yaml-cpp-build;boost-src;expat-build;udunits-build;openssl-build">
+  <Target Name="all" DependsOnTargets="shapelib-build;qwt-build;gdal-build;vtk-build;proj-build;netcdf-c-build;iriclib-build;cgnslib-build;hdf5-build;geos-build;yaml-cpp-build;boost-src;expat-build;udunits-build;openssl-build;qtwebkit-build">
     <Exec Command="create-files.cmd" />
   </Target>
 
   <!-- all release except vtk-build-release(36:21)-->
-  <Target Name="appveyor-release" DependsOnTargets="shapelib-build-release;qwt-build;gdal-build-release;proj-build;netcdf-c-build-release;iriclib-build-release;cgnslib-build-release;hdf5-build-release;geos-build-release;yaml-cpp-build-release;expat-build-release;udunits-build-release;openssl-build-release">
+  <Target Name="appveyor-release" DependsOnTargets="shapelib-build-release;qwt-build;gdal-build-release;proj-build;netcdf-c-build-release;iriclib-build-release;cgnslib-build-release;hdf5-build-release;geos-build-release;yaml-cpp-build-release;expat-build-release;udunits-build-release;openssl-build-release;qtwebkit-build-release">
     <Exec Command="create-files.cmd" />
   </Target>
 
   <!-- all debug except vtk-build-debug(36:21)-->
-  <Target Name="appveyor-debug" DependsOnTargets="shapelib-build-debug;qwt-build;gdal-build-debug;proj-build;netcdf-c-build-debug;iriclib-build-debug;cgnslib-build-debug;hdf5-build-debug;geos-build-debug;yaml-cpp-build-debug;expat-build-debug;udunits-build-debug;openssl-build-debug">
+  <Target Name="appveyor-debug" DependsOnTargets="shapelib-build-debug;qwt-build;gdal-build-debug;proj-build;netcdf-c-build-debug;iriclib-build-debug;cgnslib-build-debug;hdf5-build-debug;geos-build-debug;yaml-cpp-build-debug;expat-build-debug;udunits-build-debug;openssl-build-debug;qtwebkit-build-debug">
     <Exec Command="create-files.cmd" />
   </Target>
 
@@ -112,6 +112,8 @@
     <Message Text="IRICLIB_ADF_VER=$(IRICLIB_ADF_VER)" />
     <Message Text="NETCDF_VER=$(NETCDF_VER)" />
     <Message Text="PROJ_VER=$(PROJ_VER)" />
+    <Message Text="QT_CMAKE_DIR=$(QT_CMAKE_DIR)" />
+    <Message Text="QT_DIR=$(QT_DIR)" />
     <Message Text="QWT_VER=$(QWT_VER)" />
     <Message Text="SHAPELIB_VER=$(SHAPELIB_VER)" />
     <Message Text="SRC_DIR=$(SRC_DIR)" />
@@ -119,7 +121,6 @@
     <Message Text="VTK_MAJMIN=$(VTK_MAJMIN)" />
     <Message Text="VTK_VER=$(VTK_VER)" />
     <Message Text="YAML_CPP_VER=$(YAML_CPP_VER)" />
-    <Message Text="ZFlavor=$(ZFlavor)" />
     <Message Text="Environment:" />
     <Exec Command="set" />
   </Target>
