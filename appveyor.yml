@@ -43,7 +43,7 @@ before_build:
   - where msbuild
   - msbuild -version
   - ps: |
-      if ($true) {
+      if (Test-Path ".\lib\install" -PathType Container) {
         # remove old versions
         Remove-Item -Recurse -Force -exclude cgnslib-$env:CGNSLIB_VER      .\lib\install\cgnslib-*
         Remove-Item -Recurse -Force -exclude expat-$env:EXPAT_VER          .\lib\install\expat-*
@@ -76,7 +76,7 @@ build_script:
 
 after_build:
   - set
-  - ps: Get-ChildItem -Recurse C:\iricdev
+  - ps: Get-ChildItem -Recurse $env:APPVEYOR_BUILD_FOLDER
 
 artifacts:
   - path: lib\install
