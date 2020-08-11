@@ -69,9 +69,11 @@ build_script:
       if (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\vtk-$env:VTK_VER\$env:config" -PathType Container)) {
         msbuild /nologo /verbosity:minimal /target:vtk-build-$env:config iricdev.proj
       } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\iriclib-$env:IRICLIB_VER\$env:config" -PathType Container)) {
+        Get-Command tclsh  # reqd by sqlite
         msbuild /nologo /verbosity:minimal /target:iriclib-build-$env:config iricdev.proj
       } else {
-        msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
+        Get-Command tclsh  # reqd by sqlite
+        ##msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
       }
 
 after_build:
