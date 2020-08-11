@@ -100,8 +100,10 @@ build_script:
         Write-Output (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\vtk-$env:VTK_VER\$env:config" -PathType Container)
         Write-Output (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\vtk-$env:VTK_VER\$env:config" -PathType Container))
         Get-Command tclsh  # reqd by sqlite
-        echo msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
-        msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
+        ###echo msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
+        ###msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
+        echo msbuild /nologo /verbosity:minimal /target:sqlite-build-$env:config iricdev.proj
+        msbuild /nologo /verbosity:minimal /target:sqlite-build-$env:config iricdev.proj
       }
 
 after_build:
