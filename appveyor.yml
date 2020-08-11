@@ -76,6 +76,7 @@ build_script:
         Write-Output (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\vtk-$env:VTK_VER\$env:config" -PathType Container))
         ##Get-Command tclsh  # reqd by sqlite
         echo msbuild /nologo /verbosity:minimal /target:vtk-build-$env:config iricdev.proj
+        msbuild /nologo /verbosity:minimal /target:vtk-build-$env:config iricdev.proj
       } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\iriclib-$env:IRICLIB_VER\$env:config" -PathType Container)) {
         Write-Output "2"
         Write-Output "$env:APPVEYOR_BUILD_FOLDER\lib\install\vtk-$env:VTK_VER\$env:config"
@@ -84,6 +85,7 @@ build_script:
         Write-Output (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\vtk-$env:VTK_VER\$env:config" -PathType Container))
         ##Get-Command tclsh  # reqd by sqlite
         echo msbuild /nologo /verbosity:minimal /target:iriclib-build-$env:config iricdev.proj
+        msbuild /nologo /verbosity:minimal /target:iriclib-build-$env:config iricdev.proj
       } else {
         Write-Output "3"
         Write-Output "$env:APPVEYOR_BUILD_FOLDER\lib\install\vtk-$env:VTK_VER\$env:config"
@@ -92,6 +94,7 @@ build_script:
         Write-Output (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\vtk-$env:VTK_VER\$env:config" -PathType Container))
         ##Get-Command tclsh  # reqd by sqlite
         echo msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
+        msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
       }
 
 after_build:
