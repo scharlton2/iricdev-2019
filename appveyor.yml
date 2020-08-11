@@ -69,7 +69,7 @@ before_build:
         $exePath = "$env:APPVEYOR_BUILD_FOLDER\downloads\ActiveTcl-8.6.9.8609.2-MSWin32-x64-5ccbd9ac8.exe"
         $downloadUrl = "https://pre-platform-installers.s3.amazonaws.com/ActiveTcl-8.6.9.8609.2-MSWin32-x64-5ccbd9ac8.exe?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJAFTYUXEZJ3HWLEQ%2F20200811%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200811T155115Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=3c38d48a4f422f4d3e193d4f813db5872ce12e89ca8d8c907aea8473cfeefa13"
         (New-Object Net.WebClient).DownloadFile($downloadUrl, $exePath)
-        cmd /c start /wait .\ActiveTcl-8.6.9.8609.2-MSWin32-x64-5ccbd9ac8.exe /exenoui /exelog $env:APPVEYOR_BUILD_FOLDER\ActiveTcl-8.6.9.8609.2-MSWin32-x64-5ccbd9ac8.log /exenoupdates /quiet /norestart
+        cmd /c start /wait $exePath /exenoui /exelog $env:APPVEYOR_BUILD_FOLDER\logs\ActiveTcl-8.6.9.8609.2-MSWin32-x64-5ccbd9ac8.log /exenoupdates /quiet /norestart
       }
   - ps: Get-Command tclsh
   - ps: Start-Sleep 15
