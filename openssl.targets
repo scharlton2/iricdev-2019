@@ -15,7 +15,7 @@
       <installtop>$(topdir)\$(INSTALL_DIR)\openssl-$(OPENSSL_VER)\release</installtop>
     </PropertyGroup>
     <RemoveDir Directories="$(INSTALL_DIR)\openssl-$(OPENSSL_VER)\release" />
-    <Exec Command="$(PERL) Configure VC-WIN64A no-asm" WorkingDirectory="$(SRC_DIR)\openssl-OpenSSL_$(OPENSSL_UVER)" />
+    <Exec Command="perl Configure VC-WIN64A no-asm" WorkingDirectory="$(SRC_DIR)\openssl-OpenSSL_$(OPENSSL_UVER)" />
     <Exec Command="ms\do_win64a.bat" WorkingDirectory="$(SRC_DIR)\openssl-OpenSSL_$(OPENSSL_UVER)" />
     <Exec Command="nmake /f ms\ntdll.mak clean" WorkingDirectory="$(SRC_DIR)\openssl-OpenSSL_$(OPENSSL_UVER)" Condition="Exists('$(SRC_DIR)\openssl-OpenSSL_$(OPENSSL_UVER)\tmp32dll')" />
     <Exec Command="nmake /f ms\ntdll.mak" WorkingDirectory="$(SRC_DIR)\openssl-OpenSSL_$(OPENSSL_UVER)" />
@@ -29,7 +29,7 @@
       <installtop>$(topdir)\$(INSTALL_DIR)\openssl-$(OPENSSL_VER)\debug</installtop>
     </PropertyGroup>
     <RemoveDir Directories="$(INSTALL_DIR)\openssl-$(OPENSSL_VER)\debug" />
-    <Exec Command="$(PERL) Configure VC-WIN64A no-asm" WorkingDirectory="$(SRC_DIR)\openssl-OpenSSL_$(OPENSSL_UVER)" />
+    <Exec Command="perl Configure VC-WIN64A no-asm" WorkingDirectory="$(SRC_DIR)\openssl-OpenSSL_$(OPENSSL_UVER)" />
     <Exec Command="ms\do_win64a.bat" WorkingDirectory="$(SRC_DIR)\openssl-OpenSSL_$(OPENSSL_UVER)" />
     <Exec Command="nmake /f ms\ntdll.mak clean" WorkingDirectory="$(SRC_DIR)\openssl-OpenSSL_$(OPENSSL_UVER)" Condition="Exists('$(SRC_DIR)\openssl-OpenSSL_$(OPENSSL_UVER)\tmp32dll')" />
     <Exec Command="nmake /f ms\ntdll.mak CFLAG=&quot;$(openssl_cflag_debug)&quot;" WorkingDirectory="$(SRC_DIR)\openssl-OpenSSL_$(OPENSSL_UVER)" />
