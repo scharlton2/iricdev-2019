@@ -103,9 +103,13 @@ build_script:
         # ~ 19 minutes (includes netcdf-c (depends on proj but already built))
         msbuild /nologo /verbosity:minimal /target:gdal-build-$env:config iricdev.proj
       } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\geos-$env:GEOS_VER\$env:config" -PathType Container)) {
-        # ~ 2 minutes
+        # ~ ?? minutes
+        echo "$env:APPVEYOR_BUILD_FOLDER\lib\install\geos-$env:GEOS_VER\$env:config"
+        echo "msbuild /nologo /verbosity:minimal /target:geos-build-$env:config iricdev.proj"
         msbuild /nologo /verbosity:minimal /target:geos-build-$env:config iricdev.proj
       } else {
+        echo "$env:APPVEYOR_BUILD_FOLDER\lib\install\geos-$env:GEOS_VER\$env:config"
+        echo "msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj"
         msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
       }
 
