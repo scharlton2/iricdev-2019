@@ -105,19 +105,17 @@ build_script:
           # ~ 11 minutes (includes sqlite and libtiff)
           echo "4"
           msbuild /nologo /verbosity:minimal /target:proj-build-$env:config iricdev.proj
-        } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\gdal-$env:PROJ_VER\$env:config" -PathType Container)) {
+        } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\gdal-$env:GDAL_VER\$env:config" -PathType Container)) {
           # ~ 19 minutes (includes netcdf-c (depends on proj but already built))
           echo "5"
           msbuild /nologo /verbosity:minimal /target:gdal-build-$env:config iricdev.proj
         } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\geos-$env:GEOS_VER\$env:config" -PathType Container)) {
           # ~ ?? minutes
           echo "6"
-          echo "$env:APPVEYOR_BUILD_FOLDER\lib\install\geos-$env:GEOS_VER\$env:config"
           echo "msbuild /nologo /verbosity:minimal /target:geos-build-$env:config iricdev.proj"
           msbuild /nologo /verbosity:minimal /target:geos-build-$env:config iricdev.proj
         } else {
           echo "7"
-          echo "$env:APPVEYOR_BUILD_FOLDER\lib\install\geos-$env:GEOS_VER\$env:config"
           echo "msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj"
           msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
         }
