@@ -31,6 +31,12 @@
     <RemoveDir Directories="$(gdal_inst)" />
     <!-- appveyor calls mkdir from nmake error -->
     <MakeDir Directories="$(gdal_inst)" />
+    <MakeDir Directories="$(gdal_inst)\bin" />
+    <MakeDir Directories="$(gdal_inst)\bin\gdalplugins" />
+    <MakeDir Directories="$(gdal_inst)\data" />
+    <MakeDir Directories="$(gdal_inst)\html" />
+    <MakeDir Directories="$(gdal_inst)\include" />
+    <MakeDir Directories="$(gdal_inst)\lib" />
     <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(gdal_opts_release) clean"  />
     <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(gdal_opts_release)" />
     <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(gdal_opts_release) devinstall" />
@@ -53,6 +59,12 @@
     <RemoveDir Directories="$(gdal_inst)" />
     <!-- appveyor calls mkdir from nmake error -->
     <MakeDir Directories="$(gdal_inst)" />
+    <MakeDir Directories="$(gdal_inst)\bin" />
+    <MakeDir Directories="$(gdal_inst)\bin\gdalplugins" />
+    <MakeDir Directories="$(gdal_inst)\data" />
+    <MakeDir Directories="$(gdal_inst)\html" />
+    <MakeDir Directories="$(gdal_inst)\include" />
+    <MakeDir Directories="$(gdal_inst)\lib" />
     <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(gdal_opts_debug) clean"  />
     <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(gdal_opts_debug)" />
     <Exec WorkingDirectory="$(gdal_src)" Command="nmake -f $(makefile) $(gdal_opts_debug) devinstall" />
