@@ -9,7 +9,7 @@
 
   <Target Name="openssl-build" DependsOnTargets="openssl-build-debug;openssl-build-release" />
 
-  <Target Name="openssl-build-release" Inputs="openssl.targets" Outputs="$(INSTALL_DIR)\openssl-$(OPENSSL_VER)\release\bin\libeay32.dll">
+  <Target Name="openssl-build-release" Inputs="openssl.targets" Outputs="$(INSTALL_DIR)\openssl-$(OPENSSL_VER)\release\bin\libeay32.dll" DependsOnTargets="openssl-src">
     <PropertyGroup>
       <topdir>$(MSBuildProjectDirectory)</topdir>
       <installtop>$(topdir)\$(INSTALL_DIR)\openssl-$(OPENSSL_VER)\release</installtop>
