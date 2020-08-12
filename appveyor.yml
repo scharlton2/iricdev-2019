@@ -110,7 +110,7 @@ build_script:
           echo "5"
           msbuild /nologo /verbosity:minimal /target:gdal-build-$env:config iricdev.proj
         } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\geos-$env:GEOS_VER\$env:config" -PathType Container)) {
-          # ~ ?? minutes
+          # ~ 11 minutes
           echo "6"
           echo "msbuild /nologo /verbosity:minimal /target:geos-build-$env:config iricdev.proj"
           msbuild /nologo /verbosity:minimal /target:geos-build-$env:config iricdev.proj
