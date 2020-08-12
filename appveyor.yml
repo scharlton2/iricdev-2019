@@ -86,7 +86,7 @@ build_script:
         msbuild /nologo /verbosity:minimal /target:iriclib-build-$env:config iricdev.proj
       } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\openssl-$env:OPENSSL_VER\$env:config" -PathType Container)) {
         $env:PATH_SAVE = $env:PATH
-        $env:PATH = C:\Strawberry\perl\bin;$env:PATH
+        $env:PATH = "C:\Strawberry\perl\bin;$env:PATH"
         msbuild /nologo /verbosity:minimal /target:openssl-build-$env:config iricdev.proj
         $env:PATH = $env:PATH_SAVE
       } else {
