@@ -97,8 +97,11 @@ build_script:
         # ~ 5 minutes
         msbuild /nologo /verbosity:minimal /target:openssl-build-$env:config iricdev.proj
       } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\proj-$env:PROJ_VER\$env:config" -PathType Container)) {
-        # ~ ?? minutes (inlcudes sqlite and libtiff)
+        # ~ 11 minutes (includes sqlite and libtiff)
         msbuild /nologo /verbosity:minimal /target:proj-build-$env:config iricdev.proj
+      } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\gdal-$env:PROJ_VER\$env:config" -PathType Container)) {
+        # ~ ?? minutes (includes netcdf-c (depends on proj but already built))
+        msbuild /nologo /verbosity:minimal /target:gdal-build-$env:config iricdev.proj
       } else {
         msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
       }
