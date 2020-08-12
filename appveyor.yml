@@ -88,18 +88,19 @@ before_build:
 build_script:
   - ps: |
       if (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\vtk-$env:VTK_VER\$env:config" -PathType Container)) {
+        # ~ 1 hour
         msbuild /nologo /verbosity:minimal /target:vtk-build-$env:config iricdev.proj
       } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\iriclib-$env:IRICLIB_VER\$env:config" -PathType Container)) {
+        # ~ 8 minutes (includes hdf5 and cgns)
         msbuild /nologo /verbosity:minimal /target:iriclib-build-$env:config iricdev.proj
       } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\openssl-$env:OPENSSL_VER\$env:config" -PathType Container)) {
+        # ~ 5 minutes
         msbuild /nologo /verbosity:minimal /target:openssl-build-$env:config iricdev.proj
+      } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\proj-$env:PROJ_VER\$env:config" -PathType Container)) {
+        # ~ ?? minutes (inlcudes sqlite and libtiff)
+        msbuild /nologo /verbosity:minimal /target:proj-build-$env:config iricdev.proj
       } else {
-        ##msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
-        # Force openssl rebuild
-        if (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\openssl-$env:OPENSSL_VER\$env:config" -PathType Container) {
-          Remove-Item -Force -Recurse "$env:APPVEYOR_BUILD_FOLDER\lib\install\openssl-$env:OPENSSL_VER\$env:config"
-        }
-        msbuild /nologo /verbosity:minimal /target:openssl-build-$env:config iricdev.proj
+        msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
       }
 
 after_build:
