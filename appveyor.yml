@@ -87,30 +87,34 @@ before_build:
 # Since appveyor has time limits (1 hour) we must build in steps
 build_script:
   - ps: |
-      if (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\vtk-$env:VTK_VER\$env:config" -PathType Container)) {
-        # ~ 1 hour
-        msbuild /nologo /verbosity:minimal /target:vtk-build-$env:config iricdev.proj
-      } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\iriclib-$env:IRICLIB_VER\$env:config" -PathType Container)) {
-        # ~ 8 minutes (includes hdf5 and cgns)
-        msbuild /nologo /verbosity:minimal /target:iriclib-build-$env:config iricdev.proj
-      } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\openssl-$env:OPENSSL_VER\$env:config" -PathType Container)) {
-        # ~ 5 minutes
-        msbuild /nologo /verbosity:minimal /target:openssl-build-$env:config iricdev.proj
-      } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\proj-$env:PROJ_VER\$env:config" -PathType Container)) {
-        # ~ 11 minutes (includes sqlite and libtiff)
-        msbuild /nologo /verbosity:minimal /target:proj-build-$env:config iricdev.proj
-      } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\gdal-$env:PROJ_VER\$env:config" -PathType Container)) {
-        # ~ 19 minutes (includes netcdf-c (depends on proj but already built))
-        msbuild /nologo /verbosity:minimal /target:gdal-build-$env:config iricdev.proj
-      } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\geos-$env:GEOS_VER\$env:config" -PathType Container)) {
-        # ~ ?? minutes
-        echo "$env:APPVEYOR_BUILD_FOLDER\lib\install\geos-$env:GEOS_VER\$env:config"
-        echo "msbuild /nologo /verbosity:minimal /target:geos-build-$env:config iricdev.proj"
-        msbuild /nologo /verbosity:minimal /target:geos-build-$env:config iricdev.proj
-      } else {
-        echo "$env:APPVEYOR_BUILD_FOLDER\lib\install\geos-$env:GEOS_VER\$env:config"
-        echo "msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj"
-        msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
+      if ($true) {
+        echo "in build_script"
+        if (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\vtk-$env:VTK_VER\$env:config" -PathType Container)) {
+          # ~ 1 hour
+          msbuild /nologo /verbosity:minimal /target:vtk-build-$env:config iricdev.proj
+        } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\iriclib-$env:IRICLIB_VER\$env:config" -PathType Container)) {
+          # ~ 8 minutes (includes hdf5 and cgns)
+          msbuild /nologo /verbosity:minimal /target:iriclib-build-$env:config iricdev.proj
+        } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\openssl-$env:OPENSSL_VER\$env:config" -PathType Container)) {
+          # ~ 5 minutes
+          msbuild /nologo /verbosity:minimal /target:openssl-build-$env:config iricdev.proj
+        } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\proj-$env:PROJ_VER\$env:config" -PathType Container)) {
+          # ~ 11 minutes (includes sqlite and libtiff)
+          msbuild /nologo /verbosity:minimal /target:proj-build-$env:config iricdev.proj
+        } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\gdal-$env:PROJ_VER\$env:config" -PathType Container)) {
+          # ~ 19 minutes (includes netcdf-c (depends on proj but already built))
+          msbuild /nologo /verbosity:minimal /target:gdal-build-$env:config iricdev.proj
+        } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\geos-$env:GEOS_VER\$env:config" -PathType Container)) {
+          # ~ ?? minutes
+          echo "$env:APPVEYOR_BUILD_FOLDER\lib\install\geos-$env:GEOS_VER\$env:config"
+          echo "msbuild /nologo /verbosity:minimal /target:geos-build-$env:config iricdev.proj"
+          msbuild /nologo /verbosity:minimal /target:geos-build-$env:config iricdev.proj
+        } else {
+          echo "$env:APPVEYOR_BUILD_FOLDER\lib\install\geos-$env:GEOS_VER\$env:config"
+          echo "msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj"
+          msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
+        }
+        echo "out build_script"
       }
 
 after_build:
