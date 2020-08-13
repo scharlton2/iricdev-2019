@@ -112,7 +112,6 @@ build_script:
       else
       {
         # (~ 33 minutes)
-        echo "msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj"
         msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
       }
 

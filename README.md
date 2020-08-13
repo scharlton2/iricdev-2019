@@ -1,4 +1,4 @@
-## iricdev [![Build status](https://ci.appveyor.com/api/projects/status/vgub5bimojgucmx4?svg=true)](https://ci.appveyor.com/project/i-RIC/iricdev-2019)
+## iricdev-2019 [![Build status](https://ci.appveyor.com/api/projects/status/3ua1m85c1f88nbx1?svg=true)](https://ci.appveyor.com/project/i-RIC/iricdev-2019)
 
 Build libraries needed to build iRIC on Windows
 
@@ -14,16 +14,14 @@ Build libraries needed to build iRIC on Windows
 * NSIS available from http://nsis.sourceforge.net/Download/ (for HDF5 packaging)
 * Perl available from https://www.activestate.com/activeperl/downloads (for OpenSSL)
 * Tcl available from https://www.activestate.com/activetcl/downloads (sqlite3 required by proj)
-* curl available from https://www.nuget.org/packages/curl/ (not required if using the git packaged version)
-* Python 3
+* curl available from https://www.nuget.org/packages/curl/ (not required if using the git packaged version or if using Windows 10 >= 17063)
+* Python 3 available from https://www.python.org/downloads/
 
 ### in a git bash shell
 ```
 git clone https://github.com/i-RIC/iricdev-2019.git
 cd iricdev-2019
 ```
-
-Note: this may no longer be necessary (at least on windows 10)
 copy programs_std.prop to programs.prop and make any necessary changes (ie path to git curl program)
 
 ### in a Command Prompt
