@@ -1,10 +1,10 @@
-## iricdev [![Build status](https://ci.appveyor.com/api/projects/status/vgub5bimojgucmx4?svg=true)](https://ci.appveyor.com/project/i-RIC/iricdev)
+## iricdev [![Build status](https://ci.appveyor.com/api/projects/status/vgub5bimojgucmx4?svg=true)](https://ci.appveyor.com/project/i-RIC/iricdev-2019)
 
-Build libraries needed to build iRIC on Linux and Windows
+Build libraries needed to build iRIC on Windows
 
 ## Windows Visual Studio Community 2019 Build (Full)
 * Visual Studio 2019 available from https://visualstudio.microsoft.com/vs/
-  Install at least Workload 'Desktop development with C++ (7.02 GB)
+  Install at least Workload 'Desktop development with C++' (7.02 GB)
   Set environmental variable CL to /MP to speed up compilations
 * Qt Visual Studio Tools available from https://marketplace.visualstudio.com/items?itemName=TheQtCompany.QtVisualStudioTools2019
 * git available from https://git-scm.com/download/win
@@ -13,14 +13,14 @@ Build libraries needed to build iRIC on Linux and Windows
 * Add 7-zip installation path to "Path" environment variable.
 * NSIS available from http://nsis.sourceforge.net/Download/ (for HDF5 packaging)
 * Perl available from https://www.activestate.com/activeperl/downloads (for OpenSSL)
-* Tcl available from https://www.activestate.com/activetcl/downloads (if building cgns and hdf5 tools)
+* Tcl available from https://www.activestate.com/activetcl/downloads (sqlite3 required by proj)
 * curl available from https://www.nuget.org/packages/curl/ (not required if using the git packaged version)
 * Python 3
 
 ### in a git bash shell
 ```
-git clone https://github.com/i-RIC/iricdev.git iricdev_2019
-cd iricdev_2019
+git clone https://github.com/i-RIC/iricdev-2019.git
+cd iricdev-2019
 ```
 
 Note: this may no longer be necessary (at least on windows 10)
@@ -28,7 +28,7 @@ copy programs_std.prop to programs.prop and make any necessary changes (ie path 
 
 ### in a Command Prompt
 ```
-cd iricdev_2019
+cd iricdev-2019
 msbuild_2019.cmd (or msbuild_2019_w_tools.cmd to build cgns and hdf5 tools)
 copy paths.pri [prepost-gui-root]\.
 copy dirExt.prop [prepost-gui-root]\tools\data\.
@@ -41,7 +41,7 @@ add install\cgnslib-[CGNS_VER]\release\bin and install\hdf5-[HDF5_VER]\release\b
 or if you want to use the VTK_DEBUG_LEAKS configuration
 
 ```
-cd iricdev_2019
+cd iricdev-2019
 msbuild_2019.cmd (or msbuild_2019_w_tools.cmd to build cgns and hdf5 tools)
 copy paths-debug-vtk-leaks.pri [prepost-gui-root]\paths.pri
 copy dirExt-debug-vtk-leaks.prop [prepost-gui-root]\tools\data\dirExt.prop
@@ -49,32 +49,4 @@ mkdir [prepost-gui-root]\libdlls\debug.
 mkdir [prepost-gui-root]\libdlls\release.
 :: if building tools
 add install\cgnslib-[CGNS_VER]\release\bin and install\hdf5-[HDF5_VER]\release\bin to "Path"
-```
-
-## Ubuntu 16.04.2 LTS Build (Full)
-
-* C compiler (gcc (Ubuntu 5.4.0-6ubuntu1~16.04.4) 5.4.0 20160609)
-* C++ compiler (g++ (Ubuntu 5.4.0-6ubuntu1~16.04.4) 5.4.0 20160609)
-* cmake (cmake version 3.5.1)
-* wget (GNU Wget 1.17.1 built on linux-gnu)
-
-```
-sudo apt-get install gcc g++ gfortran cmake wget libxt-dev qt5-default qttools5-dev libqt5svg5-dev libqt5webkit5-dev m4
-git clone https://github.com/i-RIC/iricdev.git iricdev_gcc
-cd iricdev_gcc
-./download.sh
-./build_gcc.sh
-```
-
-## Scientific Linux release 6.7 (Carbon) (hdf5, cgns, iriclib)
-* C compiler (icc (ICC) 17.0.2 20170213)
-* C++ compiler (icpc (ICC) 17.0.2 20170213)
-* cmake (cmake version 2.8.12.1)
-* wget (GNU Wget 1.12 built on linux-gnu)
-
-```
-git clone https://github.com/i-RIC/iricdev.git iricdev_icc
-cd iricdev_icc
-./download.sh
-./build_icc.sh
 ```
