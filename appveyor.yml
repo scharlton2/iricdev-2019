@@ -42,8 +42,6 @@ before_build:
   - if not exist downloads (md downloads)
   - where msbuild
   - msbuild -version
-  - set
-  - ps: Get-ChildItem -Recurse $env:APPVEYOR_BUILD_FOLDER > logs\before-build-files.txt
   - ps: |
       if (Test-Path ".\lib\install" -PathType Container) {
         # remove old versions
@@ -66,14 +64,17 @@ before_build:
       }
   - ps: |
       if (-Not (Test-Path "C:\ActiveTcl\bin")) {
+        # TODO simplify this
         $exePath = "$env:APPVEYOR_BUILD_FOLDER\downloads\ActiveTcl-8.6.9.8609.2-MSWin32-x64-5ccbd9ac8.exe"
+        ### The following url has a time limit
         ###$downloadUrl = "https://pre-platform-installers.s3.amazonaws.com/ActiveTcl-8.6.9.8609.2-MSWin32-x64-5ccbd9ac8.exe?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJAFTYUXEZJ3HWLEQ%2F20200811%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200811T155115Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=3c38d48a4f422f4d3e193d4f813db5872ce12e89ca8d8c907aea8473cfeefa13"
         ###(New-Object Net.WebClient).DownloadFile($downloadUrl, $exePath)
-        Copy-Item .\ActiveTcl-8.6.9.8609.2-MSWin32-x64-5ccbd9ac8.exe .\downloads\
+        if (-Not (Test-Path ".\downloads\ActiveTcl-8.6.9.8609.2-MSWin32-x64-5ccbd9ac8.exe")) {
+          Copy-Item .\ActiveTcl-8.6.9.8609.2-MSWin32-x64-5ccbd9ac8.exe .\downloads\
+        }
         cmd /c start /wait $exePath /exenoui /exelog $env:APPVEYOR_BUILD_FOLDER\logs\ActiveTcl-8.6.9.8609.2-MSWin32-x64-5ccbd9ac8.log /exenoupdates /quiet /norestart
         Push-AppveyorArtifact $env:APPVEYOR_BUILD_FOLDER\logs\ActiveTcl-8.6.9.8609.2-MSWin32-x64-5ccbd9ac8.log
         $env:PATH += ";C:\ActiveTcl\bin"
-        $env:PATH = "C:\Strawberry\perl\bin;$env:PATH"
         Get-Command tclsh  # reqd by sqlite
       }
   - ps: |
@@ -87,44 +88,33 @@ before_build:
 # Since appveyor has time limits (1 hour) we must build in steps
 build_script:
   - ps: |
-      if ($true) {
-        echo "in build_script"
-        if (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\vtk-$env:VTK_VER\$env:config" -PathType Container)) {
-          # ~ 1 hour
-          echo "1"
-          msbuild /nologo /verbosity:minimal /target:vtk-build-$env:config iricdev.proj
-        } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\iriclib-$env:IRICLIB_VER\$env:config" -PathType Container)) {
-          # ~ 8 minutes (includes hdf5 and cgns)
-          echo "2"
-          msbuild /nologo /verbosity:minimal /target:iriclib-build-$env:config iricdev.proj
-        } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\openssl-$env:OPENSSL_VER\$env:config" -PathType Container)) {
-          # ~ 5 minutes
-          echo "3"
-          msbuild /nologo /verbosity:minimal /target:openssl-build-$env:config iricdev.proj
-        } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\proj-$env:PROJ_VER\$env:config" -PathType Container)) {
-          # ~ 11 minutes (includes sqlite and libtiff)
-          echo "4"
-          msbuild /nologo /verbosity:minimal /target:proj-build-$env:config iricdev.proj
-        } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\gdal-$env:GDAL_VER\$env:config" -PathType Container)) {
-          # ~ 19 minutes (includes netcdf-c (depends on proj but already built))
-          echo "5"
-          msbuild /nologo /verbosity:minimal /target:gdal-build-$env:config iricdev.proj
-        } elseif (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\geos-$env:GEOS_VER\$env:config" -PathType Container)) {
-          # ~ 11 minutes
-          echo "6"
-          echo "msbuild /nologo /verbosity:minimal /target:geos-build-$env:config iricdev.proj"
-          msbuild /nologo /verbosity:minimal /target:geos-build-$env:config iricdev.proj
-        } else {
-          echo "7"
-          echo "msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj"
-          msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
-        }
-        echo "out build_script"
+      if (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\vtk-$env:VTK_VER\$env:config" -PathType Container))
+      {
+        # (~ 60 minutes)
+        msbuild /nologo /verbosity:minimal /target:vtk-build-$env:config iricdev.proj
       }
-
-after_build:
-  - set
-  - ps: Get-ChildItem -Recurse $env:APPVEYOR_BUILD_FOLDER > logs\after-build-files.txt
+      elseif ( `
+        (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\iriclib-$env:IRICLIB_VER\$env:config" -PathType Container)) -Or `
+        (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\proj-$env:PROJ_VER\$env:config"       -PathType Container)) -Or `
+        (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\gdal-$env:GDAL_VER\$env:config"       -PathType Container)) -Or `
+        (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\openssl-$env:OPENSSL_VER\$env:config" -PathType Container)) )
+      {
+        # (~ 43 minutes)
+        # iriclib ~ 8 minutes (includes hdf5 and cgns)
+        msbuild /nologo /verbosity:minimal /target:iriclib-build-$env:config iricdev.proj
+        # proj ~ 11 minutes (includes sqlite and libtiff)
+        msbuild /nologo /verbosity:minimal /target:proj-build-$env:config iricdev.proj
+        # gdal ~ 19 minutes (includes netcdf-c (depends on proj))
+        msbuild /nologo /verbosity:minimal /target:gdal-build-$env:config iricdev.proj
+        # openssl ~ 5 minutes
+        msbuild /nologo /verbosity:minimal /target:openssl-build-$env:config iricdev.proj
+      }
+      else
+      {
+        # (~ 33 minutes)
+        echo "msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj"
+        msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
+      }
 
 artifacts:
   - path: lib\install
