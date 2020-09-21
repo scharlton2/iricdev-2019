@@ -20,6 +20,8 @@
 
   <Target Name="geos-src" DependsOnTargets="geos-download" Condition="!Exists('$(SRC_DIR)\geos-$(GEOS_VER)')">
     <Exec Command="7z x $(DOWNLOADS_DIR)\geos-$(GEOS_VER).tar.bz2 -so | 7z x -si -ttar -o$(SRC_DIR)" />
+    <Move SourceFiles="$(SRC_DIR)\geos-$(GEOS_VER)\tools\astyle\ASLocalizer.cpp" DestinationFiles="$(SRC_DIR)\geos-$(GEOS_VER)\tools\astyle\ASLocalizer.cpp.orig" />
+    <Exec Command="copy /b $(TOP_DIR)\bom.txt+ASLocalizer.cpp.orig ASLocalizer.cpp" WorkingDirectory="$(SRC_DIR)\geos-$(GEOS_VER)\tools\astyle" />
   </Target>
 
   <Target Name="geos-download" Condition="!Exists('$(DOWNLOADS_DIR)\geos-$(GEOS_VER).tar.bz2')">

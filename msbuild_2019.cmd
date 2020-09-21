@@ -8,5 +8,5 @@ popd
 call versions.cmd
 set GENERATOR="Visual Studio 16 2019"
 set SGEN=vs2019-x64
-msbuild /nologo /target:all iricdev.proj
+msbuild -noLogo -maxCpuCount -target:all iricdev.proj
 endlocal

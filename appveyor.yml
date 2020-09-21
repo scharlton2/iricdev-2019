@@ -91,7 +91,7 @@ build_script:
       if (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\vtk-$env:VTK_VER\$env:config" -PathType Container))
       {
         # (~ 60 minutes)
-        msbuild /nologo /verbosity:minimal /target:vtk-build-$env:config iricdev.proj
+        msbuild -noLogo -verbosity:minimal -maxCpuCount -target:vtk-build-$env:config iricdev.proj
       }
       elseif ( `
         (-Not (Test-Path "$env:APPVEYOR_BUILD_FOLDER\lib\install\iriclib-$env:IRICLIB_VER\$env:config" -PathType Container)) -Or `
@@ -101,18 +101,18 @@ build_script:
       {
         # (~ 43 minutes)
         # iriclib ~ 8 minutes (includes hdf5 and cgns)
-        msbuild /nologo /verbosity:minimal /target:iriclib-build-$env:config iricdev.proj
+        msbuild -noLogo -verbosity:minimal -maxCpuCount -target:iriclib-build-$env:config iricdev.proj
         # proj ~ 11 minutes (includes sqlite and libtiff)
-        msbuild /nologo /verbosity:minimal /target:proj-build-$env:config iricdev.proj
+        msbuild -noLogo -verbosity:minimal -maxCpuCount -target:proj-build-$env:config iricdev.proj
         # gdal ~ 19 minutes (includes netcdf-c (depends on proj))
-        msbuild /nologo /verbosity:minimal /target:gdal-build-$env:config iricdev.proj
+        msbuild -noLogo -verbosity:minimal -maxCpuCount -target:gdal-build-$env:config iricdev.proj
         # openssl ~ 5 minutes
-        msbuild /nologo /verbosity:minimal /target:openssl-build-$env:config iricdev.proj
+        msbuild -noLogo -verbosity:minimal -maxCpuCount -target:openssl-build-$env:config iricdev.proj
       }
       else
       {
         # (~ 33 minutes)
-        msbuild /nologo /verbosity:minimal /target:appveyor-$env:config iricdev.proj
+        msbuild -noLogo -verbosity:minimal -maxCpuCount -target:appveyor-$env:config iricdev.proj
       }
 
 artifacts:
