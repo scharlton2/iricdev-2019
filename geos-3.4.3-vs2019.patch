@@ -1,0 +1,17 @@
+diff --git a/src/operation/buffer/BufferOp.cpp b/src/operation/buffer/BufferOp.cpp
+index 596f6a5..f62604e 100644
+--- a/src/operation/buffer/BufferOp.cpp
++++ b/src/operation/buffer/BufferOp.cpp
+@@ -86,9 +86,9 @@ BufferOp::precisionScaleFactor(const Geometry *g,
+ 	int maxPrecisionDigits)
+ {
+   const Envelope *env=g->getEnvelopeInternal();
+-  double envMax = std::max(
+-    std::max(fabs(env->getMaxX()), fabs(env->getMinX())),
+-    std::max(fabs(env->getMaxY()), fabs(env->getMinY()))
++  double envMax = (std::max)(
++    (std::max)(fabs(env->getMaxX()), fabs(env->getMinX())),
++    (std::max)(fabs(env->getMaxY()), fabs(env->getMinY()))
+   );
+ 
+   double expandByDistance = distance > 0.0 ? distance : 0.0;
