@@ -8,7 +8,8 @@ Build libraries needed to build iRIC on Windows
   Set environmental variable CL to /MP to speed up compilations
 * Qt Visual Studio Tools available from https://marketplace.visualstudio.com/items?itemName=TheQtCompany.QtVisualStudioTools2019
 * git available from https://git-scm.com/download/win
-* Qt 5.14 available from https://www.qt.io/download-qt-installer?hsCtaTracking=99d9dd4f-5681-48d2-b096-470725510d34%7C074ddad0-fdef-4e53-8aa8-5e8a876d6ab4
+* Qt 5.14.2 available from https://www.qt.io/download-qt-installer?hsCtaTracking=99d9dd4f-5681-48d2-b096-470725510d34%7C074ddad0-fdef-4e53-8aa8-5e8a876d6ab4
+  Select 'Qt Debug Information Files' and 'Sources' if you want to debug Qt
 * 7-zip available from http://www.7-zip.org/
 * Add 7-zip installation path to "Path" environment variable.
 * NSIS available from http://nsis.sourceforge.net/Download/ (for HDF5 packaging)
