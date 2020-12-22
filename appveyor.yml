@@ -114,6 +114,7 @@ build_script:
         # (~ 33 minutes)
         msbuild -noLogo -verbosity:minimal -maxCpuCount -target:appveyor-$env:config iricdev.proj
       }
+  - create-files.cmd
 
 artifacts:
   - path: lib\install
