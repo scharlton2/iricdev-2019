@@ -30,7 +30,7 @@ if "%DEBUG_LEAKS%"=="YES" (
 @echo.	LIBS += -L"%topdir%lib/install/qwt-%QWT_VER%/lib"
 @echo.
 @echo.	# proj.4
-@echo.	LIBS += -L"%topdir%lib/install/proj-%PROJ_VER%/release/lib"
+@echo.	LIBS += -L"%topdir%lib/install/proj-%PROJ_VER%/debug/lib"
 @echo.
 @echo.	# shapefile
 @echo.	LIBS += -L"%topdir%lib/install/shapelib-%SHAPELIB_VER%/debug"
