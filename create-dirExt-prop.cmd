@@ -24,6 +24,7 @@ if "%CGNSLIB_VER%"=="4.1.1" (
 @echo.vtk      = %topdir%lib/install/VTK-%VTK_VER%/release/bin/
 @echo.yaml-cpp = %topdir%lib/install/yaml-cpp-%YAML_CPP_VER%/release/bin
 @echo.zlib     = %topdir%lib/install/hdf5-%HDF5_VER%/release/bin/
+@echo.libpng   = %topdir%lib/install/libpng-%LIBPNG_VER%/release/bin/
 @echo.
 @echo.[debug]
 @echo.cgnslib  = %topdir%lib/install/cgnslib-%CGNSLIB_VER%/debug/bin/
@@ -47,3 +48,4 @@ if "%DEBUG_LEAKS%"=="YES" (
 )
 @echo.yaml-cpp = %topdir%lib/install/yaml-cpp-%YAML_CPP_VER%/debug/bin
 @echo.zlib     = %topdir%lib/install/hdf5-%HDF5_VER%/debug/bin/
+@echo.libpng   = %topdir%lib/install/libpng-%LIBPNG_VER%/debug/bin/
