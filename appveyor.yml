@@ -48,6 +48,8 @@ before_build:
   - msbuild -version
   - ps: |
       if (Test-Path ".\lib\install" -PathType Container) {
+        # force geos build
+        Remove-Item -Recurse -Force .\lib\install\geos-*
         # remove old versions
         # Remove-Item -Recurse -Force -exclude cgnslib-$env:CGNSLIB_VER      .\lib\install\cgnslib-*
         # Remove-Item -Recurse -Force -exclude expat-$env:EXPAT_VER          .\lib\install\expat-*
