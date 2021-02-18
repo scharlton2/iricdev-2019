@@ -49,7 +49,7 @@
     <appveyor-release-targets Include="qwt-build"/>
     <appveyor-release-targets Include="shapelib-build-release"/>
     <appveyor-release-targets Include="udunits-build-release"/>
-    <appveyor-release-targets Include="yaml-cpp-build-release-appveyor"/>
+    <appveyor-release-targets Include="yaml-cpp-build-release"/>
   </ItemGroup>
 
   <Target Name="appveyor-release" DependsOnTargets="@(appveyor-release-targets)">
@@ -70,7 +70,7 @@
     <appveyor-debug-targets Include="poco-build-debug"/>
     <appveyor-debug-targets Include="shapelib-build-debug"/>
     <appveyor-debug-targets Include="udunits-build-debug"/>
-    <appveyor-debug-targets Include="yaml-cpp-build-debug-appveyor"/>
+    <appveyor-debug-targets Include="yaml-cpp-build-debug"/>
   </ItemGroup>
 
   <Target Name="appveyor-debug" DependsOnTargets="@(appveyor-debug-targets)">
