@@ -37,3 +37,4 @@ if NOT defined BUILD_TOOLS  set BUILD_TOOLS="OFF"
 if NOT defined GENERATOR    set GENERATOR="Visual Studio 16 2019"
 if NOT defined SGEN         set SGEN=vs2019-x64
 set VERSIONS_CMD_RUN=YES
+set POSTFIX=iric
