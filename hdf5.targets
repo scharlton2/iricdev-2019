@@ -8,18 +8,22 @@
 
   <Target Name="hdf5-build-debug" Inputs="hdf5.targets;hdf5.cmake" Outputs="$(INSTALL_DIR)\hdf5-$(HDF5_VER)\lib\hdf5_D-$(POSTFIX).lib" DependsOnTargets="hdf5-src">
     <RemoveDir Directories="$(BUILD_DIR)\hdf5-$(HDF5_VER)\debug" />
-    <RemoveDir Directories="$(INSTALL_DIR)\hdf5-$(HDF5_VER)\debug" />
     <Exec Command="ctest -S hdf5.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-hdf5-debug.log" />
     <Exec Command="cpack -C Debug -G ZIP" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\debug" />
-    <Exec Command="robocopy /s _CPack_Packages\win64\ZIP\HDF5-$(HDF5_VER)-win64 ..\..\..\install\hdf5-$(HDF5_VER)" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\debug" />
+    <Exec IgnoreExitCode="True" ContinueOnError="True" Command="robocopy /s /NP /NFL /NDL _CPack_Packages\win64\ZIP\HDF5-$(HDF5_VER)-win64 ..\..\..\install\hdf5-$(HDF5_VER)" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\debug">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+    </Exec>
+    <Error Condition="$(ErrorCode) &gt; 8" Message="Robocopy failed"/>
   </Target>
 
   <Target Name="hdf5-build-release" Inputs="hdf5.targets;hdf5.cmake" Outputs="$(INSTALL_DIR)\hdf5-$(HDF5_VER)\lib\hdf5-$(POSTFIX).lib" DependsOnTargets="hdf5-src">
     <RemoveDir Directories="$(BUILD_DIR)\hdf5-$(HDF5_VER)\release" />
-    <RemoveDir Directories="$(INSTALL_DIR)\hdf5-$(HDF5_VER)\release" />
     <Exec Command="ctest -S hdf5.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-hdf5-release.log" />
     <Exec Command="cpack -C Release -G ZIP" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\release" />
-    <Exec Command="robocopy /s _CPack_Packages\win64\ZIP\HDF5-$(HDF5_VER)-win64 ..\..\..\install\hdf5-$(HDF5_VER)" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\release" />
+    <Exec IgnoreExitCode="True" ContinueOnError="True" Command="robocopy /s /NP /NFL /NDL _CPack_Packages\win64\ZIP\HDF5-$(HDF5_VER)-win64 ..\..\..\install\hdf5-$(HDF5_VER)" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\release">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+    </Exec>
+    <Error Condition="$(ErrorCode) &gt; 8" Message="Robocopy failed"/>
   </Target>
 
   <Target Name="hdf5-src" DependsOnTargets="hdf5-download" Condition="!Exists('$(SRC_DIR)\CMake-hdf5-$(HDF5_VER)\hdf5-$(HDF5_VER)')">
