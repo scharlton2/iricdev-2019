@@ -9,6 +9,7 @@
     <poco_opts>$(poco_opts) -D"CTEST_PROJECT_NAME:STRING=poco"</poco_opts>
     <poco_opts>$(poco_opts) -D"CTEST_PROJECT_VERSION:STRING=$(POCO_VER)"</poco_opts>
     <poco_opts>$(poco_opts) -D"CTEST_SOURCE_DIRECTORY:PATH=lib/src/poco-$(POCO_VER)"</poco_opts>
+    <poco_opts>$(poco_opts) -D"ENABLE_DATA_MYSQL:BOOL=0"</poco_opts>  <!-- conflicts with mysql on github actions -->
     <GENERATOR_NO_QUOTES>$([System.String]::Copy($(GENERATOR)).Replace('"','') )</GENERATOR_NO_QUOTES>
   </PropertyGroup>
 
