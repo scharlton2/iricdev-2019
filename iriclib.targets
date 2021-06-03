@@ -26,6 +26,13 @@
     />
   </Target>
 
+  <!-- iriclib-2019 -->
+
+  <Target Name="iriclib-build-2019">
+    <RemoveDir Directories="$(BUILD_DIR)\iriclib-2019" />
+    <Exec Command="ctest -S iriclib-2019.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-iriclib-2019.log" />
+  </Target>
+
   <!-- iriclib-git -->
 
   <Target Name="iriclib-git-build" DependsOnTargets="iriclib-git-build-debug;iriclib-git-build-release" />
