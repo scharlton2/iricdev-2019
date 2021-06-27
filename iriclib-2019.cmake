@@ -1,4 +1,4 @@
-set(CTEST_PROJECT_NAME "iriclib_v4")
+set(CTEST_PROJECT_NAME "iriclib")
 set(CTEST_PROJECT_VERSION "$ENV{IRICLIB_VER}")
 set(CTEST_BUILD_NAME "$ENV{SGEN}-iriclib")
 set(CTEST_SITE "$ENV{COMPUTERNAME}")
@@ -7,7 +7,7 @@ set(HDF5_VER "$ENV{HDF5_VER}")
 set(POCO_VER "$ENV{POCO_VER}")
 
 set(CTEST_SOURCE_DIRECTORY "${CTEST_SCRIPT_DIRECTORY}/lib/src/iriclib-git")
-set(CTEST_BINARY_DIRECTORY "lib/build/iriclib_v4")
+set(CTEST_BINARY_DIRECTORY "lib/build/iriclib")
 
 # build PREFIX_PATH (Note the escaped semicolon)
 set(PREFIX_PATH "${CTEST_SCRIPT_DIRECTORY}/lib/install/hdf5-${HDF5_VER}/${CONF_DIR}/cmake/hdf5")
