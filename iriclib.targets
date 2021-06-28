@@ -4,6 +4,10 @@
 
   <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
 
+  <PropertyGroup>
+    <GENERATOR_NO_QUOTES>$([System.String]::Copy($(GENERATOR)).Replace('"','') )</GENERATOR_NO_QUOTES>
+  </PropertyGroup>
+
   <!-- appveyor-iriclib-artifacts -->
 
   <Target Name="appveyor-iriclib-artifacts" DependsOnTargets="iriclib-git-build-release">
@@ -24,6 +28,13 @@
     <Exec Command="7z a libs.zip libs\."
           WorkingDirectory="$(SRC_DIR)\iriclib-git\_artifacts"
     />
+  </Target>
+
+  <!-- iriclib-2019 -->
+
+  <Target Name="iriclib-build-2019">
+    <RemoveDir Directories="$(BUILD_DIR)\iriclib-2019" />
+    <Exec Command="ctest -S iriclib-2019.cmake -DCONF_DIR:STRING=release -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR_NO_QUOTES)%22 -C Release -VV -O $(LOG_DIR)\$(SGEN)-iriclib-2019.log" />
   </Target>
 
   <!-- iriclib-git -->

@@ -4,6 +4,7 @@ set(CTEST_SITE "$ENV{COMPUTERNAME}")
 
 set(CGNS_VER "$ENV{CGNSLIB_VER}")
 set(HDF5_VER "$ENV{HDF5_VER}")
+set(POCO_VER "$ENV{POCO_VER}")
 
 set(CTEST_SOURCE_DIRECTORY "${CTEST_SCRIPT_DIRECTORY}/lib/src/iriclib-git")
 # avoid caching hdf5 settings
@@ -19,7 +20,8 @@ if (WIN32)
 else()
   set(PREFIX_PATH "${CTEST_SCRIPT_DIRECTORY}/lib/install/hdf5-${HDF5_VER}/${CONF_DIR}/share/cmake/hdf5")
 endif()
-set(PREFIX_PATH "${PREFIX_PATH}\;${CTEST_SCRIPT_DIRECTORY}/lib/install/cgnslib-${CGNS_VER}/${CONF_DIR}")
+# set(PREFIX_PATH "${PREFIX_PATH}\;${CTEST_SCRIPT_DIRECTORY}/lib/install/cgnslib-${CGNS_VER}/${CONF_DIR}")
+set(PREFIX_PATH "${PREFIX_PATH}\;${CTEST_SCRIPT_DIRECTORY}/lib/install/poco-${POCO_VER}/lib/cmake/Poco")
 
 # override LIBDIR to be consistent w/ hdf5 and cgns
 set(BUILD_OPTIONS 
@@ -39,58 +41,66 @@ if (WIN32)
   set(lock_dir "${CTEST_BINARY_DIRECTORY}/unittest_lock/${CONF_DIR}")
   set(mdfy_dir "${CTEST_BINARY_DIRECTORY}/unittest_cg_open_modify/${CONF_DIR}")
   set(read_dir "${CTEST_BINARY_DIRECTORY}/unittest_cg_open_read/${CONF_DIR}")
+
+  set(poco_dir "${CTEST_SCRIPT_DIRECTORY}/lib/install/poco-${POCO_VER}")
+
   # unittests_cgnsfile
-  file(COPY "${cgns_dir}/bin/cgnsdll.dll"
-       DESTINATION ${unit_dir}
-       )
+#   file(COPY "${cgns_dir}/bin/cgnsdll.dll"
+#        DESTINATION ${unit_dir}
+#        )
   # unittest_lock
-  file(COPY "${cgns_dir}/bin/cgnsdll.dll"
-       DESTINATION ${lock_dir}
-       )
+#   file(COPY "${cgns_dir}/bin/cgnsdll.dll"
+#        DESTINATION ${lock_dir}
+#        )
   # unittest_cg_open_modify
-  file(COPY "${cgns_dir}/bin/cgnsdll.dll"
-       DESTINATION ${mdfy_dir}
-       )
+#   file(COPY "${cgns_dir}/bin/cgnsdll.dll"
+#        DESTINATION ${mdfy_dir}
+#        )
   # unittest_cg_open_read
-  file(COPY "${cgns_dir}/bin/cgnsdll.dll"
-       DESTINATION ${read_dir}
-       )
-       
+#   file(COPY "${cgns_dir}/bin/cgnsdll.dll"
+#        DESTINATION ${read_dir}
+#        )
+
   if(${CONF_DIR} STREQUAL "debug")
     # unittests_cgnsfile
     file(INSTALL "${hdf5_dir}/bin/hdf5_D.dll" "${hdf5_dir}/bin/szip_D.dll" "${hdf5_dir}/bin/zlib_D.dll"
          DESTINATION ${unit_dir}
-         )
-    # unittest_lock
-    file(INSTALL "${hdf5_dir}/bin/hdf5_D.dll" "${hdf5_dir}/bin/szip_D.dll" "${hdf5_dir}/bin/zlib_D.dll"
-         DESTINATION ${lock_dir}
-         )
-    # unittest_cg_open_modify
-    file(INSTALL "${hdf5_dir}/bin/hdf5_D.dll" "${hdf5_dir}/bin/szip_D.dll" "${hdf5_dir}/bin/zlib_D.dll"
-         DESTINATION ${mdfy_dir}
-         )
-    # unittest_cg_open_read
-    file(INSTALL "${hdf5_dir}/bin/hdf5_D.dll" "${hdf5_dir}/bin/szip_D.dll" "${hdf5_dir}/bin/zlib_D.dll"
-         DESTINATION ${read_dir}
-         )
-
+     )
+    file(COPY "${poco_dir}/bin/PocoFoundationd.dll"
+        DESTINATION ${unit_dir}
+    )
+  #     # unittest_lock
+#     file(INSTALL "${hdf5_dir}/bin/hdf5_D.dll" "${hdf5_dir}/bin/szip_D.dll" "${hdf5_dir}/bin/zlib_D.dll"
+#          DESTINATION ${lock_dir}
+#          )
+#     # unittest_cg_open_modify
+#     file(INSTALL "${hdf5_dir}/bin/hdf5_D.dll" "${hdf5_dir}/bin/szip_D.dll" "${hdf5_dir}/bin/zlib_D.dll"
+#          DESTINATION ${mdfy_dir}
+#          )
+#     # unittest_cg_open_read
+#     file(INSTALL "${hdf5_dir}/bin/hdf5_D.dll" "${hdf5_dir}/bin/szip_D.dll" "${hdf5_dir}/bin/zlib_D.dll"
+#          DESTINATION ${read_dir}
+#          )
   else()
     # unittests_cgnsfile
     file(INSTALL "${hdf5_dir}/bin/hdf5.dll" "${hdf5_dir}/bin/szip.dll" "${hdf5_dir}/bin/zlib.dll"
          DESTINATION ${unit_dir}
-         )
-    # unittest_lock
-    file(INSTALL "${hdf5_dir}/bin/hdf5.dll" "${hdf5_dir}/bin/szip.dll" "${hdf5_dir}/bin/zlib.dll"
-         DESTINATION ${unit_dir}
-         )
-    # unittest_cg_open_modify
-    file(INSTALL "${hdf5_dir}/bin/hdf5.dll" "${hdf5_dir}/bin/szip.dll" "${hdf5_dir}/bin/zlib.dll"
-         DESTINATION ${mdfy_dir}
-         )
-    # unittest_cg_open_read
-    file(INSTALL "${hdf5_dir}/bin/hdf5.dll" "${hdf5_dir}/bin/szip.dll" "${hdf5_dir}/bin/zlib.dll"
-         DESTINATION ${read_dir}
-         )
+    )
+    file(COPY "${poco_dir}/bin/PocoFoundation.dll"
+        DESTINATION ${unit_dir}
+    )
+#     # unittest_lock
+#     file(INSTALL "${hdf5_dir}/bin/hdf5.dll" "${hdf5_dir}/bin/szip.dll" "${hdf5_dir}/bin/zlib.dll"
+#          DESTINATION ${unit_dir}
+#          )
+#     # unittest_cg_open_modify
+#     file(INSTALL "${hdf5_dir}/bin/hdf5.dll" "${hdf5_dir}/bin/szip.dll" "${hdf5_dir}/bin/zlib.dll"
+#          DESTINATION ${mdfy_dir}
+#          )
+#     # unittest_cg_open_read
+#     file(INSTALL "${hdf5_dir}/bin/hdf5.dll" "${hdf5_dir}/bin/szip.dll" "${hdf5_dir}/bin/zlib.dll"
+#          DESTINATION ${read_dir}
+#          )
   endif()
 endif()
 CTEST_BUILD(BUILD "${CTEST_BINARY_DIRECTORY}" TARGET RUN_TESTS)

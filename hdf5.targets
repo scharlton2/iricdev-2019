@@ -4,22 +4,33 @@
 
   <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
 
+  <PropertyGroup>
+    <GENERATOR_NO_QUOTES>$([System.String]::Copy($(GENERATOR)).Replace('"','') )</GENERATOR_NO_QUOTES>
+  </PropertyGroup>
+
   <Target Name="hdf5-build" DependsOnTargets="hdf5-build-debug;hdf5-build-release" />
 
   <Target Name="hdf5-build-debug" Inputs="hdf5.targets;hdf5.cmake" Outputs="$(INSTALL_DIR)\hdf5-$(HDF5_VER)\debug\lib\hdf5_D.lib" DependsOnTargets="hdf5-src">
     <RemoveDir Directories="$(BUILD_DIR)\hdf5-$(HDF5_VER)\debug" />
     <RemoveDir Directories="$(INSTALL_DIR)\hdf5-$(HDF5_VER)\debug" />
-    <Exec Command="ctest -S hdf5.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-hdf5-debug.log" />
+    <Exec Command="ctest -S hdf5.cmake -DCONF_DIR:STRING=debug -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR_NO_QUOTES)%22 -C Debug -VV -O $(LOG_DIR)\$(SGEN)-hdf5-debug.log" />
     <Exec Command="cpack -C Debug -G ZIP" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\debug" />
-    <Exec Command="xcopy /s /i _CPack_Packages\win64\ZIP\HDF5-1.8.21-win64 ..\..\..\install\hdf5-$(HDF5_VER)\debug" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\debug" />
+    <Exec Command="xcopy /s /i _CPack_Packages\win64\ZIP\HDF5-$(HDF5_VER)-win64 ..\..\..\install\hdf5-$(HDF5_VER)\debug" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\debug" />
   </Target>
 
   <Target Name="hdf5-build-release" Inputs="hdf5.targets;hdf5.cmake" Outputs="$(INSTALL_DIR)\hdf5-$(HDF5_VER)\release\lib\hdf5.lib" DependsOnTargets="hdf5-src">
     <RemoveDir Directories="$(BUILD_DIR)\hdf5-$(HDF5_VER)\release" />
     <RemoveDir Directories="$(INSTALL_DIR)\hdf5-$(HDF5_VER)\release" />
-    <Exec Command="ctest -S hdf5.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-hdf5-release.log" />
+    <Exec Command="ctest -S hdf5.cmake -DCONF_DIR:STRING=release -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR_NO_QUOTES)%22 -C Release -VV -O $(LOG_DIR)\$(SGEN)-hdf5-release.log" />
     <Exec Command="cpack -C Release -G ZIP" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\release" />
-    <Exec Command="xcopy /s /i _CPack_Packages\win64\ZIP\HDF5-1.8.21-win64 ..\..\..\install\hdf5-$(HDF5_VER)\release" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\release" />
+    <Exec Command="xcopy /s /i _CPack_Packages\win64\ZIP\HDF5-$(HDF5_VER)-win64 ..\..\..\install\hdf5-$(HDF5_VER)\release" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\release" />
+  </Target>
+
+  <Target Name="hdf5-build-relwithdebinfo" Inputs="hdf5.targets;hdf5.cmake" Outputs="$(INSTALL_DIR)\hdf5-$(HDF5_VER)\relwithdebinfo\lib\hdf5.lib" DependsOnTargets="hdf5-src">
+    <RemoveDir Directories="$(BUILD_DIR)\hdf5-$(HDF5_VER)\relwithdebinfo" />
+    <Exec Command="ctest -S hdf5.cmake -DCONF_DIR:STRING=relwithdebinfo -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR_NO_QUOTES)%22 -C RelWithDebInfo -VV -O $(LOG_DIR)\$(SGEN)-hdf5-relwithdebinfo.log" />
+    <Exec Command="cpack -C RelWithDebInfo -G ZIP" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\relwithdebinfo" />
+    <Exec Command="xcopy /s /i _CPack_Packages\win64\ZIP\HDF5-$(HDF5_VER)-win64 ..\..\..\install\hdf5-$(HDF5_VER)\relwithdebinfo" WorkingDirectory="lib\build\hdf5-$(HDF5_VER)\relwithdebinfo" />
   </Target>
 
   <Target Name="hdf5-src" DependsOnTargets="hdf5-download" Condition="!Exists('$(SRC_DIR)\CMake-hdf5-$(HDF5_VER)\hdf5-$(HDF5_VER)')">
