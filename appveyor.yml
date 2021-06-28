@@ -3,7 +3,6 @@ version: '{branch}-{build}'
 branches:
   only:
   - 2019
-  - 2019_solver
 
 # QT 5.14 is only available with VS2019 on appveyor
 image: Visual Studio 2019
