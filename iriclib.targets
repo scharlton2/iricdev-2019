@@ -33,7 +33,7 @@
   <!-- iriclib_v4 -->
 
   <Target Name="iriclib_v4-build">
-    <RemoveDir Directories="$(INSTALL_DIR)\iriclib-$(IRICLIB_VER) />
+    <RemoveDir Directories="$(INSTALL_DIR)\iriclib-$(IRICLIB_VER)" />
     <Exec Command="ctest -S iriclib_v4.cmake -DCONF_DIR:STRING=debug   -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR_NO_QUOTES)%22 -C Debug   -VV -O $(LOG_DIR)\$(SGEN)-iriclib_v4-debug.log" />
     <Exec Command="ctest -S iriclib_v4.cmake -DCONF_DIR:STRING=release -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR_NO_QUOTES)%22 -C Release -VV -O $(LOG_DIR)\$(SGEN)-iriclib_v4-release.log" />
   </Target>
