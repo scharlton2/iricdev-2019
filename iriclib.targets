@@ -34,7 +34,8 @@
 
   <Target Name="iriclib-build-2019">
     <RemoveDir Directories="$(BUILD_DIR)\iriclib-2019" />
-    <Exec Command="ctest -S iriclib-2019.cmake -DCONF_DIR:STRING=release -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR_NO_QUOTES)%22 -C Release -VV -O $(LOG_DIR)\$(SGEN)-iriclib-2019.log" />
+    <Exec Command="ctest -S iriclib-2019.cmake -DCONF_DIR:STRING=debug   -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR_NO_QUOTES)%22 -C Debug   -VV -O $(LOG_DIR)\$(SGEN)-iriclib-2019-debug.log" />
+    <Exec Command="ctest -S iriclib-2019.cmake -DCONF_DIR:STRING=release -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR_NO_QUOTES)%22 -C Release -VV -O $(LOG_DIR)\$(SGEN)-iriclib-2019-release.log" />
   </Target>
 
   <!-- iriclib-git -->
