@@ -220,6 +220,7 @@ cache:
   - 'lib\install\Qwt-%QWT_VER%             ->   qwt.targets'
   - 'lib\install\shapelib-%SHAPELIB_VER%   ->   shapelib.targets'
   - 'lib\install\sqlite-src-3320300        ->   sqlite.targets'
+  - 'lib\install\swig-%SWIG_VER%           ->   swig.targets, swig.cmake'
   - 'lib\install\tiff-%LIBTIFF_VER%        ->   libtiff.targets, libtiff.cmake'
   - 'lib\install\udunits-%UDUNITS_VER%     ->   udunits.targets, udunits.cmake'
   - 'lib\install\vtk-%VTK_VER%             ->   vtk.targets, vtk.cmake'

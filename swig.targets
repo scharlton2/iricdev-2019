@@ -1,0 +1,55 @@
+<Project DefaultTargets="swig-build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="programs.prop" Condition="'$(CURL)'==''" />
+
+  <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
+
+  <PropertyGroup>
+    <swig_opts>$(swig_opts)</swig_opts>
+    <swig_opts>$(swig_opts) -D"CTEST_PROJECT_NAME:STRING=swig"</swig_opts>
+    <swig_opts>$(swig_opts) -D"CTEST_PROJECT_VERSION:STRING=$(SWIG_VER)"</swig_opts>
+    <swig_opts>$(swig_opts) -D"CTEST_SOURCE_DIRECTORY:PATH=lib/src/swig-$(SWIG_VER)"</swig_opts>
+    <GENERATOR_NO_QUOTES>$([System.String]::Copy($(GENERATOR)).Replace('"','') )</GENERATOR_NO_QUOTES>
+  </PropertyGroup>
+
+  <Target Name="swig-build" DependsOnTargets="swig-build-debug;swig-build-release" />
+
+  <!-- Both debug and release versions are installed to the same directory -->
+
+  <Target Name="swig-build-debug" Inputs="poco.targets;poco.cmake" Outputs="$(INSTALL_DIR)\swig-$(SWIG_VER)\lib\PocoFoundationd.lib" DependsOnTargets="swig-src">
+    <RemoveDir Directories="$(BUILD_DIR)\swig-$(SWIG_VER)\debug" />
+    <PropertyGroup>
+      <poco_opts_debug>$(poco_opts)</poco_opts_debug>
+      <poco_opts_debug>$(poco_opts_debug) -D"CTEST_BINARY_DIRECTORY:PATH=lib/build/swig-$(SWIG_VER)/debug"</poco_opts_debug>
+      <poco_opts_debug>$(poco_opts_debug) -D"CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR_NO_QUOTES)"</poco_opts_debug>
+    </PropertyGroup>
+    <Exec Command="ctest -S poco.cmake $(poco_opts_debug) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-swig-debug.log" />
+  </Target>
+
+  <Target Name="swig-build-release" Inputs="poco.targets;poco.cmake" Outputs="$(INSTALL_DIR)\swig-$(SWIG_VER)\lib\PocoFoundation.lib" DependsOnTargets="swig-src">
+    <RemoveDir Directories="$(BUILD_DIR)\swig-$(SWIG_VER)\release" />
+    <PropertyGroup>
+      <swig_opts_release>$(swig_opts)</swig_opts_release>
+      <swig_opts_release>$(swig_opts_release) -D"CTEST_BINARY_DIRECTORY:PATH=lib/build/swig-$(SWIG_VER)/release"</swig_opts_release>
+      <swig_opts_release>$(swig_opts_release) -D"CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR_NO_QUOTES)"</swig_opts_release>
+    </PropertyGroup>
+    <Exec Command="ctest -S swig.cmake $(poco_opts_release) -C Release -VV -O $(LOG_DIR)\$(SGEN)-swig-release.log" />
+  </Target>
+
+  <Target Name="swig-src" DependsOnTargets="swig-download" Condition="!Exists('$(SRC_DIR)\swig-$(SWIG_VER)')">
+    <Exec Command="7z x $(DOWNLOADS_DIR)\swig-$(SWIG_VER).zip -o$(SRC_DIR)" />
+  </Target>
+
+  <Target Name="swig-download" Condition="!Exists('$(DOWNLOADS_DIR)\swig-$(SWIG_VER).zip')">
+    <MakeDir Directories="$(DOWNLOADS_DIR)" />
+    <Message Text="Downloading swig-$(SWIG_VER).zip" />
+    <Exec Command="$(CURL) https://github.com/swig/swig/archive/refs/tags/v$(SWIG_VER).zip" WorkingDirectory="$(DOWNLOADS_DIR)" />
+    <Move SourceFiles="$(DOWNLOADS_DIR)\v$(SWIG_VER).zip" DestinationFiles="$(DOWNLOADS_DIR)\swig-$(SWIG_VER).zip" />
+  </Target>
+
+  <Target Name="swig-dump">
+    <Message Text="GENERATOR=$(GENERATOR)" />
+    <Message Text="GENERATOR_NO_QUOTES=$(GENERATOR_NO_QUOTES)" />
+  </Target>
+
+</Project>
