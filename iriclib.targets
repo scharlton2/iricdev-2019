@@ -36,12 +36,12 @@
 
   <Target Name="iriclib-git-build-debug" DependsOnTargets="iriclib-git-clone;hdf5-build-debug;poco-build-debug">
     <RemoveDir Directories="$(SRC_DIR)\iriclib-git\_build_debug" />
-    <Exec Command="ctest -S iriclib-git.cmake -DCONF_DIR:STRING=debug -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR)%22 -C Debug -VV -O $(LOG_DIR)\$(SGEN)-iriclib-git-debug.log" />
+    <Exec Command="ctest -S iriclib-git.cmake -DCONF_DIR:STRING=debug -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR_NO_QUOTES)%22 -C Debug -VV -O $(LOG_DIR)\$(SGEN)-iriclib-git-debug.log" />
   </Target>
 
   <Target Name="iriclib-git-build-release" DependsOnTargets="iriclib-git-clone;hdf5-build-release;poco-build-release">
     <RemoveDir Directories="$(SRC_DIR)\iriclib-git\_build_release" />
-    <Exec Command="ctest -S iriclib-git.cmake -DCONF_DIR:STRING=release -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR)%22 -C Release -VV -O $(LOG_DIR)\$(SGEN)-iriclib-git-release.log" />
+    <Exec Command="ctest -S iriclib-git.cmake -DCONF_DIR:STRING=release -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR_NO_QUOTES)%22 -C Release -VV -O $(LOG_DIR)\$(SGEN)-iriclib-git-release.log" />
   </Target>
 
   <Target Name="iriclib-git-clone" Condition="!Exists('$(SRC_DIR)\iriclib-git')">
@@ -55,12 +55,12 @@
 
   <Target Name="iriclib-build-debug" Inputs="iriclib.targets;iriclib.cmake;$(INSTALL_DIR)\hdf5-$(HDF5_VER)\lib\hdf5_D.lib;$(INSTALL_DIR)\poco-$(POCO_VER)\lib\PocoFoundationd.lib" Outputs="$(INSTALL_DIR)\iriclib-$(IRICLIB_VER)\lib\iriclibd.lib" DependsOnTargets="iriclib-src">
     <RemoveDir Directories="$(BUILD_DIR)\iriclib-$(IRICLIB_VER)\debug" />
-    <Exec Command="ctest -S iriclib.cmake -DCONF_DIR:STRING=debug -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR)%22 -C Debug -VV -O $(LOG_DIR)\$(SGEN)-iriclib-debug.log" />
+    <Exec Command="ctest -S iriclib.cmake -DCONF_DIR:STRING=debug -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR_NO_QUOTES)%22 -C Debug -VV -O $(LOG_DIR)\$(SGEN)-iriclib-debug.log" />
   </Target>
 
   <Target Name="iriclib-build-release" Inputs="iriclib.targets;iriclib.cmake;$(INSTALL_DIR)\hdf5-$(HDF5_VER)\lib\hdf5.lib;$(INSTALL_DIR)\poco-$(POCO_VER)\lib\PocoFoundation.lib" Outputs="$(INSTALL_DIR)\iriclib-$(IRICLIB_VER)\lib\iriclib.lib" DependsOnTargets="iriclib-src">
     <RemoveDir Directories="$(BUILD_DIR)\iriclib-$(IRICLIB_VER)\release" />
-    <Exec Command="ctest -S iriclib.cmake -DCONF_DIR:STRING=release -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR)%22 -C Release -VV -O $(LOG_DIR)\$(SGEN)-iriclib-release.log" />
+    <Exec Command="ctest -S iriclib.cmake -DCONF_DIR:STRING=release -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR_NO_QUOTES)%22 -C Release -VV -O $(LOG_DIR)\$(SGEN)-iriclib-release.log" />
   </Target>
 
   <Target Name="iriclib-src" DependsOnTargets="iriclib-download" Condition="!Exists('$(SRC_DIR)\iriclib-$(IRICLIB_VER)')">
