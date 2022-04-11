@@ -22,7 +22,7 @@
 
   <!-- Both debug and release versions are installed to the same directory -->
 
-  <Target Name="poco-build-debug" Inputs="poco.targets;poco.cmake" Outputs="$(INSTALL_DIR)\poco-$(POCO_VER)\lib\PocoFoundationd.lib" DependsOnTargets="poco-src">
+  <Target Name="poco-build-debug" BeforeTargets="iriclib-build-debug" Inputs="poco.targets;poco.cmake" Outputs="$(INSTALL_DIR)\poco-$(POCO_VER)\lib\PocoFoundationd.lib" DependsOnTargets="poco-src">
     <RemoveDir Directories="$(BUILD_DIR)\poco-$(POCO_VER)\debug" />
     <PropertyGroup>
       <poco_opts_debug>$(poco_opts)</poco_opts_debug>
@@ -32,7 +32,7 @@
     <Exec Command="ctest -S poco.cmake $(poco_opts_debug) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-poco-debug.log" />
   </Target>
 
-  <Target Name="poco-build-release" Inputs="poco.targets;poco.cmake" Outputs="$(INSTALL_DIR)\poco-$(POCO_VER)\lib\PocoFoundation.lib" DependsOnTargets="poco-src">
+  <Target Name="poco-build-release" BeforeTargets="iriclib-build-release" Inputs="poco.targets;poco.cmake" Outputs="$(INSTALL_DIR)\poco-$(POCO_VER)\lib\PocoFoundation.lib" DependsOnTargets="poco-src">
     <RemoveDir Directories="$(BUILD_DIR)\poco-$(POCO_VER)\release" />
     <PropertyGroup>
       <poco_opts_release>$(poco_opts)</poco_opts_release>
