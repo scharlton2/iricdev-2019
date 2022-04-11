@@ -3,6 +3,7 @@ name: build-jobs
 on:
   push:
     branches:
+      - 2019-testing
       - 2019-actions-jobs
       - 2019-actions
       - 2019
@@ -12,111 +13,112 @@ on:
 env:
   GENERATOR: Ninja Multi-Config
   SGEN: ninja-x64
+  MSBUILD_OPTS: /noLogo /maxCpuCount /v:d
   # @TODO change ${{runner.os}} to ${{runner.env???}} -> vs2019-x64
 
 jobs:
 
-  cache-expat:
-  # 1m 8s
-    runs-on: windows-2019
+  # cache-expat:
+  # # 1m 8s
+  #   runs-on: windows-2019
 
-    steps:
-      - uses: actions/checkout@v2
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: Init github env
-        run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+  #     - name: Init github env
+  #       run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      - name: Setup path for msbuild
-        uses: microsoft/setup-msbuild@v1.0.2
-        with:
-          vs-version: '[16.9,17)'
+  #     - name: Setup path for msbuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #       with:
+  #         vs-version: '[16.9,17)'
 
-      - name: Cache expat
-        id: cache-expat
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/expat-${{env.EXPAT_VER}}
-          key: ${{runner.os}}-expat-${{hashFiles('./expat.*')}}
+  #     - name: Cache expat
+  #       id: cache-expat
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/expat-${{env.EXPAT_VER}}
+  #         key: ${{runner.os}}-expat-${{hashFiles('./expat.*')}}
 
-      - name: Build expat
-        if: steps.cache-expat.outputs.cache-hit != 'true'
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          msbuild /noLogo /maxCpuCount /target:expat-build iricdev.proj
+  #     - name: Build expat
+  #       if: steps.cache-expat.outputs.cache-hit != 'true'
+  #       shell: cmd
+  #       run: |
+  #         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+  #         msbuild /noLogo /maxCpuCount /target:expat-build iricdev.proj
 
-  cache-gdal:
-  # 19m 3s
-    runs-on: windows-2019
-    needs: [cache-netcdf-c, cache-proj]
+  # cache-gdal:
+  # # 19m 3s
+  #   runs-on: windows-2019
+  #   needs: [cache-netcdf-c, cache-proj]
 
-    steps:
-      - uses: actions/checkout@v2
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: Init github env
-        run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+  #     - name: Init github env
+  #       run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      - name: Setup path for msbuild
-        uses: microsoft/setup-msbuild@v1.0.2
-        with:
-          vs-version: '[16.9,17)'
+  #     - name: Setup path for msbuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #       with:
+  #         vs-version: '[16.9,17)'
 
-      - name: Cache netcdf-c
-        id: cache-netcdf-c
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/netcdf-c-${{env.NETCDF_VER}}
-          key: ${{runner.os}}-netcdf-c-${{hashFiles('./netcdf-c.*')}}
+  #     - name: Cache netcdf-c
+  #       id: cache-netcdf-c
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/netcdf-c-${{env.NETCDF_VER}}
+  #         key: ${{runner.os}}-netcdf-c-${{hashFiles('./netcdf-c.*')}}
 
-      - name: Cache proj
-        id: cache-proj
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/proj-${{env.PROJ_VER}}
-          key: ${{runner.os}}-proj-${{hashFiles('./proj.*')}}
+  #     - name: Cache proj
+  #       id: cache-proj
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/proj-${{env.PROJ_VER}}
+  #         key: ${{runner.os}}-proj-${{hashFiles('./proj.*')}}
 
-      - name: Cache gdal
-        id: cache-gdal
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/gdal-${{env.GDAL_VER}}
-          key: ${{runner.os}}-gdal-${{hashFiles('./gdal.*')}}
+  #     - name: Cache gdal
+  #       id: cache-gdal
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/gdal-${{env.GDAL_VER}}
+  #         key: ${{runner.os}}-gdal-${{hashFiles('./gdal.*')}}
 
-      - name: Build gdal
-        if: steps.cache-gdal.outputs.cache-hit != 'true'
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          msbuild /noLogo /maxCpuCount /target:gdal-build iricdev.proj
+  #     - name: Build gdal
+  #       if: steps.cache-gdal.outputs.cache-hit != 'true'
+  #       shell: cmd
+  #       run: |
+  #         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+  #         msbuild /noLogo /maxCpuCount /target:gdal-build iricdev.proj
 
-  cache-geos:
-  # 18m 11s
-    runs-on: windows-2019
+  # cache-geos:
+  # # 18m 11s
+  #   runs-on: windows-2019
 
-    steps:
-      - uses: actions/checkout@v2
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: Init github env
-        run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+  #     - name: Init github env
+  #       run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      - name: Setup path for msbuild
-        uses: microsoft/setup-msbuild@v1.0.2
-        with:
-          vs-version: '[16.9,17)'
+  #     - name: Setup path for msbuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #       with:
+  #         vs-version: '[16.9,17)'
 
-      - name: Cache geos
-        id: cache-geos
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/geos-${{env.GEOS_VER}}
-          key: ${{runner.os}}-geos-${{hashFiles('./geos.*')}}
+  #     - name: Cache geos
+  #       id: cache-geos
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/geos-${{env.GEOS_VER}}
+  #         key: ${{runner.os}}-geos-${{hashFiles('./geos.*')}}
 
-      - name: Build geos
-        if: steps.cache-geos.outputs.cache-hit != 'true'
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          msbuild /noLogo /maxCpuCount /target:geos-build iricdev.proj
+  #     - name: Build geos
+  #       if: steps.cache-geos.outputs.cache-hit != 'true'
+  #       shell: cmd
+  #       run: |
+  #         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+  #         msbuild /noLogo /maxCpuCount /target:geos-build iricdev.proj
 
   cache-hdf5:
   # 15m 9s
@@ -145,7 +147,7 @@ jobs:
         shell: cmd
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          msbuild /noLogo /maxCpuCount /target:hdf5-build iricdev.proj
+          msbuild ${{MSBUILD_OPTS}} /target:hdf5-build iricdev.proj
 
   cache-iriclib:
   # @todo 29m 11s
@@ -189,7 +191,7 @@ jobs:
         shell: cmd
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          msbuild /noLogo /maxCpuCount /target:iriclib-build iricdev.proj /fileLogger
+          msbuild ${{MSBUILD_OPTS}} /target:iriclib-build iricdev.proj /fileLogger
 
       - uses: actions/upload-artifact@v2
         if: steps.cache-iriclib.outputs.cache-hit != 'true'
@@ -197,143 +199,143 @@ jobs:
           name: iriclib-build.log
           path: msbuild.log
 
-  cache-libpng:
-  # 1m 13s
-    runs-on: windows-2019
-    needs: [cache-hdf5]
+  # cache-libpng:
+  # # 1m 13s
+  #   runs-on: windows-2019
+  #   needs: [cache-hdf5]
 
-    steps:
-      - uses: actions/checkout@v2
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: Init github env
-        run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+  #     - name: Init github env
+  #       run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      - name: Setup path for msbuild
-        uses: microsoft/setup-msbuild@v1.0.2
-        with:
-          vs-version: '[16.9,17)'
+  #     - name: Setup path for msbuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #       with:
+  #         vs-version: '[16.9,17)'
 
-      - name: Cache hdf5
-        id: cache-hdf5
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/hdf5-${{env.HDF5_VER}}
-          key: ${{runner.os}}-hdf5-${{hashFiles('./hdf5.*')}}
+  #     - name: Cache hdf5
+  #       id: cache-hdf5
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/hdf5-${{env.HDF5_VER}}
+  #         key: ${{runner.os}}-hdf5-${{hashFiles('./hdf5.*')}}
 
-      - name: Cache libpng
-        id: cache-libpng
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/libpng-${{env.LIBPNG_VER}}
-          key: ${{runner.os}}-libpng-${{hashFiles('./libpng.*')}}
+  #     - name: Cache libpng
+  #       id: cache-libpng
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/libpng-${{env.LIBPNG_VER}}
+  #         key: ${{runner.os}}-libpng-${{hashFiles('./libpng.*')}}
 
-      - name: Build libpng
-        if: steps.cache-libpng.outputs.cache-hit != 'true'
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          msbuild /noLogo /maxCpuCount /target:libpng-build iricdev.proj
+  #     - name: Build libpng
+  #       if: steps.cache-libpng.outputs.cache-hit != 'true'
+  #       shell: cmd
+  #       run: |
+  #         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+  #         msbuild /noLogo /maxCpuCount /target:libpng-build iricdev.proj
 
-  cache-libtiff:
-  # 2m 14s
-    runs-on: windows-2019
+  # cache-libtiff:
+  # # 2m 14s
+  #   runs-on: windows-2019
 
-    steps:
-      - uses: actions/checkout@v2
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: Init github env
-        run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+  #     - name: Init github env
+  #       run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      - name: Setup path for msbuild
-        uses: microsoft/setup-msbuild@v1.0.2
-        with:
-          vs-version: '[16.9,17)'
+  #     - name: Setup path for msbuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #       with:
+  #         vs-version: '[16.9,17)'
 
-      - name: Cache libtiff
-        id: cache-libtiff
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/tiff-${{env.LIBTIFF_VER}}
-          key: ${{runner.os}}-libtiff-${{hashFiles('./libtiff.*')}}
+  #     - name: Cache libtiff
+  #       id: cache-libtiff
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/tiff-${{env.LIBTIFF_VER}}
+  #         key: ${{runner.os}}-libtiff-${{hashFiles('./libtiff.*')}}
 
-      - name: Build libtiff
-        if: steps.cache-libtiff.outputs.cache-hit != 'true'
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          msbuild /noLogo /maxCpuCount /target:libtiff-build iricdev.proj
+  #     - name: Build libtiff
+  #       if: steps.cache-libtiff.outputs.cache-hit != 'true'
+  #       shell: cmd
+  #       run: |
+  #         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+  #         msbuild /noLogo /maxCpuCount /target:libtiff-build iricdev.proj
 
-  cache-netcdf-c:
-  # @todo 12m 29s
-    runs-on: windows-2019
-    needs: [cache-hdf5]
+  # cache-netcdf-c:
+  # # @todo 12m 29s
+  #   runs-on: windows-2019
+  #   needs: [cache-hdf5]
 
-    steps:
-      - uses: actions/checkout@v2
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: Init github env
-        run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+  #     - name: Init github env
+  #       run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      - name: Setup path for msbuild
-        uses: microsoft/setup-msbuild@v1.0.2
-        with:
-          vs-version: '[16.9,17)'
+  #     - name: Setup path for msbuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #       with:
+  #         vs-version: '[16.9,17)'
 
-      - name: Cache hdf5
-        id: cache-hdf5
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/hdf5-${{env.HDF5_VER}}
-          key: ${{runner.os}}-hdf5-${{hashFiles('./hdf5.*')}}
+  #     - name: Cache hdf5
+  #       id: cache-hdf5
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/hdf5-${{env.HDF5_VER}}
+  #         key: ${{runner.os}}-hdf5-${{hashFiles('./hdf5.*')}}
 
-      - name: Cache netcdf-c
-        id: cache-netcdf-c
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/netcdf-c-${{env.NETCDF_VER}}
-          key: ${{runner.os}}-netcdf-c-${{hashFiles('./netcdf-c.*')}}
+  #     - name: Cache netcdf-c
+  #       id: cache-netcdf-c
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/netcdf-c-${{env.NETCDF_VER}}
+  #         key: ${{runner.os}}-netcdf-c-${{hashFiles('./netcdf-c.*')}}
 
-      - name: Build netcdf-c
-        if: steps.cache-netcdf-c.outputs.cache-hit != 'true'
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          msbuild /noLogo /maxCpuCount /target:netcdf-c-build iricdev.proj /fileLogger
+  #     - name: Build netcdf-c
+  #       if: steps.cache-netcdf-c.outputs.cache-hit != 'true'
+  #       shell: cmd
+  #       run: |
+  #         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+  #         msbuild /noLogo /maxCpuCount /target:netcdf-c-build iricdev.proj /fileLogger
 
-      - uses: actions/upload-artifact@v2
-        if: steps.cache-netcdf-c.outputs.cache-hit != 'true'
-        with:
-          name: netcdf-c-build.log
-          path: msbuild.log
+  #     - uses: actions/upload-artifact@v2
+  #       if: steps.cache-netcdf-c.outputs.cache-hit != 'true'
+  #       with:
+  #         name: netcdf-c-build.log
+  #         path: msbuild.log
 
-  cache-openssl:
-  # 6m 53s
-    runs-on: windows-2019
+  # cache-openssl:
+  # # 6m 53s
+  #   runs-on: windows-2019
 
-    steps:
-      - uses: actions/checkout@v2
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: Init github env
-        run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+  #     - name: Init github env
+  #       run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      - name: Setup path for msbuild
-        uses: microsoft/setup-msbuild@v1.0.2
-        with:
-          vs-version: '[16.9,17)'
+  #     - name: Setup path for msbuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #       with:
+  #         vs-version: '[16.9,17)'
 
-      - name: Cache openssl
-        id: cache-openssl
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/openssl-${{env.OPENSSL_VER}}
-          key: ${{runner.os}}-openssl-${{hashFiles('./openssl.*')}}
+  #     - name: Cache openssl
+  #       id: cache-openssl
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/openssl-${{env.OPENSSL_VER}}
+  #         key: ${{runner.os}}-openssl-${{hashFiles('./openssl.*')}}
 
-      - name: Build openssl
-        if: steps.cache-openssl.outputs.cache-hit != 'true'
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          msbuild /noLogo /maxCpuCount /target:openssl-build iricdev.proj
+  #     - name: Build openssl
+  #       if: steps.cache-openssl.outputs.cache-hit != 'true'
+  #       shell: cmd
+  #       run: |
+  #         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+  #         msbuild /noLogo /maxCpuCount /target:openssl-build iricdev.proj
 
   cache-poco:
   # 12m 2s
@@ -362,510 +364,510 @@ jobs:
         shell: cmd
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          msbuild /noLogo /maxCpuCount /target:poco-build iricdev.proj
-
-  cache-proj:
-  # 10m 19s
-    runs-on: windows-2019
-    needs: [cache-libtiff, cache-sqlite]
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Init github env
-        run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: Setup path for msbuild
-        uses: microsoft/setup-msbuild@v1.0.2
-        with:
-          vs-version: '[16.9,17)'
-
-      - name: Cache libtiff
-        id: cache-libtiff
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/tiff-${{env.LIBTIFF_VER}}
-          key: ${{runner.os}}-libtiff-${{hashFiles('./libtiff.*')}}
-
-      - name: Cache sqlite
-        id: cache-sqlite
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/sqlite-src-3320300
-          key: ${{runner.os}}-sqlite-${{hashFiles('./sqlite.*')}}
-
-      - name: Cache proj
-        id: cache-proj
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/proj-${{env.PROJ_VER}}
-          key: ${{runner.os}}-proj-${{hashFiles('./proj.*')}}
-
-      - name: Build proj
-        if: steps.cache-proj.outputs.cache-hit != 'true'
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          msbuild /noLogo /maxCpuCount /target:proj-build iricdev.proj
-
-  cache-qt:
-  # 13m 17s
-    runs-on: windows-2019
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Init github env
-        run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: Cache qt
-        id: cache-qt
-        uses: actions/cache@v2
-        with:
-          path: C:\Qt
-          key: ${{runner.os}}-qt-${{hashFiles('./scripts/Windows/install_qt*.ps1')}}
-
-      - name: Install qt
-        if: steps.cache-qt.outputs.cache-hit != 'true'
-        run: .\scripts\Windows\install_qt_fast_windows.ps1
-
-  cache-qwt:
-  # 13m 3s
-    runs-on: windows-2019
-    needs: [cache-qt]
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Init github env
-        run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: Setup path for msbuild
-        uses: microsoft/setup-msbuild@v1.0.2
-        with:
-          vs-version: '[16.9,17)'
-
-      - name: Cache qt
-        id: cache-qt
-        uses: actions/cache@v2
-        with:
-          path: C:\Qt
-          key: ${{runner.os}}-qt-${{hashFiles('./scripts/Windows/install_qt*.ps1')}}
-
-      - name: Cache qwt
-        id: cache-qwt
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/Qwt-${{env.QWT_VER}}
-          key: ${{runner.os}}-qwt-${{hashFiles('./qwt.*')}}
-
-      - name: Build qwt
-        if: steps.cache-qwt.outputs.cache-hit != 'true'
-        shell: cmd
-        run: |
-          call "C:\Qt\5.14.2\msvc2017_64\bin\qtenv2.bat"
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          cd /D ${{github.workspace}}
-          msbuild /noLogo /maxCpuCount /target:qwt-build iricdev.proj
-
-  cache-shapelib:
-  # 59s
-    runs-on: windows-2019
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Init github env
-        run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: Setup path for msbuild
-        uses: microsoft/setup-msbuild@v1.0.2
-        with:
-          vs-version: '[16.9,17)'
-
-      - name: Cache shapelib
-        id: cache-shapelib
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/shapelib-${{env.SHAPELIB_VER}}
-          key: ${{runner.os}}-shapelib-${{hashFiles('./shapelib.*')}}
-
-      - name: Build shapelib
-        if: steps.cache-shapelib.outputs.cache-hit != 'true'
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          msbuild /noLogo /maxCpuCount /target:shapelib-build iricdev.proj
-
-  cache-sqlite:
-  # 2m 30s
-    runs-on: windows-2019
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Init github env
-        run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: Setup path for msbuild
-        uses: microsoft/setup-msbuild@v1.0.2
-        with:
-          vs-version: '[16.9,17)'
-
-      - name: Cache sqlite
-        id: cache-sqlite
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/sqlite-src-3320300
-          key: ${{runner.os}}-sqlite-${{hashFiles('./sqlite.*')}}
-
-      - name: Build sqlite
-        if: steps.cache-sqlite.outputs.cache-hit != 'true'
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          msbuild /noLogo /maxCpuCount /target:sqlite-build iricdev.proj
-
-  cache-udunits:
-  # 1m 5s
-    runs-on: windows-2019
-    needs: [cache-expat]
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Init github env
-        run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: Setup path for msbuild
-        uses: microsoft/setup-msbuild@v1.0.2
-        with:
-          vs-version: '[16.9,17)'
-
-      - name: Cache expat
-        id: cache-expat
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/expat-${{env.EXPAT_VER}}
-          key: ${{runner.os}}-expat-${{hashFiles('./expat.*')}}
-
-      - name: Cache udunits
-        id: cache-udunits
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/udunits-${{env.UDUNITS_VER}}
-          key: ${{runner.os}}-udunits-${{hashFiles('./udunits.*')}}
-
-      - name: Build udunits
-        if: steps.cache-udunits.outputs.cache-hit != 'true'
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          msbuild /noLogo /maxCpuCount /target:udunits-build iricdev.proj
-
-  cache-vtk-debug:
-  # 29m 41s
-    runs-on: windows-2019
-    needs: [cache-qt]
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Init github env
-        run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: Setup path for msbuild
-        uses: microsoft/setup-msbuild@v1.0.2
-        with:
-          vs-version: '[16.9,17)'
-
-      - name: Cache qt
-        id: cache-qt
-        uses: actions/cache@v2
-        with:
-          path: C:\Qt
-          key: ${{runner.os}}-qt-${{hashFiles('./scripts/Windows/install_qt*.ps1')}}
-
-      - name: Cache vtk debug
-        id: cache-vtk-debug
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/vtk-${{env.VTK_VER}}/debug
-          key: ${{runner.os}}-vtk-${{hashFiles('./vtk.*')}}
-
-      - name: Build vtk debug
-        if: steps.cache-vtk-debug.outputs.cache-hit != 'true'
-        shell: cmd
-        run: |
-          call "C:\Qt\5.14.2\msvc2017_64\bin\qtenv2.bat"
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          cd /D ${{github.workspace}}
-          msbuild /noLogo /maxCpuCount /target:vtk-build-debug iricdev.proj
-
-  cache-vtk-release:
-  # 41m 47s
-    runs-on: windows-2019
-    needs: [cache-qt]
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Init github env
-        run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: Setup path for msbuild
-        uses: microsoft/setup-msbuild@v1.0.2
-        with:
-          vs-version: '[16.9,17)'
-
-      - name: Cache qt
-        id: cache-qt
-        uses: actions/cache@v2
-        with:
-          path: C:\Qt
-          key: ${{runner.os}}-qt-${{hashFiles('./scripts/Windows/install_qt*.ps1')}}
-
-      - name: Cache vtk release
-        id: cache-vtk-release
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/vtk-${{env.VTK_VER}}/release
-          key: ${{runner.os}}-vtk-${{hashFiles('./vtk.*')}}
-
-      - name: Build vtk release
-        if: steps.cache-vtk-release.outputs.cache-hit != 'true'
-        shell: cmd
-        run: |
-          call "C:\Qt\5.14.2\msvc2017_64\bin\qtenv2.bat"
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          cd /D ${{github.workspace}}
-          msbuild /noLogo /maxCpuCount /target:vtk-build-release iricdev.proj
-
-  cache-yaml:
-  # 1m 19s
-    runs-on: windows-2019
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Init github env
-        run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: Setup path for msbuild
-        uses: microsoft/setup-msbuild@v1.0.2
-        with:
-          vs-version: '[16.9,17)'
-
-      - name: Cache yaml
-        id: cache-yaml
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/yaml-cpp-${{env.YAML_CPP_VER}}
-          key: ${{runner.os}}-yaml-${{hashFiles('./yaml.*')}}
-
-      - name: Build yaml
-        if: steps.cache-yaml.outputs.cache-hit != 'true'
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          msbuild /noLogo /maxCpuCount /target:yaml-cpp-build iricdev.proj
-
-  create-release:
-  # 4m 24s
-    runs-on: windows-2019
-    needs: [cache-expat, cache-gdal, cache-geos, cache-hdf5, cache-iriclib, cache-libpng, cache-libtiff, cache-netcdf-c, cache-openssl, cache-poco, cache-proj, cache-qwt, cache-shapelib, cache-sqlite, cache-udunits, cache-vtk-debug, cache-vtk-release, cache-yaml]
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Init github env
-        run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: Setup path for msbuild
-        uses: microsoft/setup-msbuild@v1.0.2
-        with:
-          vs-version: '[16.9,17)'
-
-      - name: Cache expat
-        id: cache-expat
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/expat-${{env.EXPAT_VER}}
-          key: ${{runner.os}}-expat-${{hashFiles('./expat.*')}}
-
-      - name: Cache gdal
-        id: cache-gdal
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/gdal-${{env.GDAL_VER}}
-          key: ${{runner.os}}-gdal-${{hashFiles('./gdal.*')}}
-
-      - name: Cache geos
-        id: cache-geos
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/geos-${{env.GEOS_VER}}
-          key: ${{runner.os}}-geos-${{hashFiles('./geos.*')}}
-
-      - name: Cache hdf5
-        id: cache-hdf5
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/hdf5-${{env.HDF5_VER}}
-          key: ${{runner.os}}-hdf5-${{hashFiles('./hdf5.*')}}
-
-      - name: Cache iriclib
-        id: cache-iriclib
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/iriclib-${{env.IRICLIB_VER}}
-          key: ${{runner.os}}-iriclib-${{hashFiles('./iriclib.*')}}
-
-      - name: Cache libpng
-        id: cache-libpng
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/libpng-${{env.LIBPNG_VER}}
-          key: ${{runner.os}}-libpng-${{hashFiles('./libpng.*')}}
-
-      - name: Cache libtiff
-        id: cache-libtiff
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/tiff-${{env.LIBTIFF_VER}}
-          key: ${{runner.os}}-libtiff-${{hashFiles('./libtiff.*')}}
-
-      - name: Cache netcdf-c
-        id: cache-netcdf-c
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/netcdf-c-${{env.NETCDF_VER}}
-          key: ${{runner.os}}-netcdf-c-${{hashFiles('./netcdf-c.*')}}
-
-      - name: Cache openssl
-        id: cache-openssl
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/openssl-${{env.OPENSSL_VER}}
-          key: ${{runner.os}}-openssl-${{hashFiles('./openssl.*')}}
-
-      - name: Cache poco
-        id: cache-poco
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/poco-${{env.POCO_VER}}
-          key: ${{runner.os}}-poco-${{hashFiles('./poco.*')}}
-
-      - name: Cache proj
-        id: cache-proj
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/proj-${{env.PROJ_VER}}
-          key: ${{runner.os}}-proj-${{hashFiles('./proj.*')}}
-
-      - name: Cache qwt
-        id: cache-qwt
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/Qwt-${{env.QWT_VER}}
-          key: ${{runner.os}}-qwt-${{hashFiles('./qwt.*')}}
-
-      - name: Cache shapelib
-        id: cache-shapelib
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/shapelib-${{env.SHAPELIB_VER}}
-          key: ${{runner.os}}-shapelib-${{hashFiles('./shapelib.*')}}
-
-      - name: Cache sqlite
-        id: cache-sqlite
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/sqlite-src-3320300
-          key: ${{runner.os}}-sqlite-${{hashFiles('./sqlite.*')}}
-
-      - name: Cache udunits
-        id: cache-udunits
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/udunits-${{env.UDUNITS_VER}}
-          key: ${{runner.os}}-udunits-${{hashFiles('./udunits.*')}}
-
-      - name: Cache vtk debug
-        id: cache-vtk-debug
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/vtk-${{env.VTK_VER}}/debug
-          key: ${{runner.os}}-vtk-${{hashFiles('./vtk.*')}}
+          msbuild ${{MSBUILD_OPTS}} /target:poco-build iricdev.proj
+
+  # cache-proj:
+  # # 10m 19s
+  #   runs-on: windows-2019
+  #   needs: [cache-libtiff, cache-sqlite]
+
+  #   steps:
+  #     - uses: actions/checkout@v2
+
+  #     - name: Init github env
+  #       run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+  #     - name: Setup path for msbuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #       with:
+  #         vs-version: '[16.9,17)'
+
+  #     - name: Cache libtiff
+  #       id: cache-libtiff
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/tiff-${{env.LIBTIFF_VER}}
+  #         key: ${{runner.os}}-libtiff-${{hashFiles('./libtiff.*')}}
+
+  #     - name: Cache sqlite
+  #       id: cache-sqlite
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/sqlite-src-3320300
+  #         key: ${{runner.os}}-sqlite-${{hashFiles('./sqlite.*')}}
+
+  #     - name: Cache proj
+  #       id: cache-proj
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/proj-${{env.PROJ_VER}}
+  #         key: ${{runner.os}}-proj-${{hashFiles('./proj.*')}}
+
+  #     - name: Build proj
+  #       if: steps.cache-proj.outputs.cache-hit != 'true'
+  #       shell: cmd
+  #       run: |
+  #         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+  #         msbuild /noLogo /maxCpuCount /target:proj-build iricdev.proj
+
+  # cache-qt:
+  # # 13m 17s
+  #   runs-on: windows-2019
+
+  #   steps:
+  #     - uses: actions/checkout@v2
+
+  #     - name: Init github env
+  #       run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+  #     - name: Cache qt
+  #       id: cache-qt
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: C:\Qt
+  #         key: ${{runner.os}}-qt-${{hashFiles('./scripts/Windows/install_qt*.ps1')}}
+
+  #     - name: Install qt
+  #       if: steps.cache-qt.outputs.cache-hit != 'true'
+  #       run: .\scripts\Windows\install_qt_fast_windows.ps1
+
+  # cache-qwt:
+  # # 13m 3s
+  #   runs-on: windows-2019
+  #   needs: [cache-qt]
+
+  #   steps:
+  #     - uses: actions/checkout@v2
+
+  #     - name: Init github env
+  #       run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+  #     - name: Setup path for msbuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #       with:
+  #         vs-version: '[16.9,17)'
+
+  #     - name: Cache qt
+  #       id: cache-qt
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: C:\Qt
+  #         key: ${{runner.os}}-qt-${{hashFiles('./scripts/Windows/install_qt*.ps1')}}
+
+  #     - name: Cache qwt
+  #       id: cache-qwt
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/Qwt-${{env.QWT_VER}}
+  #         key: ${{runner.os}}-qwt-${{hashFiles('./qwt.*')}}
+
+  #     - name: Build qwt
+  #       if: steps.cache-qwt.outputs.cache-hit != 'true'
+  #       shell: cmd
+  #       run: |
+  #         call "C:\Qt\5.14.2\msvc2017_64\bin\qtenv2.bat"
+  #         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+  #         cd /D ${{github.workspace}}
+  #         msbuild /noLogo /maxCpuCount /target:qwt-build iricdev.proj
+
+  # cache-shapelib:
+  # # 59s
+  #   runs-on: windows-2019
+
+  #   steps:
+  #     - uses: actions/checkout@v2
+
+  #     - name: Init github env
+  #       run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+  #     - name: Setup path for msbuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #       with:
+  #         vs-version: '[16.9,17)'
+
+  #     - name: Cache shapelib
+  #       id: cache-shapelib
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/shapelib-${{env.SHAPELIB_VER}}
+  #         key: ${{runner.os}}-shapelib-${{hashFiles('./shapelib.*')}}
+
+  #     - name: Build shapelib
+  #       if: steps.cache-shapelib.outputs.cache-hit != 'true'
+  #       shell: cmd
+  #       run: |
+  #         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+  #         msbuild /noLogo /maxCpuCount /target:shapelib-build iricdev.proj
+
+  # cache-sqlite:
+  # # 2m 30s
+  #   runs-on: windows-2019
+
+  #   steps:
+  #     - uses: actions/checkout@v2
+
+  #     - name: Init github env
+  #       run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+  #     - name: Setup path for msbuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #       with:
+  #         vs-version: '[16.9,17)'
+
+  #     - name: Cache sqlite
+  #       id: cache-sqlite
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/sqlite-src-3320300
+  #         key: ${{runner.os}}-sqlite-${{hashFiles('./sqlite.*')}}
+
+  #     - name: Build sqlite
+  #       if: steps.cache-sqlite.outputs.cache-hit != 'true'
+  #       shell: cmd
+  #       run: |
+  #         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+  #         msbuild /noLogo /maxCpuCount /target:sqlite-build iricdev.proj
+
+  # cache-udunits:
+  # # 1m 5s
+  #   runs-on: windows-2019
+  #   needs: [cache-expat]
+
+  #   steps:
+  #     - uses: actions/checkout@v2
+
+  #     - name: Init github env
+  #       run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+  #     - name: Setup path for msbuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #       with:
+  #         vs-version: '[16.9,17)'
+
+  #     - name: Cache expat
+  #       id: cache-expat
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/expat-${{env.EXPAT_VER}}
+  #         key: ${{runner.os}}-expat-${{hashFiles('./expat.*')}}
+
+  #     - name: Cache udunits
+  #       id: cache-udunits
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/udunits-${{env.UDUNITS_VER}}
+  #         key: ${{runner.os}}-udunits-${{hashFiles('./udunits.*')}}
+
+  #     - name: Build udunits
+  #       if: steps.cache-udunits.outputs.cache-hit != 'true'
+  #       shell: cmd
+  #       run: |
+  #         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+  #         msbuild /noLogo /maxCpuCount /target:udunits-build iricdev.proj
+
+  # cache-vtk-debug:
+  # # 29m 41s
+  #   runs-on: windows-2019
+  #   needs: [cache-qt]
+
+  #   steps:
+  #     - uses: actions/checkout@v2
+
+  #     - name: Init github env
+  #       run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+  #     - name: Setup path for msbuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #       with:
+  #         vs-version: '[16.9,17)'
+
+  #     - name: Cache qt
+  #       id: cache-qt
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: C:\Qt
+  #         key: ${{runner.os}}-qt-${{hashFiles('./scripts/Windows/install_qt*.ps1')}}
+
+  #     - name: Cache vtk debug
+  #       id: cache-vtk-debug
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/vtk-${{env.VTK_VER}}/debug
+  #         key: ${{runner.os}}-vtk-${{hashFiles('./vtk.*')}}
+
+  #     - name: Build vtk debug
+  #       if: steps.cache-vtk-debug.outputs.cache-hit != 'true'
+  #       shell: cmd
+  #       run: |
+  #         call "C:\Qt\5.14.2\msvc2017_64\bin\qtenv2.bat"
+  #         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+  #         cd /D ${{github.workspace}}
+  #         msbuild /noLogo /maxCpuCount /target:vtk-build-debug iricdev.proj
+
+  # cache-vtk-release:
+  # # 41m 47s
+  #   runs-on: windows-2019
+  #   needs: [cache-qt]
+
+  #   steps:
+  #     - uses: actions/checkout@v2
+
+  #     - name: Init github env
+  #       run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+  #     - name: Setup path for msbuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #       with:
+  #         vs-version: '[16.9,17)'
+
+  #     - name: Cache qt
+  #       id: cache-qt
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: C:\Qt
+  #         key: ${{runner.os}}-qt-${{hashFiles('./scripts/Windows/install_qt*.ps1')}}
+
+  #     - name: Cache vtk release
+  #       id: cache-vtk-release
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/vtk-${{env.VTK_VER}}/release
+  #         key: ${{runner.os}}-vtk-${{hashFiles('./vtk.*')}}
+
+  #     - name: Build vtk release
+  #       if: steps.cache-vtk-release.outputs.cache-hit != 'true'
+  #       shell: cmd
+  #       run: |
+  #         call "C:\Qt\5.14.2\msvc2017_64\bin\qtenv2.bat"
+  #         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+  #         cd /D ${{github.workspace}}
+  #         msbuild /noLogo /maxCpuCount /target:vtk-build-release iricdev.proj
+
+  # cache-yaml:
+  # # 1m 19s
+  #   runs-on: windows-2019
+
+  #   steps:
+  #     - uses: actions/checkout@v2
+
+  #     - name: Init github env
+  #       run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+  #     - name: Setup path for msbuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #       with:
+  #         vs-version: '[16.9,17)'
+
+  #     - name: Cache yaml
+  #       id: cache-yaml
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/yaml-cpp-${{env.YAML_CPP_VER}}
+  #         key: ${{runner.os}}-yaml-${{hashFiles('./yaml.*')}}
+
+  #     - name: Build yaml
+  #       if: steps.cache-yaml.outputs.cache-hit != 'true'
+  #       shell: cmd
+  #       run: |
+  #         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+  #         msbuild /noLogo /maxCpuCount /target:yaml-cpp-build iricdev.proj
+
+  # create-release:
+  # # 4m 24s
+  #   runs-on: windows-2019
+  #   needs: [cache-expat, cache-gdal, cache-geos, cache-hdf5, cache-iriclib, cache-libpng, cache-libtiff, cache-netcdf-c, cache-openssl, cache-poco, cache-proj, cache-qwt, cache-shapelib, cache-sqlite, cache-udunits, cache-vtk-debug, cache-vtk-release, cache-yaml]
+
+  #   steps:
+  #     - uses: actions/checkout@v2
+
+  #     - name: Init github env
+  #       run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+  #     - name: Setup path for msbuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #       with:
+  #         vs-version: '[16.9,17)'
+
+  #     - name: Cache expat
+  #       id: cache-expat
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/expat-${{env.EXPAT_VER}}
+  #         key: ${{runner.os}}-expat-${{hashFiles('./expat.*')}}
+
+  #     - name: Cache gdal
+  #       id: cache-gdal
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/gdal-${{env.GDAL_VER}}
+  #         key: ${{runner.os}}-gdal-${{hashFiles('./gdal.*')}}
+
+  #     - name: Cache geos
+  #       id: cache-geos
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/geos-${{env.GEOS_VER}}
+  #         key: ${{runner.os}}-geos-${{hashFiles('./geos.*')}}
+
+  #     - name: Cache hdf5
+  #       id: cache-hdf5
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/hdf5-${{env.HDF5_VER}}
+  #         key: ${{runner.os}}-hdf5-${{hashFiles('./hdf5.*')}}
+
+  #     - name: Cache iriclib
+  #       id: cache-iriclib
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/iriclib-${{env.IRICLIB_VER}}
+  #         key: ${{runner.os}}-iriclib-${{hashFiles('./iriclib.*')}}
+
+  #     - name: Cache libpng
+  #       id: cache-libpng
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/libpng-${{env.LIBPNG_VER}}
+  #         key: ${{runner.os}}-libpng-${{hashFiles('./libpng.*')}}
+
+  #     - name: Cache libtiff
+  #       id: cache-libtiff
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/tiff-${{env.LIBTIFF_VER}}
+  #         key: ${{runner.os}}-libtiff-${{hashFiles('./libtiff.*')}}
+
+  #     - name: Cache netcdf-c
+  #       id: cache-netcdf-c
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/netcdf-c-${{env.NETCDF_VER}}
+  #         key: ${{runner.os}}-netcdf-c-${{hashFiles('./netcdf-c.*')}}
+
+  #     - name: Cache openssl
+  #       id: cache-openssl
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/openssl-${{env.OPENSSL_VER}}
+  #         key: ${{runner.os}}-openssl-${{hashFiles('./openssl.*')}}
+
+  #     - name: Cache poco
+  #       id: cache-poco
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/poco-${{env.POCO_VER}}
+  #         key: ${{runner.os}}-poco-${{hashFiles('./poco.*')}}
+
+  #     - name: Cache proj
+  #       id: cache-proj
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/proj-${{env.PROJ_VER}}
+  #         key: ${{runner.os}}-proj-${{hashFiles('./proj.*')}}
+
+  #     - name: Cache qwt
+  #       id: cache-qwt
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/Qwt-${{env.QWT_VER}}
+  #         key: ${{runner.os}}-qwt-${{hashFiles('./qwt.*')}}
+
+  #     - name: Cache shapelib
+  #       id: cache-shapelib
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/shapelib-${{env.SHAPELIB_VER}}
+  #         key: ${{runner.os}}-shapelib-${{hashFiles('./shapelib.*')}}
+
+  #     - name: Cache sqlite
+  #       id: cache-sqlite
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/sqlite-src-3320300
+  #         key: ${{runner.os}}-sqlite-${{hashFiles('./sqlite.*')}}
+
+  #     - name: Cache udunits
+  #       id: cache-udunits
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/udunits-${{env.UDUNITS_VER}}
+  #         key: ${{runner.os}}-udunits-${{hashFiles('./udunits.*')}}
+
+  #     - name: Cache vtk debug
+  #       id: cache-vtk-debug
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/vtk-${{env.VTK_VER}}/debug
+  #         key: ${{runner.os}}-vtk-${{hashFiles('./vtk.*')}}
  
-      - name: Cache vtk release
-        id: cache-vtk-release
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/vtk-${{env.VTK_VER}}/release
-          key: ${{runner.os}}-vtk-${{hashFiles('./vtk.*')}}
+  #     - name: Cache vtk release
+  #       id: cache-vtk-release
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/vtk-${{env.VTK_VER}}/release
+  #         key: ${{runner.os}}-vtk-${{hashFiles('./vtk.*')}}
 
-      - name: Cache yaml
-        id: cache-yaml
-        uses: actions/cache@v2
-        with:
-          path: ${{github.workspace}}/lib/install/yaml-cpp-${{env.YAML_CPP_VER}}
-          key: ${{runner.os}}-yaml-${{hashFiles('./yaml.*')}}
+  #     - name: Cache yaml
+  #       id: cache-yaml
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: ${{github.workspace}}/lib/install/yaml-cpp-${{env.YAML_CPP_VER}}
+  #         key: ${{runner.os}}-yaml-${{hashFiles('./yaml.*')}}
 
-      - name: Create iricdev-vs2019-build-cache.7z
-        run: 7z a iricdev-vs2019-build-cache.7z lib\install
+  #     - name: Create iricdev-vs2019-build-cache.7z
+  #       run: 7z a iricdev-vs2019-build-cache.7z lib\install
 
-      - name: Create release
-        env:
-          releases_url: ${{github.api_url}}/repos/${{github.repository}}/releases
-        run: |
-          # create tag
-          $tag_name = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH.mm.ssK')
+  #     - name: Create release
+  #       env:
+  #         releases_url: ${{github.api_url}}/repos/${{github.repository}}/releases
+  #       run: |
+  #         # create tag
+  #         $tag_name = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH.mm.ssK')
 
-          # store commit
-          $target_commitish = "${{github.sha}}"
+  #         # store commit
+  #         $target_commitish = "${{github.sha}}"
 
-          # create headers dictionary
-          $h = @{"Authorization" = "token ${{secrets.GITHUB_TOKEN}}"}
-          $releases_url = "${{env.releases_url}}"
-          # create release
-          # POST /repos/{owner}/{repo}/releases
-          # see https://docs.github.com/en/rest/reference/repos#create-a-release
-          # see https://docs.github.com/ja/rest/reference/repos#create-a-release
-          #
-          $create = @{
-            "tag_name"         = "$tag_name"
-            "target_commitish" = "$target_commitish"
-            "name"             = "iricdev " + $tag_name
-            "draft"            = $true
-          }
-          $create_json = $create | ConvertTo-Json
-          $release = Invoke-WebRequest -Uri $releases_url -Headers $h -Method POST -Body $create_json
-          # upload artifact (asset)
-          # POST /repos/{owner}/{repo}/releases/{release_id}/assets
-          # see https://docs.github.com/en/rest/reference/repos#upload-a-release-asset
-          # see https://docs.github.com/ja/rest/reference/repos#upload-a-release-asset
-          #
-          $upload_uri = ($release.Content | ConvertFrom-Json).upload_url
-          if (! ($upload_uri -match  "(.*)\{\?name,label\}") ) {
-            # expecting URI{?name,label}
-            # ie https://uploads.github.com/repos/scharlton2/iricdev-2019/releases/24058628/assets{?name,label}
-            throw "Bad upload_url"
-          }
-          $upload_uri = $Matches[1] + "?name=iricdev-vs2019-build-cache.7z"
-          $h["Content-type"] = "application/x-7z-compressed"
-          $bytes = [System.IO.File]::ReadAllBytes("iricdev-vs2019-build-cache.7z")
-          $upload = Invoke-WebRequest -Uri $upload_uri -Headers $h -Method POST -Body $bytes
-          # update release
-          # PATCH /repos/{owner}/{repo}/releases/{release_id}
-          # see https://docs.github.com/en/rest/reference/repos#update-a-release
-          # see https://docs.github.com/ja/rest/reference/repos#update-a-release
-          #
-          $release_id = ($release.Content | ConvertFrom-Json).id
-          $h.Remove("Content-type")
-          $update = @{ "draft" = $false }
-          $update_json = $update | ConvertTo-Json
-          $release = Invoke-WebRequest -Uri "$releases_url/$release_id" -Headers $h -Method PATCH -Body $update_json
-          # display download url
-          Write-Output "$((($release.Content | ConvertFrom-Json).assets).browser_download_url)"
-          Get-FileHash "iricdev-vs2019-build-cache.7z"
+  #         # create headers dictionary
+  #         $h = @{"Authorization" = "token ${{secrets.GITHUB_TOKEN}}"}
+  #         $releases_url = "${{env.releases_url}}"
+  #         # create release
+  #         # POST /repos/{owner}/{repo}/releases
+  #         # see https://docs.github.com/en/rest/reference/repos#create-a-release
+  #         # see https://docs.github.com/ja/rest/reference/repos#create-a-release
+  #         #
+  #         $create = @{
+  #           "tag_name"         = "$tag_name"
+  #           "target_commitish" = "$target_commitish"
+  #           "name"             = "iricdev " + $tag_name
+  #           "draft"            = $true
+  #         }
+  #         $create_json = $create | ConvertTo-Json
+  #         $release = Invoke-WebRequest -Uri $releases_url -Headers $h -Method POST -Body $create_json
+  #         # upload artifact (asset)
+  #         # POST /repos/{owner}/{repo}/releases/{release_id}/assets
+  #         # see https://docs.github.com/en/rest/reference/repos#upload-a-release-asset
+  #         # see https://docs.github.com/ja/rest/reference/repos#upload-a-release-asset
+  #         #
+  #         $upload_uri = ($release.Content | ConvertFrom-Json).upload_url
+  #         if (! ($upload_uri -match  "(.*)\{\?name,label\}") ) {
+  #           # expecting URI{?name,label}
+  #           # ie https://uploads.github.com/repos/scharlton2/iricdev-2019/releases/24058628/assets{?name,label}
+  #           throw "Bad upload_url"
+  #         }
+  #         $upload_uri = $Matches[1] + "?name=iricdev-vs2019-build-cache.7z"
+  #         $h["Content-type"] = "application/x-7z-compressed"
+  #         $bytes = [System.IO.File]::ReadAllBytes("iricdev-vs2019-build-cache.7z")
+  #         $upload = Invoke-WebRequest -Uri $upload_uri -Headers $h -Method POST -Body $bytes
+  #         # update release
+  #         # PATCH /repos/{owner}/{repo}/releases/{release_id}
+  #         # see https://docs.github.com/en/rest/reference/repos#update-a-release
+  #         # see https://docs.github.com/ja/rest/reference/repos#update-a-release
+  #         #
+  #         $release_id = ($release.Content | ConvertFrom-Json).id
+  #         $h.Remove("Content-type")
+  #         $update = @{ "draft" = $false }
+  #         $update_json = $update | ConvertTo-Json
+  #         $release = Invoke-WebRequest -Uri "$releases_url/$release_id" -Headers $h -Method PATCH -Body $update_json
+  #         # display download url
+  #         Write-Output "$((($release.Content | ConvertFrom-Json).assets).browser_download_url)"
+  #         Get-FileHash "iricdev-vs2019-build-cache.7z"

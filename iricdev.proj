@@ -9,22 +9,28 @@
 
   <!-- all -->
   <ItemGroup>
+    <!--
     <all-targets Include="boost-src"/>
     <all-targets Include="expat-build"/>
     <all-targets Include="gdal-build"/>
     <all-targets Include="geos-build"/>
+    -->
     <all-targets Include="hdf5-build"/>
     <all-targets Include="iriclib-build"/>
+    <!--
     <all-targets Include="libpng-build"/>
     <all-targets Include="netcdf-c-build"/>
     <all-targets Include="openssl-build"/>
+    -->
     <all-targets Include="poco-build"/>
+    <!--
     <all-targets Include="proj-build"/>
     <all-targets Include="qwt-build"/>
     <all-targets Include="shapelib-build"/>
     <all-targets Include="udunits-build"/>
     <all-targets Include="vtk-build"/>
     <all-targets Include="yaml-cpp-build"/>
+    -->
   </ItemGroup>
 
   <Target Name="all" DependsOnTargets="@(all-targets)">
