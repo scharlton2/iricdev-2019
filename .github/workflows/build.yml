@@ -147,7 +147,7 @@ jobs:
         shell: cmd
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          msbuild ${{MSBUILD_OPTS}} /target:hdf5-build iricdev.proj
+          msbuild ${{env.MSBUILD_OPTS}} /target:hdf5-build iricdev.proj
 
   cache-iriclib:
   # @todo 29m 11s
@@ -191,7 +191,7 @@ jobs:
         shell: cmd
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          msbuild ${{MSBUILD_OPTS}} /target:iriclib-build iricdev.proj /fileLogger
+          msbuild ${{env.MSBUILD_OPTS}} /target:iriclib-build iricdev.proj /fileLogger
 
       - uses: actions/upload-artifact@v2
         if: steps.cache-iriclib.outputs.cache-hit != 'true'
@@ -364,7 +364,7 @@ jobs:
         shell: cmd
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          msbuild ${{MSBUILD_OPTS}} /target:poco-build iricdev.proj
+          msbuild ${{env.MSBUILD_OPTS}} /target:poco-build iricdev.proj
 
   # cache-proj:
   # # 10m 19s
