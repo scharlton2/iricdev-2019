@@ -3,10 +3,8 @@ name: build-jobs
 on:
   push:
     branches:
-      - 2019-UseDeps
-      - 2019-actions-jobs
-      - 2019-actions
       - 2019
+      - 2019-*
     paths-ignore:
       README.md
 
