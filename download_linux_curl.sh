@@ -18,6 +18,13 @@ if [ ! -f "hdf5-${HDF5_VER}.tar.gz" ]; then
   ${CURL} https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${MAJOR}.${MINOR}/hdf5-${HDF5_VER}/src/hdf5-${HDF5_VER}.tar.gz
 fi
 
+if [ ! -f "CMake-hdf5-${HDF5_VER}.tar.gz" ]; then
+  MAJOR=$(echo ${HDF5_VER} | cut -d '.' -f 1)
+  MINOR=$(echo ${HDF5_VER} | cut -d '.' -f 2)
+  ${CURL} https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${MAJOR}.${MINOR}/hdf5-${HDF5_VER}/src/CMake-hdf5-${HDF5_VER}.tar.gz
+fi
+
+
 if [ ! -f "iriclib-${IRICLIB_VER}.zip" ]; then
   ${CURL} https://github.com/i-RIC/iriclib/archive/v${IRICLIB_VER}.zip
   mv v${IRICLIB_VER}.zip iriclib-${IRICLIB_VER}.zip
