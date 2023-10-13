@@ -1,5 +1,21 @@
+# ubuntu-22.04
+# sudo apt install build-essential
+# sudo apt install gfortran
+# sudo apt install curl
+# sudo apt install p7zip-full
+# sudo apt install ninja-build
+# sudo apt install swig
+# sudo apt install python3-dev
+
 # versions
-HDF5_MAJMIN := $(shell echo $(HDF5_VER) | sed -e 's/\./ /g' | awk '{ print $$1"."$$2 }')
+
+export HDF5_VER=$(shell awk '/^set HDF5_VER/ {print $2}' versions.cmd | sed 's/[^=]*=//')
+export IRICLIB_VER=$(shell awk '/^set IRICLIB_VER/ {print $2}' versions.cmd | sed 's/[^=]*=//')
+export POCO_VER=$(shell awk '/^set POCO_VER/ {print $2}' versions.cmd | sed 's/[^=]*=//')
+export VTK_VER=$(shell awk '/^set VTK_VER/ {print $2}' versions.cmd | sed 's/[^=]*=//')
+
+export HDF5_MAJMIN=$(shell echo $(HDF5_VER) | sed -e 's/\./ /g' | awk '{ print $$1"."$$2 }')
+export VTK_MAJMIN=$(shell echo $(VTK_VER) | sed -e 's/\./ /g' | awk '{ print $$1"."$$2 }')
 
 # programs
 CURL := curl -L -O
@@ -21,13 +37,20 @@ SGEN := ninja
 # environment
 export SGEN
 
+DEPS := $(INSTALL_DIR)/hdf5-$(HDF5_VER)/lib/libhdf5.so
+DEPS += $(INSTALL_DIR)/hdf5-$(HDF5_VER)/lib/libhdf5_debug.so
+DEPS += $(INSTALL_DIR)/poco-$(POCO_VER)/lib/libPocoFoundation.so
+DEPS += $(INSTALL_DIR)/poco-$(POCO_VER)/lib/libPocoFoundationd.so
+DEPS += $(INSTALL_DIR)/iriclib-$(IRICLIB_VER)/lib/libiriclib.so
+DEPS += $(INSTALL_DIR)/iriclib-$(IRICLIB_VER)/lib/libiriclibd.so
+# DEPS += $(INSTALL_DIR)/vtk-$(VTK_VER)/debug/lib/libvtkCommonCore-$(VTK_MAJMIN).so
+# DEPS += $(INSTALL_DIR)/vtk-$(VTK_VER)/release/lib/libvtkCommonCore-$(VTK_MAJMIN).so
 
-all : $(INSTALL_DIR)/iriclib-$(IRICLIB_VER)/lib/libiriclibd.so $(INSTALL_DIR)/iriclib-$(IRICLIB_VER)/lib/libiriclib.so
+all : $(DEPS)
+
 
 # iriclib
 
-
-export HDF5_VER HDF5_MAJMIN IRICLIB_VER POCO_VER
 
 iriclib-build : $(INSTALL_DIR)/iriclib-$(IRICLIB_VER)/lib/libiriclib.so $(INSTALL_DIR)/iriclib-$(IRICLIB_VER)/lib/libiriclibd.so
 	echo iriclib-build Done
@@ -112,3 +135,41 @@ hdf5-src $(SRC_DIR)/CMake-hdf5-$(HDF5_VER) : $(DOWNLOADS_DIR)/CMake-hdf5-$(HDF5_
 hdf5-download $(DOWNLOADS_DIR)/CMake-hdf5-$(HDF5_VER).zip :
 	$(MKDIR) $(DOWNLOADS_DIR)
 	cd $(DOWNLOADS_DIR) && $(CURL) https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-$(HDF5_MAJMIN)/hdf5-$(HDF5_VER)/src/CMake-hdf5-$(HDF5_VER).zip
+
+
+# VTK
+
+# libvtk9-dev
+# sudo apt install libvtk9-dev
+
+
+# vtk-build : $(INSTALL_DIR)/vtk-$(VTK_VER)/release/lib/libvtkCommonCore-$(VTK_MAJMIN).so $(INSTALL_DIR)/vtk-$(VTK_VER)/debug/lib/libvtkCommonCore-$(VTK_MAJMIN).so
+# 	echo vtk-build Done
+
+# # vtk-build-release $(INSTALL_DIR)/vtk-$(VTK_VER)/release/lib/libvtkCommonCore-$(VTK_MAJMIN).so : $(SRC_DIR)/VTK-$(VTK_VER)
+# # 	$(MKDIR) $(INSTALL_DIR)
+# # 	ctest -S vtk.cmake -DCONF_DIR:STRING=release -D"CTEST_CMAKE_GENERATOR:STRING=Unix Makefiles" -C Release -VV -O $(LOG_DIR)/make-vtk-release.log
+
+# vtk-build-release : $(INSTALL_DIR)/vtk-$(VTK_VER)/release/lib/libvtkCommonCore-$(VTK_MAJMIN).so
+
+# $(INSTALL_DIR)/vtk-$(VTK_VER)/release/lib/libvtkCommonCore-$(VTK_MAJMIN).so : $(SRC_DIR)/VTK-$(VTK_VER)
+# 	$(MKDIR) $(INSTALL_DIR)
+# 	ctest -S vtk.cmake -DCONF_DIR:STRING=release -D"CTEST_CMAKE_GENERATOR:STRING=Unix Makefiles" -C Release -VV -O $(LOG_DIR)/make-vtk-release.log
+
+# # vtk-build-debug $(INSTALL_DIR)/vtk-$(VTK_VER)/debug/lib/libvtkCommonCore-$(VTK_MAJMIN).so : $(SRC_DIR)/VTK-$(VTK_VER)
+# # 	$(MKDIR) $(INSTALL_DIR)
+# # 	ctest -S vtk.cmake -DCONF_DIR:STRING=debug -D"CTEST_CMAKE_GENERATOR:STRING=Unix Makefiles" -C Debug -VV -O $(LOG_DIR)/make-vtk-debug.log
+
+# vtk-build-debug : $(INSTALL_DIR)/vtk-$(VTK_VER)/debug/lib/libvtkCommonCore-$(VTK_MAJMIN).so
+
+# $(INSTALL_DIR)/vtk-$(VTK_VER)/debug/lib/libvtkCommonCore-$(VTK_MAJMIN).so : $(SRC_DIR)/VTK-$(VTK_VER)
+# 	$(MKDIR) $(INSTALL_DIR)
+# 	ctest -S vtk.cmake -DCONF_DIR:STRING=debug -D"CTEST_CMAKE_GENERATOR:STRING=Unix Makefiles" -C Debug -VV -O $(LOG_DIR)/make-vtk-debug.log
+
+# vtk-src $(SRC_DIR)/VTK-$(VTK_VER) : $(DOWNLOADS_DIR)/VTK-$(VTK_VER).zip
+# 	7z x $(DOWNLOADS_DIR)/VTK-$(VTK_VER).zip -o$(SRC_DIR)
+# 	touch $(SRC_DIR)/VTK-$(VTK_VER)
+
+# vtk-download $(DOWNLOADS_DIR)/VTK-$(VTK_VER).zip :
+# 	$(MKDIR) $(DOWNLOADS_DIR)
+# 	cd $(DOWNLOADS_DIR) && $(CURL) https://www.vtk.org/files/release/$(VTK_MAJMIN)/VTK-$(VTK_VER).zip

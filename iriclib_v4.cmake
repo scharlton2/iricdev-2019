@@ -10,7 +10,11 @@ set(CTEST_SOURCE_DIRECTORY "${CTEST_SCRIPT_DIRECTORY}/lib/src/${CTEST_PROJECT_NA
 set(CTEST_BINARY_DIRECTORY "lib/build/${CTEST_PROJECT_NAME}-${CTEST_PROJECT_VERSION}/${CONF_DIR}")
 
 # build PREFIX_PATH (Note the escaped semicolon)
-set(PREFIX_PATH "${CTEST_SCRIPT_DIRECTORY}/lib/install/hdf5-${HDF5_VER}/cmake/hdf5")
+if(WIN32)
+  set(PREFIX_PATH "${CTEST_SCRIPT_DIRECTORY}/lib/install/hdf5-${HDF5_VER}/cmake/hdf5")
+else()
+  set(PREFIX_PATH "${CTEST_SCRIPT_DIRECTORY}/lib/install/hdf5-${HDF5_VER}/share/cmake/hdf5")
+endif()
 set(PREFIX_PATH "${PREFIX_PATH}\;${CTEST_SCRIPT_DIRECTORY}/lib/install/poco-${POCO_VER}/lib/cmake/Poco")
 
 # override LIBDIR to be consistent w/ hdf5

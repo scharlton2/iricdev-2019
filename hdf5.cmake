@@ -33,20 +33,21 @@ elseif("${CONF_DIR}" STREQUAL "minsizerel")
 endif()
 
 message(STATUS "CTEST_CONFIGURATION_TYPE=${CTEST_CONFIGURATION_TYPE}")
-# if(CTEST_CONFIGURATION_TYPE)
-#   list(APPEND BUILD_OPTIONS "-DCMAKE_BUILD_TYPE:STRING=${CTEST_CONFIGURATION_TYPE}")
-# endif()
+if(CTEST_CONFIGURATION_TYPE)
+  list(APPEND BUILD_OPTIONS "-DCMAKE_BUILD_TYPE:STRING=${CTEST_CONFIGURATION_TYPE}")
+endif()
 
 CTEST_START("Experimental")
 CTEST_CONFIGURE(BUILD "${CTEST_BINARY_DIRECTORY}"
                 OPTIONS "${BUILD_OPTIONS}")
 CTEST_BUILD(BUILD "${CTEST_BINARY_DIRECTORY}")
 
-# # for hdf we build PACKAGE target instead of INSTALL target
-# # since the szip and zlib libraries cmake configurations
-# # are created only during the packaging stage
-# # see lib/install/hdf5-${VER}/${CONF_DIR}/cmake
-# CTEST_BUILD(BUILD "${CTEST_BINARY_DIRECTORY}" FLAGS "-G ZIP" TARGET package)
+# for hdf we build PACKAGE target instead of INSTALL target
+# since the szip and zlib libraries cmake configurations
+# are created only during the packaging stage
+# see lib/install/hdf5-${VER}/${CONF_DIR}/cmake
+##CTEST_BUILD(BUILD "${CTEST_BINARY_DIRECTORY}" FLAGS "-G ZIP" TARGET package)
+# CTEST_BUILD(BUILD "${CTEST_BINARY_DIRECTORY}" TARGET package)
 
 # if (WIN32)
 #   file(COPY "${CTEST_BINARY_DIRECTORY}/_CPack_Packages/win64/ZIP/HDF5-${VER}-win64/"
