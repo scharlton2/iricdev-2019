@@ -12,9 +12,9 @@ set(BUILD_OPTIONS
 )
 
 if("${CONF_DIR}" STREQUAL "debug")
-  list(APPEND BUILD_OPTIONS "-DZLIB_LIBRARY:PATH=${CTEST_SCRIPT_DIRECTORY}/lib/install/hdf5-$ENV{HDF5_VER}/lib/zlib_D.lib")
+  list(APPEND BUILD_OPTIONS "-DZLIB_LIBRARY:PATH=${CTEST_SCRIPT_DIRECTORY}/lib/install/hdf5-$ENV{HDF5_VER}/lib/libzlib_D.lib")
 else()
-  list(APPEND BUILD_OPTIONS "-DZLIB_LIBRARY:PATH=${CTEST_SCRIPT_DIRECTORY}/lib/install/hdf5-$ENV{HDF5_VER}/lib/zlib.lib")
+  list(APPEND BUILD_OPTIONS "-DZLIB_LIBRARY:PATH=${CTEST_SCRIPT_DIRECTORY}/lib/install/hdf5-$ENV{HDF5_VER}/lib/libzlib.lib")
 endif()
 
 CTEST_START("Experimental")
