@@ -166,6 +166,11 @@ jobs:
           REM call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           msbuild /noLogo /maxCpuCount /target:hdf5-build iricdev.proj
 
+      - name: List hdf5
+        shell: bash
+        run: |
+          ls -al ${{github.workspace}}/lib/install/hdf5-${{env.HDF5_VER}}
+
       - name: Archive build artifacts
         if: ${{ always() && steps.cache-hdf5.outputs.cache-hit != 'true' }}
         uses: actions/upload-artifact@v3
