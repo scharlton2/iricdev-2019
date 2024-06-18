@@ -24,6 +24,7 @@ set SHAPELIB_VER=1.5.0
 set UDUNITS_VER=2.2.28
 set VTK_VER=8.2.0
 set YAML_CPP_VER=0.6.3
+set ZLIB_VER=1.3.1
 
 ::
 :: replace . with _

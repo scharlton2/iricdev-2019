@@ -25,6 +25,7 @@
     <all-targets Include="udunits-build"/>
     <all-targets Include="vtk-build"/>
     <all-targets Include="yaml-cpp-build"/>
+    <all-targets Include="zlib-build"/>
   </ItemGroup>
 
   <Target Name="all" DependsOnTargets="@(all-targets)">
@@ -92,6 +93,7 @@
     <download-targets Include="udunits-download"/>
     <download-targets Include="vtk-download"/>
     <download-targets Include="yaml-cpp-download"/>
+    <download-targets Include="zlib-download"/>
   </ItemGroup>
 
   <Target Name="download" DependsOnTargets="@(download-targets)">
@@ -151,6 +153,9 @@
   <!-- OpenSSL -->
   <Import Project="openssl.targets" />
 
+  <!-- zlib -->
+  <Import Project="zlib.targets" />
+
   <Target Name="download-dir">
     <MakeDir Directories="$(DOWNLOADS_DIR)" />
   </Target>
@@ -182,6 +187,7 @@
     <Message Text="VTK_MAJMIN=$(VTK_MAJMIN)" />
     <Message Text="VTK_VER=$(VTK_VER)" />
     <Message Text="YAML_CPP_VER=$(YAML_CPP_VER)" />
+    <Message Text="ZLIB_VER=$(ZLIB_VER)" />
     <Message Text="Environment:" />
     <Exec Command="set" />
   </Target>

@@ -1,0 +1,35 @@
+<Project DefaultTargets="libpng-build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="programs.prop" Condition="'$(CURL)'==''" />
+
+  <Import Project="directories.prop" Condition="'$(TOP_DIR)'==''" />
+
+  <Target Name="zlib-clean">
+    <RemoveDir Directories="$(BUILD_DIR)\zlib-$(ZLIB_VER)" />
+    <RemoveDir Directories="$(SRC_DIR)\zlib-$(ZLIB_VER)" />
+    <Delete Files="$(DOWNLOADS_DIR)\zlib-$(ZLIB_VER).tar.xz" />
+  </Target>
+
+  <Target Name="zlib-build" DependsOnTargets="zlib-build-debug;zlib-build-release" />
+ 
+  <Target Name="zlib-build-debug" Inputs="zlib.targets;zlib.cmake" Outputs="$(INSTALL_DIR)\zlib-$(ZLIB_VER)\lib\zlibd.lib" DependsOnTargets="zlib-src">
+    <RemoveDir Directories="$(BUILD_DIR)\zlib-$(ZLIB_VER)\debug" />
+    <Exec Command="ctest -S zlib.cmake -DCONF_DIR:STRING=debug -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR_NO_QUOTES)%22 -C Debug -VV -O $(LOG_DIR)\$(SGEN)-zlib-debug.log"/>
+  </Target>
+
+  <Target Name="zlib-build-release" Inputs="zlib.targets;zlib.cmake" Outputs="$(INSTALL_DIR)\zlib-$(ZLIB_VER)\lib\zlib.lib" DependsOnTargets="zlib-src">
+    <RemoveDir Directories="$(BUILD_DIR)\zlib-$(ZLIB_VER)\release" />
+    <Exec Command="ctest -S zlib.cmake -DCONF_DIR:STRING=release -D%22CTEST_CMAKE_GENERATOR:STRING=$(GENERATOR_NO_QUOTES)%22 -C Release -VV -O $(LOG_DIR)\$(SGEN)-zlib-release.log" />
+  </Target>
+
+  <Target Name="zlib-src" DependsOnTargets="zlib-download" Condition="!Exists('$(SRC_DIR)\zlib-$(ZLIB_VER)')">
+    <Exec Command="7z x $(DOWNLOADS_DIR)\zlib-$(ZLIB_VER).tar.xz -so | 7z x -si -ttar -o$(SRC_DIR)"/>
+  </Target>
+
+  <Target Name="zlib-download" Condition="!Exists('$(DOWNLOADS_DIR)\zlib-$(ZLIB_VER).tar.xz')">
+    <MakeDir Directories="$(DOWNLOADS_DIR)" />
+    <Message Text="Downloading zlib-$(ZLIB_VER).tar.xz" />
+    <Exec Command="$(CURL) https://github.com/madler/zlib/releases/download/v$(ZLIB_VER)/zlib-$(ZLIB_VER).tar.xz" WorkingDirectory="$(DOWNLOADS_DIR)" />
+  </Target>
+
+</Project>
