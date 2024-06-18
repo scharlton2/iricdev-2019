@@ -773,10 +773,39 @@ jobs:
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           msbuild /noLogo /maxCpuCount /target:yaml-cpp-build iricdev.proj
 
+  cache-zlib:
+    # 30s
+      runs-on: windows-2019
+  
+      steps:
+        - uses: actions/checkout@v3
+  
+        - name: Init github env
+          run: .\init.github_env.ps1 | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+  
+        - name: Setup path for msbuild
+          uses: microsoft/setup-msbuild@v1.1
+          with:
+            vs-version: '[16.9,17)'
+  
+        - name: Cache zlib
+          id: cache-zlib
+          uses: actions/cache@v3
+          with:
+            path: ${{github.workspace}}/lib/install/zlib-${{env.ZLIB_VER}}
+            key: ${{runner.os}}-zlib-${{hashFiles('./zlib.*')}}
+
+        - name: Build zlib
+          if: steps.cache-zlib.outputs.cache-hit != 'true'
+          shell: cmd
+          run: |
+            call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+            msbuild /noLogo /maxCpuCount /target:zlib-build iricdev.proj
+          
   create-release:
   # 4m 24s
     runs-on: windows-2019
-    needs: [cache-expat, cache-gdal, cache-geos, cache-hdf5, cache-iriclib, cache-libpng, cache-libtiff, cache-netcdf-c, cache-openssl, cache-poco, cache-proj, cache-qwt, cache-shapelib, cache-sqlite, cache-udunits, cache-vtk-debug, cache-vtk-release, cache-yaml]
+    needs: [cache-expat, cache-gdal, cache-geos, cache-hdf5, cache-iriclib, cache-libpng, cache-libtiff, cache-netcdf-c, cache-openssl, cache-poco, cache-proj, cache-qwt, cache-shapelib, cache-sqlite, cache-udunits, cache-vtk-debug, cache-vtk-release, cache-yaml, cache-zlib]
 
     steps:
       - uses: actions/checkout@v3
@@ -914,6 +943,13 @@ jobs:
         with:
           path: ${{github.workspace}}/lib/install/yaml-cpp-${{env.YAML_CPP_VER}}
           key: ${{runner.os}}-yaml-${{hashFiles('./yaml.*')}}
+
+      - name: Cache zlib
+        id: cache-zlib
+        uses: actions/cache@v3
+        with:
+          path: ${{github.workspace}}/lib/install/zlib-${{env.ZLIB_VER}}
+          key: ${{runner.os}}-zlib-${{hashFiles('./zlib.*')}}
 
       - name: Create iricdev-vs2019-build-cache.7z
         run: 7z a iricdev-vs2019-build-cache.7z lib\install
