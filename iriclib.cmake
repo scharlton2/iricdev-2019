@@ -11,11 +11,7 @@ set(CTEST_SOURCE_DIRECTORY "${CTEST_SCRIPT_DIRECTORY}/lib/src/iriclib-${VER}")
 set(CTEST_BINARY_DIRECTORY "${CTEST_SCRIPT_DIRECTORY}/lib/build/iriclib-${VER}/${CONF_DIR}")
 
 # build PREFIX_PATH (Note the escaped semicolon)
-if (WIN32)
-  set(PREFIX_PATH "${CTEST_SCRIPT_DIRECTORY}/lib/install/hdf5-${HDF5_VER}/cmake/hdf5")
-else()
-  set(PREFIX_PATH "${CTEST_SCRIPT_DIRECTORY}/lib/install/hdf5-${HDF5_VER}/share/cmake/hdf5")
-endif()
+set(PREFIX_PATH "${CTEST_SCRIPT_DIRECTORY}/lib/install/hdf5-${HDF5_VER}/share/cmake/hdf5")
 set(PREFIX_PATH "${PREFIX_PATH}\;${CTEST_SCRIPT_DIRECTORY}/lib/install/poco-${POCO_VER}/lib/cmake/Poco")
 
 # override LIBDIR to be consistent w/ hdf5
