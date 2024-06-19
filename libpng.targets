@@ -7,16 +7,16 @@
   <!-- @(libpng-build-debug-deps) -->
   <ItemGroup>
     <libpng-build-debug-deps Include="libpng-src"/>
-    <libpng-build-debug-deps Include="hdf5-build-debug" Condition=" '$(UseDeps)' == 'Yes' " />
+    <libpng-build-debug-deps Include="zlib-build-debug" Condition=" '$(UseDeps)' == 'Yes' " />
   </ItemGroup>
 
   <!-- @(libpng-build-release-deps) -->
   <ItemGroup>
     <libpng-build-release-deps Include="libpng-src"/>
-    <libpng-build-release-deps Include="hdf5-build-release" Condition=" '$(UseDeps)' == 'Yes' " />
+    <libpng-build-release-deps Include="zlib-build-release" Condition=" '$(UseDeps)' == 'Yes' " />
   </ItemGroup>
 
-  <Target Name="libpng-clean" DependsOnTargets="hdf5-clean">
+  <Target Name="libpng-clean" DependsOnTargets="zlib-clean">
     <RemoveDir Directories="$(BUILD_DIR)\libpng-$(LIBPNG_VER)" />
     <RemoveDir Directories="$(SRC_DIR)\libpng-$(LIBPNG_VER)" />
     <Delete Files="$(DOWNLOADS_DIR)\libpng-$(LIBPNG_VER).tar.xz" />
@@ -24,11 +24,11 @@
 
   <Target Name="libpng-build" DependsOnTargets="libpng-build-debug;libpng-build-release" />
 
-  <Target Name="libpng-build-debug" Inputs="$(INSTALL_DIR)\hdf5-$(HDF5_VER)\lib\hdf5_D.lib" Outputs="$(INSTALL_DIR)\libpng-$(LIBPNG_VER)\debug\lib\libpng16d.lib" DependsOnTargets="@(libpng-build-debug-deps)">
+  <Target Name="libpng-build-debug" Inputs="libpng.targets;libpng.cmake;$(INSTALL_DIR)\zlib-$(ZLIB_VER)\lib\zlibd.lib" Outputs="$(INSTALL_DIR)\libpng-$(LIBPNG_VER)\debug\lib\libpng16d.lib" DependsOnTargets="@(libpng-build-debug-deps)">
     <Exec Command="ctest -S libpng.cmake -DCONF_DIR:STRING=debug -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Debug -VV -O $(LOG_DIR)\$(SGEN)-libpng-debug.log"/>
   </Target>
 
-  <Target Name="libpng-build-release" Inputs="$(INSTALL_DIR)\hdf5-$(HDF5_VER)\lib\hdf5.lib" Outputs="$(INSTALL_DIR)\libpng-$(LIBPNG_VER)\release\lib\libpng16.lib" DependsOnTargets="@(libpng-build-release-deps)">
+  <Target Name="libpng-build-release" Inputs="libpng.targets;libpng.cmake;$(INSTALL_DIR)\zlib-$(ZLIB_VER)\lib\zlib.lib" Outputs="$(INSTALL_DIR)\libpng-$(LIBPNG_VER)\release\lib\libpng16.lib" DependsOnTargets="@(libpng-build-release-deps)">
     <Exec Command="ctest -S libpng.cmake -DCONF_DIR:STRING=release -DCTEST_CMAKE_GENERATOR:STRING=$(GENERATOR) -C Release -VV -O $(LOG_DIR)\$(SGEN)-libpng-release.log"/>
   </Target>
 

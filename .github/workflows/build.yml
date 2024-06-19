@@ -261,7 +261,7 @@ jobs:
   cache-libpng:
   # 1m 13s
     runs-on: windows-2019
-    needs: [cache-hdf5]
+    needs: [cache-zlib]
 
     steps:
       - uses: actions/checkout@v3
@@ -274,12 +274,19 @@ jobs:
         with:
           vs-version: '[16.9,17)'
 
-      - name: Cache hdf5
-        id: cache-hdf5
+      # - name: Cache hdf5
+      #   id: cache-hdf5
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ${{github.workspace}}/lib/install/hdf5-${{env.HDF5_VER}}
+      #     key: ${{runner.os}}-hdf5-${{hashFiles('./hdf5.*')}}
+
+      - name: Cache zlib
+        id: cache-zlib
         uses: actions/cache@v3
         with:
-          path: ${{github.workspace}}/lib/install/hdf5-${{env.HDF5_VER}}
-          key: ${{runner.os}}-hdf5-${{hashFiles('./hdf5.*')}}
+          path: ${{github.workspace}}/lib/install/zlib-${{env.ZLIB_VER}}
+          key: ${{runner.os}}-zlib-${{hashFiles('./zlib.*')}}
 
       - name: Cache libpng
         id: cache-libpng
