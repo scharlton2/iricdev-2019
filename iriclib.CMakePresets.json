@@ -14,7 +14,7 @@
       "cacheVariables": {
         "CMAKE_INSTALL_PREFIX" : "${sourceDir}/../../install/iriclib-$env{IRICLIB_VER}",
         "IRICLIB_FORTRAN_TESTING": "OFF",
-        "HDF5_DIR": "${sourceDir}/../../install/hdf5-$env{HDF5_VER}/share/cmake/hdf5",
+        "HDF5_ROOT": "${sourceDir}/../../install/hdf5-$env{HDF5_VER}",
         "PocoFoundation_DIR": "${sourceDir}/../../install/poco-$env{POCO_VER}/lib/cmake/Poco",
         "Python_ROOT_DIR": "$env{PYTHON_INSTALL_DIR}",
         "Python_FIND_STRATEGY": "LOCATION"
