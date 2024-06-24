@@ -345,7 +345,7 @@ jobs:
   cache-netcdf-c:
   # @todo 12m 29s
     runs-on: windows-2019
-    needs: [cache-hdf5]
+    needs: [cache-hdf5, cache-zlib]
 
     steps:
       - uses: actions/checkout@v3
@@ -364,6 +364,13 @@ jobs:
         with:
           path: ${{github.workspace}}/lib/install/hdf5-${{env.HDF5_VER}}
           key: ${{runner.os}}-hdf5-${{hashFiles('./hdf5.*')}}
+
+      - name: Cache zlib
+        id: cache-zlib
+        uses: actions/cache@v3
+        with:
+          path: ${{github.workspace}}/lib/install/zlib-${{env.ZLIB_VER}}
+          key: ${{runner.os}}-zlib-${{hashFiles('./zlib.*')}}
 
       - name: Cache netcdf-c
         id: cache-netcdf-c
