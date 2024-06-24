@@ -179,7 +179,7 @@ jobs:
   cache-iriclib:
   # @todo 29m 11s
     runs-on: windows-2019
-    needs: [cache-hdf5, cache-poco, cache-python-with-debug-symbols]
+    needs: [cache-hdf5, cache-poco, cache-python-with-debug-symbols, cache-zlib]
 
     steps:
       - uses: actions/checkout@v3
@@ -212,6 +212,13 @@ jobs:
         with:
           path: '${{ env.PYTHON_INSTALL_DIR }}'
           key: '${{ runner.os }}-cache-python-v${{ env.PYTHON_VERSION }}-amd64'
+
+      - name: Cache zlib
+        id: cache-zlib
+        uses: actions/cache@v3
+        with:
+          path: ${{github.workspace}}/lib/install/zlib-${{env.ZLIB_VER}}
+          key: ${{runner.os}}-zlib-${{hashFiles('./zlib.*')}}
 
       - name: Cache iriclib
         id: cache-iriclib
