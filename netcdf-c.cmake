@@ -4,6 +4,7 @@ set(CTEST_SITE "$ENV{COMPUTERNAME}")
 
 set(VER "$ENV{NETCDF_VER}")
 set(HDF5_VER "$ENV{HDF5_VER}")
+set(ZLIB_VER "$ENV{ZLIB_VER}")
 set(CTEST_SOURCE_DIRECTORY "${CTEST_SCRIPT_DIRECTORY}/lib/src/netcdf-c-${VER}")
 set(CTEST_BINARY_DIRECTORY "${CTEST_SCRIPT_DIRECTORY}/lib/build/netcdf-c-${VER}/${CONF_DIR}")
 
@@ -20,6 +21,11 @@ if (WIN32)
 #     set(HDF5_LIB    "${CTEST_SCRIPT_DIRECTORY}/lib/install/hdf5-${HDF5_VER}/${CONF_DIR}/lib/hdf5.lib")
 #     set(HDF5_HL_LIB "${CTEST_SCRIPT_DIRECTORY}/lib/install/hdf5-${HDF5_VER}/${CONF_DIR}/lib/hdf5_hl.lib")
 #   endif()
+  if("${CONF_DIR}" STREQUAL "debug")
+    set(ZLIB_LIB    "${CTEST_SCRIPT_DIRECTORY}/lib/install/zlib-${ZLIB_VER}/lib/zlibd.lib")
+  else()
+    set(ZLIB_LIB    "${CTEST_SCRIPT_DIRECTORY}/lib/install/zlib-${ZLIB_VER}/lib/zlib.lib")
+  endif()
 elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
   if("${CONF_DIR}" STREQUAL "debug")
     set(ZLIB_LIB    "${CTEST_SCRIPT_DIRECTORY}/lib/install/hdf5-${HDF5_VER}/${CONF_DIR}/lib/libz_debug.so.1.2")
@@ -60,6 +66,7 @@ set(BUILD_OPTIONS
   -DCMAKE_INSTALL_PREFIX:PATH=${CTEST_SCRIPT_DIRECTORY}/lib/install/netcdf-c-${VER}/${CONF_DIR}
   -DENABLE_DAP:BOOL=OFF
   -DENABLE_TESTS:BOOL=OFF
+  -DENABLE_BYTERANGE:BOOL=OFF
 ##  -DHDF5_LIB:PATH=${HDF5_LIB}
 ##  -DHDF5_HL_LIB:PATH=${HDF5_HL_LIB}
 ##  -DHDF5_INCLUDE_DIR:PATH=${HDF5_INCLUDE_DIR}
@@ -71,6 +78,8 @@ set(BUILD_OPTIONS
 ##  -DMSVC12_REDIST_DIR:PATH=C:/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio\ 12.0/VC/redist
 ##  -DCMAKE_LIBRARY_PATH:PATH=${CTEST_SCRIPT_DIRECTORY}/lib/install/hdf5-${HDF5_VER}/${CONF_DIR}/lib
   -DHDF5_DIR:PATH=${CTEST_SCRIPT_DIRECTORY}/lib/install/hdf5-${HDF5_VER}/share/cmake/hdf5
+  -DZLIB_LIBRARY:PATH=${ZLIB_LIB}
+  -DZLIB_INCLUDE_DIR:PATH=${CTEST_SCRIPT_DIRECTORY}/lib/install/zlib-${ZLIB_VER}/include
 )
 
 CTEST_START("Experimental")

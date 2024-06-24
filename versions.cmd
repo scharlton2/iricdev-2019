@@ -32,7 +32,7 @@ set ZLIB_VER=1.3.1
 set BOOST_UVER=%BOOST_VER:.=_%
 set EXPAT_UVER=%EXPAT_VER:.=_%
 set OPENSSL_UVER=%OPENSSL_VER:.=_%
-if NOT defined BUILD_TOOLS  set BUILD_TOOLS="OFF"
+if NOT defined BUILD_TOOLS  set BUILD_TOOLS=OFF
 
 :: nmake cannot create environment variables
 if NOT defined GENERATOR    set GENERATOR="Visual Studio 16 2019"

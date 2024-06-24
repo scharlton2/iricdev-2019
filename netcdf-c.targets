@@ -40,6 +40,9 @@
 
   <Target Name="netcdf-c-src" DependsOnTargets="netcdf-c-download" Condition="!Exists('$(SRC_DIR)\netcdf-c-$(NETCDF_VER)')">
     <Exec Command="7z x $(DOWNLOADS_DIR)\netcdf-c-$(NETCDF_VER).zip -o$(SRC_DIR)" />
+    <!-- Move netCDF_BINARY_DIR to top of include directories when '$(NETCDF_VER)' == '4.7.4'-->
+    <Move SourceFiles="$(SRC_DIR)\netcdf-c-$(NETCDF_VER)\CMakeLists.txt" DestinationFiles="$(SRC_DIR)\netcdf-c-$(NETCDF_VER)\CMakeLists.txt.orig" Condition="'$(NETCDF_VER)' == '4.7.4'" />
+    <Copy SourceFiles="patches\netcdf-c-$(NETCDF_VER)\CMakeLists.txt" DestinationFiles="$(SRC_DIR)\netcdf-c-$(NETCDF_VER)\CMakeLists.txt" Condition="'$(NETCDF_VER)' == '4.7.4'" />
   </Target>
 
   <Target Name="netcdf-c-download" Condition="!Exists('$(DOWNLOADS_DIR)\netcdf-c-$(NETCDF_VER).zip')">
