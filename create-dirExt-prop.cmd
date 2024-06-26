@@ -22,7 +22,7 @@ call versions.cmd
 @echo.udunits  = %topdir%lib/install/udunits-%UDUNITS_VER%/release/bin/
 @echo.vtk      = %topdir%lib/install/VTK-%VTK_VER%/release/bin/
 @echo.yaml-cpp = %topdir%lib/install/yaml-cpp-%YAML_CPP_VER%/release/bin
-@echo.zlib     = %topdir%lib/install/hdf5-%HDF5_VER%/bin/
+@echo.zlib     = %topdir%lib/install/zlib-%ZLIB_VER%/bin/
 @echo.
 @echo.[debug]
 @echo.expat    = %topdir%lib/install/expat-%EXPAT_VER%/debug/bin/
@@ -47,4 +47,4 @@ if "%DEBUG_LEAKS%"=="YES" (
   @echo.vtk      = %topdir%lib/install/VTK-%VTK_VER%/debug/bin/
 )
 @echo.yaml-cpp = %topdir%lib/install/yaml-cpp-%YAML_CPP_VER%/debug/bin
-@echo.zlib     = %topdir%lib/install/hdf5-%HDF5_VER%/bin/
+@echo.zlib     = %topdir%lib/install/zlib-%ZLIB_VER%/bin/
