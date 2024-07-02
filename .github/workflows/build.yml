@@ -15,7 +15,7 @@ env:
   GENERATOR: Ninja Multi-Config
   SGEN: ninja-x64
   PYTHON_INSTALL_DIR: C:\Python-x64
-  PYTHON_VERSION: 3.8.10
+  PYTHON_VERSION: 3.12.4
   # @TODO change ${{runner.os}} to ${{runner.env???}} -> vs2019-x64
 
   # oneAPI
