@@ -17,7 +17,6 @@ call versions.cmd
 @echo.qwt      = %topdir%lib/install/Qwt-%QWT_VER%/lib/
 @echo.shapelib = %topdir%lib/install/shapelib-%SHAPELIB_VER%/release/
 @echo.sqlite3  = %topdir%lib/install/sqlite-src-3320300/release/
-@echo.szip     = %topdir%lib/install/hdf5-%HDF5_VER%/bin/
 @echo.tiff     = %topdir%lib/install/tiff-%LIBTIFF_VER%/release/bin/
 @echo.udunits  = %topdir%lib/install/udunits-%UDUNITS_VER%/release/bin/
 @echo.vtk      = %topdir%lib/install/VTK-%VTK_VER%/release/bin/
@@ -38,7 +37,6 @@ call versions.cmd
 @echo.qwt      = %topdir%lib/install/Qwt-%QWT_VER%/lib/
 @echo.shapelib = %topdir%lib/install/shapelib-%SHAPELIB_VER%/debug/
 @echo.sqlite3  = %topdir%lib/install/sqlite-src-3320300/debug/
-@echo.szip     = %topdir%lib/install/hdf5-%HDF5_VER%/bin/
 @echo.tiff     = %topdir%lib/install/tiff-%LIBTIFF_VER%/debug/bin/
 @echo.udunits  = %topdir%lib/install/udunits-%UDUNITS_VER%/debug/bin/
 if "%DEBUG_LEAKS%"=="YES" (
