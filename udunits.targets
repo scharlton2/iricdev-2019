@@ -43,6 +43,6 @@
   <Target Name="udunits-download" Condition="!Exists('$(DOWNLOADS_DIR)\udunits-$(UDUNITS_VER).zip')">
     <MakeDir Directories="$(DOWNLOADS_DIR)" />
     <Message Text="Downloading udunits-$(UDUNITS_VER).zip" />
-    <Exec Command="$(CURL) https://artifacts.unidata.ucar.edu/repository/downloads-udunits/$(UDUNITS_VER)/udunits-$(UDUNITS_VER).zip" WorkingDirectory="$(DOWNLOADS_DIR)" />
+    <Exec Command="$(CURL) https://downloads.unidata.ucar.edu/udunits/$(UDUNITS_VER)/udunits-$(UDUNITS_VER).zip" WorkingDirectory="$(DOWNLOADS_DIR)" />
   </Target>
 </Project>
