@@ -402,7 +402,7 @@ jobs:
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           msbuild /noLogo /maxCpuCount /target:netcdf-c-build iricdev.proj /fileLogger
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: steps.cache-netcdf-c.outputs.cache-hit != 'true'
         with:
           name: netcdf-c-build.log
