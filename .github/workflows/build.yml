@@ -41,19 +41,35 @@ jobs:
         with:
           vs-version: '[16.9,17)'
 
-      - name: Cache expat
+      - name: Restore expat with version
+        id: cache-expat-restore-versioned
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{github.workspace}}/lib/install/expat-${{env.EXPAT_VER}}
+          key: ${{runner.os}}-expat-${{env.EXPAT_VER}}-${{hashFiles('./expat.*')}}
+
+      - name: Restore expat without version
+        if: steps.cache-expat-restore-versioned.outputs.cache-hit != 'true'
         id: cache-expat
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         with:
           path: ${{github.workspace}}/lib/install/expat-${{env.EXPAT_VER}}
           key: ${{runner.os}}-expat-${{hashFiles('./expat.*')}}
 
       - name: Build expat
-        if: steps.cache-expat.outputs.cache-hit != 'true'
+        if: steps.cache-expat-restore-versioned.outputs.cache-hit != 'true' && steps.cache-expat.outputs.cache-hit != 'true'
         shell: cmd
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           msbuild /noLogo /maxCpuCount /target:expat-build iricdev.proj
+
+      - name: Save expat with version
+        if: steps.cache-expat-restore-versioned.outputs.cache-hit != 'true'
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{github.workspace}}/lib/install/expat-${{env.EXPAT_VER}}
+          key: ${{runner.os}}-expat-${{env.EXPAT_VER}}-${{hashFiles('./expat.*')}}
+
 
   cache-gdal:
   # 19m 3s
