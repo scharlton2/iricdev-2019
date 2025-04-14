@@ -185,12 +185,12 @@ jobs:
       - name: List hdf5
         run: dir -Recurse ${{github.workspace}}/lib/install/hdf5-${{env.HDF5_VER}}
 
-      - name: Archive build artifacts
-        if: ${{ always() && steps.cache-hdf5.outputs.cache-hit != 'true' }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: BuildLogs
-          path: lib/build/hdf5-${{env.HDF5_VER}}/**/BuildLog.htm
+      # - name: Archive build artifacts
+      #   if: ${{ always() && steps.cache-hdf5.outputs.cache-hit != 'true' }}
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: BuildLogs
+      #     path: lib/build/hdf5-${{env.HDF5_VER}}/**/BuildLog.htm
 
   cache-iriclib:
   # @todo 29m 11s
